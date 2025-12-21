@@ -2,28 +2,71 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, X, Menu, ChevronDown } from 'lucide-react';
 
+interface Service {
+  name: string;
+  slug: string;
+  serviceType: string;
+}
+
+interface Location {
+  name: string;
+  slug: string;
+  county: string;
+}
+
 export default function Navbar() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [visible, setVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  
+  // Dynamic data from Strapi
+  const [services, setServices] = useState<Service[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch services and locations from Strapi
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [servicesRes, locationsRes] = await Promise.all([
+          fetch('/api/cms/services'),
+          fetch('/api/cms/locations')
+        ]);
+        
+        const servicesData = await servicesRes.json();
+        const locationsData = await locationsRes.json();
+        
+        if (servicesData.success) {
+          setServices(servicesData.data || []);
+        }
+        if (locationsData.success) {
+          setLocations(locationsData.data || []);
+        }
+      } catch (error) {
+        console.error('Error fetching nav data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.scrollY;
       setScrollPosition(currentScrollPos);
-      setVisible(true); // Always visible, Apple-style
+      setVisible(true);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      // Don't close if clicking on dropdown buttons or dropdown content
       if (!target.closest('.mobile-menu-container')) {
         setIsMobileMenuOpen(false);
         setOpenDropdown(null);
@@ -39,7 +82,6 @@ export default function Navbar() {
     };
   }, [isMobileMenuOpen]);
 
-  // Immediate page detection function
   const isWhiteBackgroundPage = () => {
     if (typeof window === 'undefined') return false;
     const whiteBackgroundPages = ['/booking', '/contact', '/about', '/faq'];
@@ -48,23 +90,16 @@ export default function Navbar() {
 
   const isWhiteBackground = isWhiteBackgroundPage();
 
-  // Dynamic opacity with proper minimum for white background pages
   const bgOpacity = isWhiteBackground
     ? Math.max(0.85, Math.min(scrollPosition / 100, 0.98))
     : Math.max(0.1, Math.min(scrollPosition / 200, 0.95));
 
-  // Enhanced border and shadow logic
   const shouldShowBorder = isWhiteBackground || scrollPosition > 50;
   const borderOpacity = isWhiteBackground ? 0.2 : 0.1;
   const shadowOpacity = isWhiteBackground ? 0.15 : 0.05;
 
-  // Dynamic text color with proper contrast
   const textColor = scrollPosition > 100 || isWhiteBackground ? 'text-black' : 'text-white';
-
-  // Dynamic logo filter
   const logoFilter = scrollPosition > 100 || isWhiteBackground ? '' : 'brightness(0) invert(1)';
-
-  // Dynamic button styling
   const buttonBg = scrollPosition > 100 || isWhiteBackground ? 'bg-black text-white' : 'bg-white text-black';
 
   const toggleDropdown = (dropdown: string, event: React.MouseEvent) => {
@@ -85,6 +120,14 @@ export default function Navbar() {
     }
   };
 
+  // Separate services by type
+  const residentialServices = services.filter(s => 
+    ['routine', 'deep', 'airbnb', 'moving', 'post-construction', 'extras'].includes(s.serviceType)
+  );
+  const commercialServices = services.filter(s => 
+    ['office', 'medical', 'gym', 'school', 'retail', 'property', 'other-commercial'].includes(s.serviceType)
+  );
+
   return (
     <>
       <header
@@ -99,7 +142,7 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo - Always left aligned */}
+            {/* Logo */}
             <div className="flex-shrink-0 flex items-center h-full py-2">
               <a href="/" className="flex items-center h-full">
                 <img
@@ -120,89 +163,44 @@ export default function Navbar() {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex space-x-8">
-              {/* Services Dropdown */}
-              <div className="relative dropdown group">
-                <button className={`flex items-center ${textColor} hover:opacity-80 transition-opacity`}>
-                  <span className="text-sm font-medium">Services</span>
-                </button>
-                <div className="dropdown-content apple-dropdown-content absolute left-1/2 transform -translate-x-1/2 mt-2 w-[500px] z-50 grid grid-cols-2 gap-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 bg-white rounded-lg shadow-lg p-6">
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Residential</h4>
-                    <ul className="space-y-2">
-                      <li>
-                        <a href="/services/routine-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Routine Cleaning
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services/deep-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Deep Cleaning
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services/moving-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Moving Cleaning
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services/post-construction-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Post Construction
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services/airbnb-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Airbnb Cleaning
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services/extras" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Extras
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Commercial</h4>
-                    <ul className="space-y-2">
-                      <li>
-                        <a href="/services/office-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Offices & Corporate Buildings
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services/medical-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Medical & Healthcare Facilities
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services/retail-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Retail Stores
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services/gym-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Gyms & Fitness Centers
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services/school-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Schools & Childcare Facilities
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services/property-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Property & Building Common Areas
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services/other-commercial" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Other Commercial Spaces
-                        </a>
-                      </li>
-                    </ul>
+              {/* Services Dropdown - Only show if services exist */}
+              {services.length > 0 && (
+                <div className="relative dropdown group">
+                  <button className={`flex items-center ${textColor} hover:opacity-80 transition-opacity`}>
+                    <span className="text-sm font-medium">Services</span>
+                  </button>
+                  <div className="dropdown-content apple-dropdown-content absolute left-1/2 transform -translate-x-1/2 mt-2 w-[500px] z-50 grid grid-cols-2 gap-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 bg-white rounded-lg shadow-lg p-6">
+                    {residentialServices.length > 0 && (
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Residential</h4>
+                        <ul className="space-y-2">
+                          {residentialServices.map((service) => (
+                            <li key={service.slug}>
+                              <a href={`/services/${service.slug}`} className="block text-gray-600 hover:text-gray-900 transition-colors">
+                                {service.name}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {commercialServices.length > 0 && (
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Commercial</h4>
+                        <ul className="space-y-2">
+                          {commercialServices.map((service) => (
+                            <li key={service.slug}>
+                              <a href={`/services/${service.slug}`} className="block text-gray-600 hover:text-gray-900 transition-colors">
+                                {service.name}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Company Dropdown */}
               <div className="relative dropdown group">
@@ -233,49 +231,28 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Locations Dropdown */}
-              <div className="relative dropdown group">
-                <a href="/locations" className={`flex items-center ${textColor} hover:opacity-80 transition-opacity`}>
-                  <span className="text-sm font-medium">Locations</span>
-                </a>
-                <div className="dropdown-content apple-dropdown-content absolute left-1/2 transform -translate-x-1/2 mt-2 w-[300px] z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 bg-white rounded-lg shadow-lg p-6">
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Service Areas</h4>
-                    <ul className="space-y-2 grid grid-cols-2">
-                      <li>
-                        <a href="/locations/bergen" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Bergen County
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/locations/hudson" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Hudson County
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/locations/essex" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Essex County
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/locations/passaic" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Passaic County
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/locations/union" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Union County
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/locations/morris" className="block text-gray-600 hover:text-gray-900 transition-colors">
-                          Morris County
-                        </a>
-                      </li>
-                    </ul>
+              {/* Locations Dropdown - Only show if locations exist */}
+              {locations.length > 0 && (
+                <div className="relative dropdown group">
+                  <a href="/locations" className={`flex items-center ${textColor} hover:opacity-80 transition-opacity`}>
+                    <span className="text-sm font-medium">Locations</span>
+                  </a>
+                  <div className="dropdown-content apple-dropdown-content absolute left-1/2 transform -translate-x-1/2 mt-2 w-[300px] z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 bg-white rounded-lg shadow-lg p-6">
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-3">Service Areas</h4>
+                      <ul className="space-y-2 grid grid-cols-2">
+                        {locations.map((location) => (
+                          <li key={location.slug}>
+                            <a href={`/locations/${location.slug}`} className="block text-gray-600 hover:text-gray-900 transition-colors">
+                              {location.name || location.county} County
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               <a href="/faq" className={`text-sm font-medium ${textColor} hover:opacity-80 transition-opacity`}>
                 FAQ
@@ -306,7 +283,6 @@ export default function Navbar() {
 
             {/* Mobile/Tablet Actions */}
             <div className="flex lg:hidden items-center space-x-2 sm:space-x-3">
-              {/* Mobile Book Button - Always visible */}
               <button
                 onClick={() => window.location.href = '/booking'}
                 className={`text-xs sm:text-sm font-medium ${buttonBg} hover:opacity-90 px-3 sm:px-4 py-2 rounded-full transition-colors flex items-center whitespace-nowrap`}
@@ -317,7 +293,6 @@ export default function Navbar() {
                 <span className="xs:hidden">Book</span>
               </button>
 
-              {/* Hamburger Menu Button */}
               <button
                 onClick={toggleMobileMenu}
                 className={`p-2 rounded-md ${textColor} hover:bg-gray-100/10 focus:outline-none transition-colors`}
@@ -341,125 +316,60 @@ export default function Navbar() {
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
               <nav className="space-y-1">
-                {/* Services Section */}
-                <div className="border-b border-gray-100 pb-2">
-                  <button
-                    onClick={(e) => toggleDropdown('services', e)}
-                    className="flex items-center justify-between w-full text-left text-gray-900 font-medium py-3 hover:bg-gray-50 rounded-lg px-2 transition-colors"
-                  >
-                    <span>Services</span>
-                    <ChevronDown
-                      className={`h-4 w-4 transition-transform duration-200 ${
-                        openDropdown === 'services' ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                  {openDropdown === 'services' && (
-                    <div className="mt-2 pl-4 space-y-4 bg-gray-50 rounded-lg p-4">
-                      <div>
-                        <h4 className="text-sm font-semibold text-gray-700 mb-3">Residential</h4>
-                        <div className="space-y-2">
-                          <a
-                            href="/services/routine-cleaning"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Routine Cleaning
-                          </a>
-                          <a
-                            href="/services/deep-cleaning"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Deep Cleaning
-                          </a>
-                          <a
-                            href="/services/moving-cleaning"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Moving Cleaning
-                          </a>
-                          <a
-                            href="/services/post-construction-cleaning"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Post Construction
-                          </a>
-                          <a
-                            href="/services/airbnb-cleaning"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Airbnb Cleaning
-                          </a>
-                          <a
-                            href="/services/extras"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Extras
-                          </a>
-                        </div>
+                {/* Services Section - Only show if services exist */}
+                {services.length > 0 && (
+                  <div className="border-b border-gray-100 pb-2">
+                    <button
+                      onClick={(e) => toggleDropdown('services', e)}
+                      className="flex items-center justify-between w-full text-left text-gray-900 font-medium py-3 hover:bg-gray-50 rounded-lg px-2 transition-colors"
+                    >
+                      <span>Services</span>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform duration-200 ${
+                          openDropdown === 'services' ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                    {openDropdown === 'services' && (
+                      <div className="mt-2 pl-4 space-y-4 bg-gray-50 rounded-lg p-4">
+                        {residentialServices.length > 0 && (
+                          <div>
+                            <h4 className="text-sm font-semibold text-gray-700 mb-3">Residential</h4>
+                            <div className="space-y-2">
+                              {residentialServices.map((service) => (
+                                <a
+                                  key={service.slug}
+                                  href={`/services/${service.slug}`}
+                                  className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
+                                  onClick={closeAllDropdowns}
+                                >
+                                  {service.name}
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {commercialServices.length > 0 && (
+                          <div>
+                            <h4 className="text-sm font-semibold text-gray-700 mb-3">Commercial</h4>
+                            <div className="space-y-2">
+                              {commercialServices.map((service) => (
+                                <a
+                                  key={service.slug}
+                                  href={`/services/${service.slug}`}
+                                  className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
+                                  onClick={closeAllDropdowns}
+                                >
+                                  {service.name}
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div>
-                        <h4 className="text-sm font-semibold text-gray-700 mb-3">Commercial</h4>
-                        <div className="space-y-2">
-                          <a
-                            href="/services/office-cleaning"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Offices & Corporate Buildings
-                          </a>
-                          <a
-                            href="/services/medical-cleaning"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Medical & Healthcare Facilities
-                          </a>
-                          <a
-                            href="/services/retail-cleaning"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Retail Stores
-                          </a>
-                          <a
-                            href="/services/gym-cleaning"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Gyms & Fitness Centers
-                          </a>
-                          <a
-                            href="/services/school-cleaning"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Schools & Childcare Facilities
-                          </a>
-                          <a
-                            href="/services/property-cleaning"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Property & Building Common Areas
-                          </a>
-                          <a
-                            href="/services/other-commercial"
-                            className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                            onClick={closeAllDropdowns}
-                          >
-                            Other Commercial Spaces
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Company Section */}
                 <div className="border-b border-gray-100 pb-2">
@@ -501,68 +411,38 @@ export default function Navbar() {
                   )}
                 </div>
 
-                {/* Locations Section */}
-                <div className="border-b border-gray-100 pb-2">
-                  <button
-                    onClick={(e) => toggleDropdown('locations', e)}
-                    className="flex items-center justify-between w-full text-left text-gray-900 font-medium py-3 hover:bg-gray-50 rounded-lg px-2 transition-colors"
-                  >
-                    <span>Locations</span>
-                    <ChevronDown
-                      className={`h-4 w-4 transition-transform duration-200 ${
-                        openDropdown === 'locations' ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                  {openDropdown === 'locations' && (
-                    <div className="mt-2 pl-4 bg-gray-50 rounded-lg p-4">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <a
-                          href="/locations/bergen"
-                          className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                          onClick={closeAllDropdowns}
-                        >
-                          Bergen County
-                        </a>
-                        <a
-                          href="/locations/hudson"
-                          className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                          onClick={closeAllDropdowns}
-                        >
-                          Hudson County
-                        </a>
-                        <a
-                          href="/locations/essex"
-                          className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                          onClick={closeAllDropdowns}
-                        >
-                          Essex County
-                        </a>
-                        <a
-                          href="/locations/passaic"
-                          className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                          onClick={closeAllDropdowns}
-                        >
-                          Passaic County
-                        </a>
-                        <a
-                          href="/locations/union"
-                          className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                          onClick={closeAllDropdowns}
-                        >
-                          Union County
-                        </a>
-                        <a
-                          href="/locations/morris"
-                          className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
-                          onClick={closeAllDropdowns}
-                        >
-                          Morris County
-                        </a>
+                {/* Locations Section - Only show if locations exist */}
+                {locations.length > 0 && (
+                  <div className="border-b border-gray-100 pb-2">
+                    <button
+                      onClick={(e) => toggleDropdown('locations', e)}
+                      className="flex items-center justify-between w-full text-left text-gray-900 font-medium py-3 hover:bg-gray-50 rounded-lg px-2 transition-colors"
+                    >
+                      <span>Locations</span>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform duration-200 ${
+                          openDropdown === 'locations' ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                    {openDropdown === 'locations' && (
+                      <div className="mt-2 pl-4 bg-gray-50 rounded-lg p-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {locations.map((location) => (
+                            <a
+                              key={location.slug}
+                              href={`/locations/${location.slug}`}
+                              className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
+                              onClick={closeAllDropdowns}
+                            >
+                              {location.name || location.county} County
+                            </a>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Direct Links */}
                 <a
