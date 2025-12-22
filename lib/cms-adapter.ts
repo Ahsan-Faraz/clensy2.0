@@ -8,6 +8,11 @@
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
+// Cache for landing page data
+let landingPageCache: any = null;
+let landingPageCacheTime: number = 0;
+const CACHE_DURATION = 60000; // 1 minute
+
 interface StrapiResponse<T> {
   data: T;
   meta?: any;
@@ -106,9 +111,46 @@ export function getImageUrl(image: any): string {
  */
 export class CMSAdapter {
   /**
+   * Get Landing Page (all homepage sections in one call)
+   */
+  static async getLandingPage() {
+    // Check cache first
+    if (landingPageCache && Date.now() - landingPageCacheTime < CACHE_DURATION) {
+      return landingPageCache;
+    }
+
+    const result = await fetchFromStrapi<StrapiResponse<any>>('/landing-page', {
+      populate: '*',
+    });
+    
+    if (result?.data) {
+      landingPageCache = result.data;
+      landingPageCacheTime = Date.now();
+    }
+    
+    return result?.data || null;
+  }
+
+  /**
    * Get Hero Section
    */
   static async getHeroSection() {
+    // Try landing page first
+    const landingPage = await this.getLandingPage();
+    if (landingPage) {
+      return {
+        topLabel: landingPage.heroTopLabel || '',
+        heading: landingPage.heroHeading || '',
+        subheading: landingPage.heroSubheading || '',
+        buttonText: landingPage.heroButtonText || '',
+        buttonLink: landingPage.heroButtonLink || '/booking',
+        feature1: landingPage.heroFeature1 || '',
+        feature2: landingPage.heroFeature2 || '',
+        backgroundImage: getImageUrl(landingPage.heroBackgroundImage) || '',
+      };
+    }
+
+    // Fallback to separate hero-section endpoint
     const result = await fetchFromStrapi<StrapiResponse<any>>('/hero-section', {
       populate: '*',
     });
@@ -172,6 +214,25 @@ export class CMSAdapter {
    * Get CTA Section
    */
   static async getCTASection() {
+    // Try landing page first
+    const landingPage = await this.getLandingPage();
+    if (landingPage) {
+      return {
+        heading: landingPage.ctaHeading || '',
+        description: landingPage.ctaDescription || '',
+        leftCard: {
+          title: landingPage.ctaLeftCardTitle || '',
+          description: landingPage.ctaLeftCardDescription || '',
+          buttonText: landingPage.ctaLeftCardButtonText || '',
+        },
+        rightCard: {
+          title: landingPage.ctaRightCardTitle || '',
+          description: landingPage.ctaRightCardDescription || '',
+          buttonText: landingPage.ctaRightCardButtonText || '',
+        },
+      };
+    }
+
     const result = await fetchFromStrapi<StrapiResponse<any>>('/cta', {
       populate: '*',
     });
@@ -191,6 +252,16 @@ export class CMSAdapter {
    * Get Reviews Section
    */
   static async getReviewsSection() {
+    // Try landing page first
+    const landingPage = await this.getLandingPage();
+    if (landingPage) {
+      return {
+        heading: landingPage.reviewsHeading || '',
+        buttonText: landingPage.reviewsButtonText || '',
+        testimonials: landingPage.testimonials || [],
+      };
+    }
+
     const result = await fetchFromStrapi<StrapiResponse<any>>('/review', {
       populate: '*',
     });
@@ -280,6 +351,29 @@ export class CMSAdapter {
    * Get How It Works Section
    */
   static async getHowItWorks() {
+    // Try landing page first
+    const landingPage = await this.getLandingPage();
+    if (landingPage) {
+      return {
+        step1: {
+          title: landingPage.step1Title || '',
+          description: landingPage.step1Description || '',
+          featureText: landingPage.step1FeatureText || '',
+        },
+        step2: {
+          title: landingPage.step2Title || '',
+          description: landingPage.step2Description || '',
+          featureText: landingPage.step2FeatureText || '',
+        },
+        step3: {
+          title: landingPage.step3Title || '',
+          description: landingPage.step3Description || '',
+          featureText: landingPage.step3FeatureText || '',
+        },
+        buttonText: landingPage.howItWorksButtonText || '',
+      };
+    }
+
     const result = await fetchFromStrapi<StrapiResponse<any>>('/how-it-work', {
       populate: '*',
     });
@@ -311,6 +405,17 @@ export class CMSAdapter {
    * Get Comparison Section
    */
   static async getComparisonSection() {
+    // Try landing page first
+    const landingPage = await this.getLandingPage();
+    if (landingPage) {
+      return {
+        heading: landingPage.comparisonHeading || '',
+        description: landingPage.comparisonDescription || '',
+        features: landingPage.comparisonFeatures || [],
+        buttonText: landingPage.comparisonButtonText || '',
+      };
+    }
+
     const result = await fetchFromStrapi<StrapiResponse<any>>('/comparison', {
       populate: '*',
     });
@@ -330,6 +435,17 @@ export class CMSAdapter {
    * Get Checklist Section
    */
   static async getChecklistSection() {
+    // Try landing page first
+    const landingPage = await this.getLandingPage();
+    if (landingPage) {
+      return {
+        heading: landingPage.checklistHeading || '',
+        description: landingPage.checklistDescription || '',
+        checklistItems: landingPage.checklistItems || {},
+        buttonText: landingPage.checklistButtonText || '',
+      };
+    }
+
     const result = await fetchFromStrapi<StrapiResponse<any>>('/checklist', {
       populate: '*',
     });
