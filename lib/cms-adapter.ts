@@ -221,9 +221,9 @@ export class CMSAdapter {
         topLabel: data.heroTopLabel || '',
         heading: data.heroHeading || '',
         description: data.heroDescription || '',
+        backgroundImage: data.heroBackgroundImageUrl || '',
       },
-      faqCategories: data.faqCategories || {},
-      faqItems: data.faqItems || [],
+      comprehensiveFAQs: data.comprehensiveFAQs || [],
       stillHaveQuestionsSection: {
         heading: data.stillHaveQuestionsHeading || '',
         description: data.stillHaveQuestionsDescription || '',
@@ -238,6 +238,7 @@ export class CMSAdapter {
         callSection: {
           phone: data.contactPhone || '',
         },
+        contactButtonText: data.contactButtonText || '',
       },
       trustIndicatorsSection: {
         indicators: data.trustIndicators || [],
