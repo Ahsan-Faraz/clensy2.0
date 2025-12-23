@@ -64,7 +64,7 @@ async function fetchFromStrapi<T>(
         'Content-Type': 'application/json',
         ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
       },
-      next: { revalidate }, // Use ISR instead of no-store
+      next: { revalidate }, // Use ISR inst
     });
     
     if (!response.ok) {
@@ -845,6 +845,163 @@ export class CMSAdapter {
       heroSubtitle: location.heroSubtitle || '',
       heroBackgroundImage: getImageUrl(location.heroBackgroundImage) || location.heroBackgroundImageUrl || '',
     }));
+  }
+
+  // ============================================
+  // SEO METHODS FOR ALL PAGES
+  // ============================================
+
+  /**
+   * Helper to extract SEO data from page data
+   */
+  private static extractSEOFromData(data: any, defaults: { title: string; description: string; canonicalUrl: string }) {
+    return {
+      title: data.seoTitle || defaults.title,
+      description: data.seoMetaDescription || defaults.description,
+      keywords: data.seoKeywords || '',
+      canonicalUrl: data.seoCanonicalUrl || defaults.canonicalUrl,
+      robots: data.seoRobots || 'index, follow',
+      openGraph: {
+        title: data.ogTitle || data.seoTitle || defaults.title,
+        description: data.ogDescription || data.seoMetaDescription || defaults.description,
+        image: getImageUrl(data.ogImage) || data.ogImageUrl || '',
+        type: data.ogType || 'website',
+      },
+      twitter: {
+        card: data.twitterCard || 'summary_large_image',
+        title: data.twitterTitle || data.ogTitle || defaults.title,
+        description: data.twitterDescription || data.ogDescription || defaults.description,
+      },
+      schemaJsonLd: data.schemaJsonLd || null,
+      scripts: {
+        head: data.headScripts || '',
+        bodyStart: data.bodyStartScripts || '',
+        bodyEnd: data.bodyEndScripts || '',
+      },
+      customCss: data.customCss || '',
+    };
+  }
+
+  /**
+   * Get About Page SEO
+   */
+  static async getAboutPageSEO() {
+    const result = await fetchFromStrapi<StrapiResponse<any>>('/about', { populate: '*' });
+    if (!result?.data) return null;
+    
+    return this.extractSEOFromData(result.data, {
+      title: 'About Clensy | Professional Cleaning Services',
+      description: 'Learn about Clensy - New Jersey\'s trusted professional cleaning company.',
+      canonicalUrl: 'https://clensy.com/company/about',
+    });
+  }
+
+  /**
+   * Get FAQ Page SEO
+   */
+  static async getFAQPageSEO() {
+    const result = await fetchFromStrapi<StrapiResponse<any>>('/faq-page', { populate: '*' });
+    if (!result?.data) return null;
+    
+    return this.extractSEOFromData(result.data, {
+      title: 'FAQ | Clensy Cleaning Services',
+      description: 'Find answers to common questions about Clensy cleaning services.',
+      canonicalUrl: 'https://clensy.com/faq',
+    });
+  }
+
+  /**
+   * Get Contact Page SEO
+   */
+  static async getContactPageSEO() {
+    const result = await fetchFromStrapi<StrapiResponse<any>>('/contact', { populate: '*' });
+    if (!result?.data) return null;
+    
+    return this.extractSEOFromData(result.data, {
+      title: 'Contact Us | Clensy Professional Cleaning',
+      description: 'Get in touch with Clensy for professional cleaning services.',
+      canonicalUrl: 'https://clensy.com/contact',
+    });
+  }
+
+  /**
+   * Get Privacy Policy SEO
+   */
+  static async getPrivacyPolicySEO() {
+    const result = await fetchFromStrapi<StrapiResponse<any>>('/privacy-policy', { populate: '*' });
+    if (!result?.data) return null;
+    
+    return this.extractSEOFromData(result.data, {
+      title: 'Privacy Policy | Clensy',
+      description: 'Read Clensy\'s privacy policy.',
+      canonicalUrl: 'https://clensy.com/privacy-policy',
+    });
+  }
+
+  /**
+   * Get Terms of Service SEO
+   */
+  static async getTermsOfServiceSEO() {
+    const result = await fetchFromStrapi<StrapiResponse<any>>('/terms-of-service', { populate: '*' });
+    if (!result?.data) return null;
+    
+    return this.extractSEOFromData(result.data, {
+      title: 'Terms of Service | Clensy',
+      description: 'Read Clensy\'s terms of service.',
+      canonicalUrl: 'https://clensy.com/terms-of-service',
+    });
+  }
+
+  /**
+   * Get Checklist Page SEO
+   */
+  static async getChecklistPageSEO() {
+    const result = await fetchFromStrapi<StrapiResponse<any>>('/checklist-page', { populate: '*' });
+    if (!result?.data) return null;
+    
+    return this.extractSEOFromData(result.data, {
+      title: 'Our Cleaning Checklist | Clensy',
+      description: 'Explore Clensy\'s comprehensive cleaning checklist.',
+      canonicalUrl: 'https://clensy.com/company/checklist',
+    });
+  }
+
+  /**
+   * Get Checklist Page (full content)
+   */
+  static async getChecklistPage() {
+    const result = await fetchFromStrapi<StrapiResponse<any>>('/checklist-page', { populate: '*' });
+    if (!result?.data) return null;
+    
+    const data = result.data;
+    return {
+      heroSection: {
+        heading: data.heroHeading || '',
+        description: data.heroDescription || '',
+        subDescription: data.heroSubDescription || '',
+        backgroundImage: getImageUrl(data.heroBackgroundImage) || data.heroBackgroundImageUrl || '',
+        ctaButtonText: data.heroCtaButtonText || '',
+        ratingText: data.heroRatingText || '',
+        satisfactionText: data.heroSatisfactionText || '',
+      },
+      interactiveGuide: {
+        heading: data.interactiveGuideHeading || '',
+        description: data.interactiveGuideDescription || '',
+        floorPlanDesktop: getImageUrl(data.floorPlanImageDesktop) || data.floorPlanImageDesktopUrl || '',
+        floorPlanMobile: getImageUrl(data.floorPlanImageMobile) || data.floorPlanImageMobileUrl || '',
+      },
+      checklistSection: {
+        heading: data.checklistSectionHeading || '',
+        description: data.checklistSectionDescription || '',
+        checklistData: data.checklistData || {},
+      },
+      ctaSection: {
+        heading: data.ctaHeading || '',
+        description: data.ctaDescription || '',
+        buttonText: data.ctaButtonText || '',
+        phoneNumber: data.ctaPhoneNumber || '',
+      },
+    };
   }
 }
 
