@@ -39,14 +39,20 @@ export default function Footer() {
         const servicesData = await servicesRes.json();
         const locationsData = await locationsRes.json();
         
-        if (servicesData.success) {
-          setServices(servicesData.data || []);
+        if (servicesData.success && (servicesData.data?.length ?? 0) > 0) {
+          setServices(servicesData.data);
+        } else {
+          setServices([]);
         }
-        if (locationsData.success) {
-          setLocations(locationsData.data || []);
+        if (locationsData.success && (locationsData.data?.length ?? 0) > 0) {
+          setLocations(locationsData.data);
+        } else {
+          setLocations([]);
         }
       } catch (error) {
         console.error('Error fetching footer data:', error);
+        setServices([]);
+        setLocations([]);
       }
     };
 
@@ -231,7 +237,7 @@ export default function Footer() {
                       href={`/locations/${location.slug}`}
                       className={`text-sm ${textColor} hover:${hoverColor}`}
                     >
-                      {location.name || location.county} County
+                      {location.name || location.county}
                     </Link>
                   </li>
                 ))

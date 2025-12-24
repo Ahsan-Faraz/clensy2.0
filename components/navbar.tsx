@@ -37,14 +37,20 @@ export default function Navbar() {
         const servicesData = await servicesRes.json();
         const locationsData = await locationsRes.json();
         
-        if (servicesData.success) {
-          setServices(servicesData.data || []);
+        if (servicesData.success && (servicesData.data?.length ?? 0) > 0) {
+          setServices(servicesData.data);
+        } else {
+          setServices([]);
         }
-        if (locationsData.success) {
-          setLocations(locationsData.data || []);
+        if (locationsData.success && (locationsData.data?.length ?? 0) > 0) {
+          setLocations(locationsData.data);
+        } else {
+          setLocations([]);
         }
       } catch (error) {
         console.error('Error fetching nav data:', error);
+        setServices([]);
+        setLocations([]);
       } finally {
         setLoading(false);
       }
@@ -244,7 +250,7 @@ export default function Navbar() {
                         {locations.map((location) => (
                           <li key={location.slug}>
                             <a href={`/locations/${location.slug}`} className="block text-gray-600 hover:text-gray-900 transition-colors">
-                              {location.name || location.county} County
+                              {location.name || location.county}
                             </a>
                           </li>
                         ))}

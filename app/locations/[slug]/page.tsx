@@ -13,6 +13,7 @@ import {
   Mail,
   Loader2,
 } from "lucide-react";
+import SEOScripts from "@/components/seo-scripts";
 
 interface LocationData {
   name?: string;
@@ -41,9 +42,41 @@ interface LocationData {
     description: string;
   };
   seo?: {
-    title: string;
-    description: string;
+    metaTitle: string;
+    metaDescription: string;
     keywords: string[];
+    canonicalUrl: string;
+    robots: string;
+    h1: string;
+    h2: string;
+    h3: string;
+    openGraph: {
+      title: string;
+      description: string;
+      image: string;
+      type: string;
+    };
+    twitter: {
+      card: string;
+      title: string;
+      description: string;
+    };
+    schemaJsonLd: any;
+    schemaType: string;
+    headScripts: string;
+    bodyStartScripts: string;
+    bodyEndScripts: string;
+    customCss: string;
+  };
+  localSeo?: {
+    city: string;
+    county: string;
+    state: string;
+    zipCode: string;
+    serviceType: string;
+  };
+  imageAlt?: {
+    heroBackground: string;
   };
 }
 
@@ -122,7 +155,7 @@ export default function DynamicLocationPage() {
         <div className="absolute inset-0 z-0">
           <Image
             src={heroSection.backgroundImage || 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1920'}
-            alt={`${locationName} Skyline`}
+            alt={data.imageAlt?.heroBackground || `${locationName} Skyline`}
             fill
             className="object-cover brightness-90"
             priority
@@ -346,6 +379,17 @@ export default function DynamicLocationPage() {
           </div>
         )}
       </div>
+      
+      {/* SEO Scripts and Schema */}
+      {data.seo && (
+        <SEOScripts
+          headScripts={data.seo.headScripts}
+          bodyStartScripts={data.seo.bodyStartScripts}
+          bodyEndScripts={data.seo.bodyEndScripts}
+          schemaJsonLd={data.seo.schemaJsonLd}
+          customCss={data.seo.customCss}
+        />
+      )}
     </main>
   );
 }

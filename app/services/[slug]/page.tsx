@@ -9,6 +9,7 @@ import { Check, ArrowRight, Star, Clock, Shield } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CTASection from "@/components/cta-section";
+import SEOScripts from "@/components/seo-scripts";
 
 interface FAQItem {
   question: string;
@@ -27,6 +28,7 @@ interface CleaningArea {
   title: string;
   description: string;
   image: string;
+  imageAlt?: string;
   features: string[];
 }
 
@@ -98,6 +100,43 @@ interface ServiceData {
 
   // FAQ Section
   faqs: FAQItem[];
+  
+  // SEO Fields
+  seo?: {
+    metaTitle: string;
+    metaDescription: string;
+    keywords: string[];
+    canonicalUrl: string;
+    robots: string;
+    h1: string;
+    h2: string;
+    h3: string;
+    openGraph: {
+      title: string;
+      description: string;
+      image: string;
+      type: string;
+    };
+    twitter: {
+      card: string;
+      title: string;
+      description: string;
+    };
+    schemaJsonLd: any;
+    schemaType: string;
+    headScripts: string;
+    bodyStartScripts: string;
+    bodyEndScripts: string;
+    customCss: string;
+  };
+  imageAlt?: {
+    heroBackground: string;
+    featureSection: string;
+    benefits: string;
+    step1: string;
+    step2: string;
+    step3: string;
+  };
 }
 
 // Default fallback images
@@ -198,7 +237,7 @@ export default function DynamicServicePage() {
         <div className="absolute inset-0 z-0">
           <Image
             src={data.heroBackgroundImage || DEFAULT_IMAGES.hero}
-            alt={data.heroHeading}
+            alt={data.imageAlt?.heroBackground || data.heroHeading || 'Professional cleaning service'}
             fill
             className="object-cover opacity-70"
             priority
@@ -351,7 +390,7 @@ export default function DynamicServicePage() {
                   <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-lg order-2 lg:order-1">
                     <Image
                       src={area.image || DEFAULT_IMAGES.kitchen}
-                      alt={area.title}
+                      alt={area.imageAlt || area.title || 'Cleaning service area'}
                       fill
                       className="object-cover"
                     />
@@ -390,7 +429,7 @@ export default function DynamicServicePage() {
                   <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-lg">
                     <Image
                       src={area.image || DEFAULT_IMAGES.bathroom}
-                      alt={area.title}
+                      alt={area.imageAlt || area.title || 'Cleaning service area'}
                       fill
                       className="object-cover"
                     />
@@ -437,7 +476,7 @@ export default function DynamicServicePage() {
             <div className="relative h-[400px] rounded-2xl overflow-hidden">
               <Image
                 src={data.featureSectionImage || DEFAULT_IMAGES.feature}
-                alt="Professional cleaning"
+                alt={data.imageAlt?.featureSection || "Professional cleaning"}
                 fill
                 className="object-cover rounded-2xl"
               />
@@ -467,7 +506,7 @@ export default function DynamicServicePage() {
               <div className="relative h-40 rounded-xl overflow-hidden mb-6 mt-2">
                 <Image
                   src={data.step1Image || DEFAULT_IMAGES.step1}
-                  alt={data.step1Title || "Book Online"}
+                  alt={data.imageAlt?.step1 || data.step1Title || "Book Online"}
                   fill
                   className="object-cover"
                 />
@@ -492,7 +531,7 @@ export default function DynamicServicePage() {
               <div className="relative h-40 rounded-xl overflow-hidden mb-6 mt-2">
                 <Image
                   src={data.step2Image || DEFAULT_IMAGES.step2}
-                  alt={data.step2Title || "We Clean"}
+                  alt={data.imageAlt?.step2 || data.step2Title || "We Clean"}
                   fill
                   className="object-cover"
                 />
@@ -517,7 +556,7 @@ export default function DynamicServicePage() {
               <div className="relative h-40 rounded-xl overflow-hidden mb-6 mt-2">
                 <Image
                   src={data.step3Image || DEFAULT_IMAGES.step3}
-                  alt={data.step3Title || "Relax & Enjoy"}
+                  alt={data.imageAlt?.step3 || data.step3Title || "Relax & Enjoy"}
                   fill
                   className="object-cover"
                 />
@@ -598,7 +637,7 @@ export default function DynamicServicePage() {
             <div className="relative h-[600px] rounded-2xl overflow-hidden">
               <Image
                 src={data.benefitsImage || DEFAULT_IMAGES.benefits}
-                alt="Clean space"
+                alt={data.imageAlt?.benefits || "Clean space"}
                 fill
                 className="object-cover rounded-2xl"
               />
@@ -772,6 +811,15 @@ export default function DynamicServicePage() {
       {/* Call to Action */}
       <CTASection />
       <Footer />
+      
+      {/* SEO Scripts and Schema */}
+      <SEOScripts
+        headScripts={data.seo?.headScripts}
+        bodyStartScripts={data.seo?.bodyStartScripts}
+        bodyEndScripts={data.seo?.bodyEndScripts}
+        schemaJsonLd={data.seo?.schemaJsonLd}
+        customCss={data.seo?.customCss}
+      />
     </main>
   );
 }

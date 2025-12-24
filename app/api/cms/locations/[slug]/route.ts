@@ -9,9 +9,19 @@ export async function GET(
   { params }: { params: { slug: string } }
 ) {
   try {
-    const { slug } = params;
+    const rawSlug = params?.slug;
+    // Normalize slug: handle leading/trailing slashes and arrays
+    const slugValue = Array.isArray(rawSlug) ? rawSlug[0] : rawSlug;
+    const slug = typeof slugValue === 'string' ? slugValue.replace(/^\/+|\/+$/g, '') : '';
+
+    if (!slug) {
+      return NextResponse.json(
+        { success: false, error: "Missing slug", source: 'strapi' },
+        { status: 400 }
+      );
+    }
     
-    // Try Strapi first if enabled
+    // Try Strapi first
     const strapiData = await CMSAdapter.getLocationBySlug(slug);
     if (strapiData) {
       return NextResponse.json({ success: true, data: strapiData, source: 'strapi' });
@@ -19,13 +29,13 @@ export async function GET(
     
     // If no data found
     return NextResponse.json(
-      { success: false, error: `Location '${slug}' not found` },
+      { success: false, error: `Location '${slug}' not found`, source: 'strapi' },
       { status: 404 }
     );
   } catch (error) {
-    console.error("Database error:", error);
+    console.error("Location slug handler error:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to fetch location data" },
+      { success: false, error: "Failed to fetch location data", source: 'strapi' },
       { status: 500 }
     );
   }

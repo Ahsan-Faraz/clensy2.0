@@ -5,7 +5,8 @@
  * MongoDB is only used for booking functionality (separate from this adapter).
  */
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+// Default to the deployed Strapi if NEXT_PUBLIC_STRAPI_URL is not provided
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://strapi-production-8d56.up.railway.app';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 // Cache for landing page data
@@ -26,27 +27,28 @@ async function fetchFromStrapi<T>(
   options: {
     populate?: string | string[] | object;
     filters?: object;
+    status?: 'draft' | 'published';
     revalidate?: number;
   } = {}
 ): Promise<T | null> {
-  const { populate, filters, revalidate = 60 } = options;
+  const { populate, filters, status } = options;
   
   const params = new URLSearchParams();
   
+  // Strapi v5 REST prefers bracket syntax; to avoid 400, use simple populate=*
   if (populate) {
-    if (typeof populate === 'string') {
-      params.append('populate', populate);
-    } else if (Array.isArray(populate)) {
-      populate.forEach((p, i) => params.append(`populate[${i}]`, p));
+    if (populate === '*' || typeof populate === 'string') {
+      params.append('populate', typeof populate === 'string' ? populate : '*');
     } else {
-      params.append('populate', JSON.stringify(populate));
+      // For arrays or objects, fall back to populate=*
+      params.append('populate', '*');
     }
   }
   
   if (filters) {
     Object.entries(filters).forEach(([key, value]) => {
-      if (typeof value === 'object') {
-        Object.entries(value as object).forEach(([op, val]) => {
+      if (value !== null && typeof value === 'object') {
+        Object.entries(value as Record<string, unknown>).forEach(([op, val]) => {
           params.append(`filters[${key}][${op}]`, String(val));
         });
       } else {
@@ -54,9 +56,16 @@ async function fetchFromStrapi<T>(
       }
     });
   }
+
+  if (status) {
+    params.append('status', status);
+  }
   
   const queryString = params.toString();
-  const url = `${STRAPI_URL}/api${endpoint}${queryString ? `?${queryString}` : ''}`;
+  // Ensure no double slashes
+  const base = STRAPI_URL.replace(/\/+$/, '');
+  const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const url = `${base}/api${path}${queryString ? `?${queryString}` : ''}`;
   
   try {
     const response = await fetch(url, {
@@ -64,11 +73,15 @@ async function fetchFromStrapi<T>(
         'Content-Type': 'application/json',
         ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
       },
-      next: { revalidate }, // Use ISR inst
+      cache: 'no-store',
     });
     
     if (!response.ok) {
-      console.error(`Strapi fetch error: ${response.status} ${response.statusText}`);
+      const bodyText = await response.text().catch(() => '');
+      console.error(
+        `Strapi fetch error: ${response.status} ${response.statusText} url=${url} ` +
+        `${bodyText ? `body=${bodyText}` : ''}`
+      );
       return null;
     }
     
@@ -675,15 +688,22 @@ export class CMSAdapter {
    * Get Location by Slug
    */
   static async getLocationBySlug(slug: string) {
-    const result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
+    if (!slug) return null;
+
+    // try published first
+    let result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
       filters: { slug: { $eq: slug } },
-      populate: {
-        heroBackgroundImage: { populate: '*' },
-        operatingHours: { populate: '*' },
-        serviceAreas: { populate: '*' },
-        seo: { populate: '*' },
-      },
+      populate: '*',
+      status: 'published',
     });
+    // fallback to draft
+    if (!result?.data || result.data.length === 0) {
+      result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
+        filters: { slug: { $eq: slug } },
+        populate: '*',
+        status: 'draft',
+      });
+    }
     
     if (!result?.data || result.data.length === 0) return null;
     
@@ -716,9 +736,52 @@ export class CMSAdapter {
         description: data.aboutDescription || '',
       },
       seo: {
-        title: data.seo?.metaTitle || '',
-        description: data.seo?.metaDescription || '',
-        keywords: data.seo?.keywords || [],
+        metaTitle: data.seo?.metaTitle || data.seoMetaTitle || `Professional Cleaning Services in ${data.county || ''} County, NJ | Clensy`,
+        metaDescription: data.seo?.metaDescription || data.seoMetaDescription || `Professional cleaning services for ${data.county || ''} County. Book online in 30 seconds.`,
+        keywords: data.seo?.keywords ? (typeof data.seo.keywords === 'string' ? data.seo.keywords.split(',').map((k: string) => k.trim()) : data.seo.keywords) : (data.seoKeywords || []),
+        canonicalUrl: data.seo?.canonicalURL || data.seoCanonicalUrl || `https://clensy.com/locations/${data.slug}`,
+        robots: data.seo?.metaRobots || data.seoRobots || 'index, follow',
+        h1: data.seo?.h1 || data.seoH1 || data.heroTitle || `Professional Cleaning Services in ${data.county || ''} County`,
+        h2: data.seo?.h2 || data.seoH2 || data.aboutTitle || '',
+        h3: data.seo?.h3 || data.seoH3 || 'Service Areas',
+        openGraph: {
+          title: data.openGraph?.ogTitle || data.ogTitle || `Professional Cleaning Services in ${data.county || ''} County | Clensy`,
+          description: data.openGraph?.ogDescription || data.ogDescription || `Professional cleaning services for ${data.county || ''} County.`,
+          image: getImageUrl(data.openGraph?.ogImage) || data.ogImageUrl || getImageUrl(data.heroBackgroundImage) || data.heroBackgroundImageUrl || '',
+          type: data.openGraph?.ogType || data.ogType || 'website',
+        },
+        twitter: {
+          card: data.openGraph?.twitterCard || data.twitterCard || 'summary_large_image',
+          title: data.openGraph?.twitterTitle || data.twitterTitle || data.openGraph?.ogTitle || data.ogTitle || `Professional Cleaning Services in ${data.county || ''} County | Clensy`,
+          description: data.openGraph?.twitterDescription || data.twitterDescription || data.openGraph?.ogDescription || data.ogDescription || `Professional cleaning services for ${data.county || ''} County.`,
+        },
+        schemaJsonLd: data.seo?.structuredData || data.schema?.customJsonLd || data.schemaJsonLd || null,
+        schemaType: data.schema?.schemaType || data.schemaType || 'LocalBusiness',
+        headScripts: data.scripts?.headScripts || data.headScripts || '',
+        bodyStartScripts: data.scripts?.bodyStartScripts || data.bodyStartScripts || '',
+        bodyEndScripts: data.scripts?.bodyEndScripts || data.bodyEndScripts || '',
+        customCss: data.customCss || '',
+        localBusinessSchema: data.schema ? {
+          name: data.schema.businessName || 'Clensy',
+          url: `https://clensy.com/locations/${data.slug}`,
+          telephone: data.schema.telephone || data.contactPhone || '',
+          address: data.schema.address || data.contactAddress || '',
+          priceRange: data.schema.priceRange || '$$',
+        } : null,
+        faqSchema: null, // Can be added if FAQs are added to locations
+        reviewSchema: null, // Can be added if testimonials are added to locations
+      },
+      // Local SEO
+      localSeo: {
+        city: data.localSeo?.city || data.city || '',
+        county: data.localSeo?.county || data.county || '',
+        state: data.localSeo?.state || data.state || 'NJ',
+        zipCode: data.localSeo?.zipCode || data.zipCode || '',
+        serviceType: data.localSeo?.serviceType || data.serviceType || 'residential, commercial',
+      },
+      // Image Alt Text
+      imageAlt: {
+        heroBackground: data.heroBackgroundImageAlt || `Professional cleaning services in ${data.county || ''} County, New Jersey`,
       },
     };
   }
@@ -727,10 +790,22 @@ export class CMSAdapter {
    * Get Service by Slug
    */
   static async getServiceBySlug(slug: string) {
-    const result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
+    if (!slug) return null;
+
+    // try published first
+    let result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
       filters: { slug: { $eq: slug } },
       populate: '*',
+      status: 'published',
     });
+    // fallback to draft
+    if (!result?.data || result.data.length === 0) {
+      result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
+        filters: { slug: { $eq: slug } },
+        populate: '*',
+        status: 'draft',
+      });
+    }
 
     if (!result?.data || result.data.length === 0) return null;
 
@@ -752,6 +827,7 @@ export class CMSAdapter {
         title: area.title || '',
         description: area.description || '',
         image: getImageUrl(area.image) || '',
+        imageAlt: area.imageAlt || area.title || '',
         features: area.features || [],
       })) || [],
       featureSectionHeading: data.featureSectionHeading || '',
@@ -800,6 +876,43 @@ export class CMSAdapter {
         question: f.question || '',
         answer: f.answer || '',
       })) || [],
+      // SEO Fields (read from nested components or fallback to flat fields for backward compatibility)
+      seo: {
+        metaTitle: data.seo?.metaTitle || data.seoMetaTitle || `${data.name} in New Jersey | Clensy`,
+        metaDescription: data.seo?.metaDescription || data.seoMetaDescription || `Professional ${data.name.toLowerCase()} services. Book online in 30 seconds.`,
+        keywords: data.seo?.keywords ? (typeof data.seo.keywords === 'string' ? data.seo.keywords.split(',').map((k: string) => k.trim()) : data.seo.keywords) : (data.seoKeywords || []),
+        canonicalUrl: data.seo?.canonicalURL || data.seoCanonicalUrl || `https://clensy.com/services/${data.slug}`,
+        robots: data.seo?.metaRobots || data.seoRobots || 'index, follow',
+        h1: data.seo?.h1 || data.seoH1 || data.heroHeading || `${data.name} Services`,
+        h2: data.seo?.h2 || data.seoH2 || data.includedSectionHeading || '',
+        h3: data.seo?.h3 || data.seoH3 || data.howItWorksHeading || '',
+        openGraph: {
+          title: data.openGraph?.ogTitle || data.ogTitle || `${data.name} | Clensy`,
+          description: data.openGraph?.ogDescription || data.ogDescription || `Professional ${data.name.toLowerCase()} services.`,
+          image: getImageUrl(data.openGraph?.ogImage) || data.ogImageUrl || getImageUrl(data.heroBackgroundImage) || data.heroBackgroundImageUrl || '',
+          type: data.openGraph?.ogType || data.ogType || 'website',
+        },
+        twitter: {
+          card: data.openGraph?.twitterCard || data.twitterCard || 'summary_large_image',
+          title: data.openGraph?.twitterTitle || data.twitterTitle || data.openGraph?.ogTitle || data.ogTitle || `${data.name} | Clensy`,
+          description: data.openGraph?.twitterDescription || data.twitterDescription || data.openGraph?.ogDescription || data.ogDescription || `Professional ${data.name.toLowerCase()} services.`,
+        },
+        schemaJsonLd: data.seo?.structuredData || data.schema?.customJsonLd || data.schemaJsonLd || null,
+        schemaType: data.schema?.schemaType || data.schemaType || 'Service',
+        headScripts: data.scripts?.headScripts || data.headScripts || '',
+        bodyStartScripts: data.scripts?.bodyStartScripts || data.bodyStartScripts || '',
+        bodyEndScripts: data.scripts?.bodyEndScripts || data.bodyEndScripts || '',
+        customCss: data.customCss || '',
+      },
+      // Image Alt Text
+      imageAlt: {
+        heroBackground: data.heroBackgroundImageAlt || `Professional ${data.name.toLowerCase()} service`,
+        featureSection: data.featureSectionImageAlt || `Professional cleaning team providing ${data.name.toLowerCase()} service`,
+        benefits: data.benefitsImageAlt || `Clean space after ${data.name.toLowerCase()} service`,
+        step1: data.step1ImageAlt || `Book ${data.name.toLowerCase()} service online`,
+        step2: data.step2ImageAlt || 'Professional cleaning team at work',
+        step3: data.step3ImageAlt || `Clean and fresh space after ${data.name.toLowerCase()} service`,
+      },
     };
   }
   
@@ -807,11 +920,22 @@ export class CMSAdapter {
    * Get All Services (for listing)
    */
   static async getAllServices() {
-    const result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
+    // First, try published
+    let result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
       populate: {
         heroBackgroundImage: { populate: '*' },
       },
+      status: 'published',
     });
+    // If none published, fallback to draft
+    if (!result?.data || result.data.length === 0) {
+      result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
+        populate: {
+          heroBackgroundImage: { populate: '*' },
+        },
+        status: 'draft',
+      });
+    }
     
     if (!result?.data) return [];
     
@@ -829,11 +953,22 @@ export class CMSAdapter {
    * Get All Locations (for listing)
    */
   static async getAllLocations() {
-    const result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
+    // First, try published
+    let result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
       populate: {
         heroBackgroundImage: { populate: '*' },
       },
+      status: 'published',
     });
+    // If none published, fallback to draft
+    if (!result?.data || result.data.length === 0) {
+      result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
+        populate: {
+          heroBackgroundImage: { populate: '*' },
+        },
+        status: 'draft',
+      });
+    }
     
     if (!result?.data) return [];
     
