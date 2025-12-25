@@ -14,7 +14,6 @@ import {
   Loader2,
 } from "lucide-react";
 import SEOScripts from "@/components/seo-scripts";
-import HTMLBlockRenderer from "@/components/html-block-renderer";
 
 interface LocationData {
   name?: string;
@@ -79,15 +78,6 @@ interface LocationData {
   imageAlt?: {
     heroBackground: string;
   };
-  htmlBlocks?: Array<{
-    blockName?: string;
-    htmlContent: string;
-    placement: string;
-    customPosition?: string;
-    cssClasses?: string;
-    cssId?: string;
-    order: number;
-  }>;
 }
 
 export default function DynamicLocationPage() {
@@ -201,9 +191,6 @@ export default function DynamicLocationPage() {
           </div>
         </div>
       </section>
-
-      {/* HTML Block: After Hero */}
-      {data.htmlBlocks && <HTMLBlockRenderer blocks={data.htmlBlocks} placement="after-hero" />}
 
       {/* Breadcrumb Navigation */}
       <div className="bg-gradient-to-r from-gray-900 to-black py-4 border-y border-gray-800">
@@ -366,9 +353,6 @@ export default function DynamicLocationPage() {
           </div>
         </div>
 
-        {/* HTML Block: After About Section */}
-        {data.htmlBlocks && <HTMLBlockRenderer blocks={data.htmlBlocks} placement="after-included" />}
-
         {/* Service Areas Section */}
         {serviceAreas && serviceAreas.length > 0 && (
           <div className="mt-12">
@@ -395,9 +379,6 @@ export default function DynamicLocationPage() {
           </div>
         )}
       </div>
-
-      {/* HTML Block: Before Footer */}
-      {data.htmlBlocks && <HTMLBlockRenderer blocks={data.htmlBlocks} placement="before-footer" />}
       
       {/* SEO Scripts and Schema */}
       {data.seo && (

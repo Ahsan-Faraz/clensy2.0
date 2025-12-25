@@ -10,7 +10,6 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CTASection from "@/components/cta-section";
 import SEOScripts from "@/components/seo-scripts";
-import HTMLBlockRenderer from "@/components/html-block-renderer";
 
 interface FAQItem {
   question: string;
@@ -138,15 +137,6 @@ interface ServiceData {
     step2: string;
     step3: string;
   };
-  htmlBlocks?: Array<{
-    blockName?: string;
-    htmlContent: string;
-    placement: string;
-    customPosition?: string;
-    cssClasses?: string;
-    cssId?: string;
-    order: number;
-  }>;
 }
 
 // Default fallback images
@@ -376,9 +366,6 @@ export default function DynamicServicePage() {
         </div>
       </section>
 
-      {/* HTML Block: After Trust Indicators */}
-      {data.htmlBlocks && <HTMLBlockRenderer blocks={data.htmlBlocks} placement="after-trust-indicators" />}
-
       {/* What's Included Section with Zigzag Layout */}
       <section className="py-24 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -454,9 +441,6 @@ export default function DynamicServicePage() {
         </div>
       </section>
 
-      {/* HTML Block: After Included */}
-      {data.htmlBlocks && <HTMLBlockRenderer blocks={data.htmlBlocks} placement="after-included" />}
-
       {/* Feature Section - Dark background */}
       <section className="relative py-16">
         <div className="absolute inset-0 bg-gradient-to-r from-black to-gray-900 opacity-90"></div>
@@ -500,9 +484,6 @@ export default function DynamicServicePage() {
           </div>
         </div>
       </section>
-
-      {/* HTML Block: After Features */}
-      {data.htmlBlocks && <HTMLBlockRenderer blocks={data.htmlBlocks} placement="after-features" />}
 
       {/* How It Works Section */}
       <section className="py-20 bg-gray-50">
@@ -596,9 +577,6 @@ export default function DynamicServicePage() {
         </div>
       </section>
 
-      {/* HTML Block: After How It Works */}
-      {data.htmlBlocks && <HTMLBlockRenderer blocks={data.htmlBlocks} placement="after-how-it-works" />}
-
       {/* Benefits Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -669,9 +647,6 @@ export default function DynamicServicePage() {
       </section>
 
       {/* Testimonial Section */}
-      {/* HTML Block: After Benefits */}
-      {data.htmlBlocks && <HTMLBlockRenderer blocks={data.htmlBlocks} placement="after-benefits" />}
-
       {data.clientTestimonials && data.clientTestimonials.length > 0 && (
         <section className="py-20 bg-gray-900 text-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -788,12 +763,6 @@ export default function DynamicServicePage() {
           </div>
         </div>
       </section>
-
-      {/* HTML Block: After Testimonials */}
-      {data.htmlBlocks && <HTMLBlockRenderer blocks={data.htmlBlocks} placement="after-testimonials" />}
-
-      {/* HTML Block: After Frequency */}
-      {data.htmlBlocks && <HTMLBlockRenderer blocks={data.htmlBlocks} placement="after-frequency" />}
 
       {/* FAQ Section */}
       <section className="py-24 bg-white">
