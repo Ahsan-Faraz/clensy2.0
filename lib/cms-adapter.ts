@@ -1067,6 +1067,16 @@ export class CMSAdapter {
         step2: data.step2ImageAlt || 'Professional cleaning team at work',
         step3: data.step3ImageAlt || `Clean and fresh space after ${data.name.toLowerCase()} service`,
       },
+      // HTML Blocks
+      htmlBlocks: (data.htmlBlocks || []).filter((block: any) => block.isActive !== false).map((block: any) => ({
+        blockName: block.blockName || '',
+        htmlContent: block.htmlContent || '',
+        placement: block.placement || 'after-hero',
+        customPosition: block.customPosition || '',
+        cssClasses: block.cssClasses || '',
+        cssId: block.cssId || '',
+        order: block.order || 0,
+      })).sort((a: any, b: any) => a.order - b.order),
     };
   }
   
