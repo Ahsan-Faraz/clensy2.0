@@ -129,6 +129,41 @@ export function getImageUrl(image: any): string {
 }
 
 /**
+ * Helper function to get scripts for a specific placement
+ * Handles both dedicated script fields and per-page script with placement selector
+ */
+function getScriptsForPlacement(
+  data: any,
+  placement: 'head' | 'body-start' | 'body-end'
+): string {
+  const scripts = data.scripts || {};
+  
+  // Get dedicated script field for this placement
+  let script = '';
+  if (placement === 'head') {
+    script = scripts.headScripts || data.headScripts || '';
+  } else if (placement === 'body-start') {
+    script = scripts.bodyStartScripts || data.bodyStartScripts || '';
+  } else if (placement === 'body-end') {
+    script = scripts.bodyEndScripts || data.bodyEndScripts || '';
+  }
+  
+  // Add per-page script if placement matches
+  const perPageScript = scripts.perPageScript || data.perPageScript || '';
+  const perPagePlacement = scripts.perPageScriptPlacement || data.perPageScriptPlacement || 'body-end';
+  
+  if (perPageScript && perPagePlacement === placement) {
+    // Combine scripts if both exist
+    if (script) {
+      return `${script}\n${perPageScript}`;
+    }
+    return perPageScript;
+  }
+  
+  return script;
+}
+
+/**
  * CMS Adapter - Fetches all CMS content from Strapi
  */
 export class CMSAdapter {
@@ -808,9 +843,9 @@ export class CMSAdapter {
         },
         schemaJsonLd: data.seo?.structuredData || data.schema?.customJsonLd || data.schemaJsonLd || null,
         schemaType: data.schema?.schemaType || data.schemaType || 'LocalBusiness',
-        headScripts: data.scripts?.headScripts || data.headScripts || '',
-        bodyStartScripts: data.scripts?.bodyStartScripts || data.bodyStartScripts || '',
-        bodyEndScripts: data.scripts?.bodyEndScripts || data.bodyEndScripts || '',
+        headScripts: getScriptsForPlacement(data, 'head'),
+        bodyStartScripts: getScriptsForPlacement(data, 'body-start'),
+        bodyEndScripts: getScriptsForPlacement(data, 'body-end'),
         customCss: data.customCss || '',
         localBusinessSchema: data.schema ? {
           name: data.schema.businessName || 'Clensy',
@@ -1018,9 +1053,9 @@ export class CMSAdapter {
         },
         schemaJsonLd: data.seo?.structuredData || data.schema?.customJsonLd || data.schemaJsonLd || null,
         schemaType: data.schema?.schemaType || data.schemaType || 'Service',
-        headScripts: data.scripts?.headScripts || data.headScripts || '',
-        bodyStartScripts: data.scripts?.bodyStartScripts || data.bodyStartScripts || '',
-        bodyEndScripts: data.scripts?.bodyEndScripts || data.bodyEndScripts || '',
+        headScripts: getScriptsForPlacement(data, 'head'),
+        bodyStartScripts: getScriptsForPlacement(data, 'body-start'),
+        bodyEndScripts: getScriptsForPlacement(data, 'body-end'),
         customCss: data.customCss || '',
       },
       // Image Alt Text

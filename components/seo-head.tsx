@@ -7,6 +7,7 @@ interface SEOHeadProps {
   schemaJsonLd?: object | null;
   additionalSchemas?: object[];
   headScripts?: string;
+  bodyStartScripts?: string;
   bodyEndScripts?: string;
   customCss?: string;
 }
@@ -15,6 +16,7 @@ export default function SEOHead({
   schemaJsonLd,
   additionalSchemas = [],
   headScripts,
+  bodyStartScripts,
   bodyEndScripts,
   customCss,
 }: SEOHeadProps) {
@@ -68,6 +70,15 @@ export default function SEOHead({
           id="cms-head-scripts"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: headScripts }}
+        />
+      )}
+
+      {/* Body Start Scripts */}
+      {bodyStartScripts && (
+        <Script
+          id="cms-body-start-scripts"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: bodyStartScripts }}
         />
       )}
 

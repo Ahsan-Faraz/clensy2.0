@@ -31,7 +31,37 @@ export default function SEOScripts({
       const script = document.createElement("script");
       script.innerHTML = bodyStartScripts;
       script.setAttribute("data-seo-script", "body-start");
-      document.body.insertBefore(script, document.body.firstChild);
+      if (document.body) {
+        document.body.insertBefore(script, document.body.firstChild);
+      } else {
+        // If body doesn't exist yet, wait for it
+        const observer = new MutationObserver((mutations, obs) => {
+          if (document.body) {
+            document.body.insertBefore(script, document.body.firstChild);
+            obs.disconnect();
+          }
+        });
+        observer.observe(document.documentElement, { childList: true });
+      }
+    }
+
+    // Inject body end scripts
+    if (bodyEndScripts) {
+      const script = document.createElement("script");
+      script.innerHTML = bodyEndScripts;
+      script.setAttribute("data-seo-script", "body-end");
+      if (document.body) {
+        document.body.appendChild(script);
+      } else {
+        // If body doesn't exist yet, wait for it
+        const observer = new MutationObserver((mutations, obs) => {
+          if (document.body) {
+            document.body.appendChild(script);
+            obs.disconnect();
+          }
+        });
+        observer.observe(document.documentElement, { childList: true });
+      }
     }
 
     // Inject custom CSS
@@ -48,7 +78,7 @@ export default function SEOScripts({
       document.querySelectorAll('[data-seo-script]').forEach((el) => el.remove());
       document.querySelectorAll('[data-seo-style]').forEach((el) => el.remove());
     };
-  }, [headScripts, bodyStartScripts, customCss]);
+  }, [headScripts, bodyStartScripts, bodyEndScripts, customCss]);
 
   return (
     <>
@@ -59,7 +89,6 @@ export default function SEOScripts({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaJsonLd) }}
         />
       )}
-      {/* Body end scripts are injected via useEffect */}
     </>
   );
 }
