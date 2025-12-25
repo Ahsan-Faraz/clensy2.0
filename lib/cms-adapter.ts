@@ -704,8 +704,49 @@ export class CMSAdapter {
         status: 'draft',
       });
     }
-    
-    if (!result?.data || result.data.length === 0) return null;
+    // Fallback: fetch all and filter client-side (avoids slug/filters issues)
+    if (!result?.data || result.data.length === 0) {
+      const all = await this.getAllLocations();
+      const found = all.find((loc) => loc.slug === slug);
+      if (!found) return null;
+      // Minimal shape to avoid breaking pages
+      return {
+        name: found.name,
+        slug: found.slug,
+        county: found.county,
+        state: found.state || 'NJ',
+        heroSection: { title: '', subtitle: '', backgroundImage: '', ctaButton1: '', ctaButton2: '' },
+        contactSection: { title: '', phone: '', email: '', address: '', hours: [] },
+        serviceAreas: [],
+        aboutSection: { title: '', description: '' },
+        seo: {
+          metaTitle: found.name || '',
+          metaDescription: '',
+          keywords: [],
+          canonicalUrl: `https://clensy.com/locations/${found.slug}`,
+          robots: 'index, follow',
+          h1: found.name || '',
+          h2: '',
+          h3: '',
+          openGraph: { title: found.name || '', description: '', image: found.heroBackgroundImage || '', type: 'website' },
+          twitter: { card: 'summary_large_image', title: found.name || '', description: '' },
+          schemaJsonLd: null,
+          schemaType: 'LocalBusiness',
+          headScripts: '',
+          bodyStartScripts: '',
+          bodyEndScripts: '',
+          customCss: '',
+        },
+        localSeo: {
+          city: '',
+          county: found.county || '',
+          state: found.state || 'NJ',
+          zipCode: '',
+          serviceType: 'residential, commercial',
+        },
+        imageAlt: { heroBackground: '' },
+      };
+    }
     
     const data = result.data[0];
     return {
@@ -806,8 +847,75 @@ export class CMSAdapter {
         status: 'draft',
       });
     }
-
-    if (!result?.data || result.data.length === 0) return null;
+    // Fallback: fetch all and filter client-side
+    if (!result?.data || result.data.length === 0) {
+      const all = await this.getAllServices();
+      const found = all.find((svc) => svc.slug === slug);
+      if (!found) return null;
+      return {
+        name: found.name,
+        slug: found.slug,
+        serviceType: found.serviceType,
+        heroTopLabel: '',
+        heroHeading: found.heroHeading || '',
+        heroSubheading: found.heroSubheading || '',
+        heroBackgroundImage: found.heroBackgroundImage || '',
+        heroServiceDuration: '',
+        heroServiceGuarantee: '',
+        includedSectionHeading: '',
+        includedSectionSubheading: '',
+        cleaningAreas: [],
+        featureSectionHeading: '',
+        featureSectionSubheading: '',
+        featureSectionImage: '',
+        featureSectionPoints: [],
+        howItWorksHeading: '',
+        howItWorksSubheading: '',
+        step1Title: '',
+        step1Description: '',
+        step1Image: '',
+        step2Title: '',
+        step2Description: '',
+        step2Image: '',
+        step3Title: '',
+        step3Description: '',
+        step3Image: '',
+        benefitsHeading: '',
+        benefitsSubheading: '',
+        benefitsImage: '',
+        benefit1Title: '',
+        benefit1Description: '',
+        benefit2Title: '',
+        benefit2Description: '',
+        benefit3Title: '',
+        benefit3Description: '',
+        clientTestimonialsHeading: '',
+        clientTestimonialsSubheading: '',
+        clientTestimonials: [],
+        frequencyGuideHeading: '',
+        frequencyGuideSubheading: '',
+        frequencyOptions: [],
+        faqs: [],
+        seo: {
+          metaTitle: found.name || '',
+          metaDescription: '',
+          keywords: [],
+          canonicalUrl: `https://clensy.com/services/${found.slug}`,
+          robots: 'index, follow',
+          h1: found.heroHeading || found.name || '',
+          h2: '',
+          h3: '',
+          openGraph: { title: found.name || '', description: '', image: found.heroBackgroundImage || '', type: 'website' },
+          twitter: { card: 'summary_large_image', title: found.name || '', description: '' },
+          schemaJsonLd: null,
+          schemaType: 'Service',
+          headScripts: '',
+          bodyStartScripts: '',
+          bodyEndScripts: '',
+          customCss: '',
+        },
+      };
+    }
 
     const data = result.data[0];
 
@@ -981,6 +1089,198 @@ export class CMSAdapter {
       heroSubtitle: location.heroSubtitle || '',
       heroBackgroundImage: getImageUrl(location.heroBackgroundImage) || location.heroBackgroundImageUrl || '',
     }));
+  }
+
+  /**
+   * Get All Active Redirects
+   */
+  static async getAllRedirects() {
+    try {
+      const result = await fetchFromStrapi<StrapiResponse<any[]>>('/redirects', {
+        filters: { isActive: { $eq: true } },
+        populate: '*',
+      });
+      
+      if (!result?.data) return [];
+      
+      return result.data.map((redirect: any) => ({
+        fromPath: redirect.fromPath || '',
+        toPath: redirect.toPath || '',
+        statusCode: redirect.statusCode || 'permanent_301',
+        isActive: redirect.isActive !== false,
+        notes: redirect.notes || '',
+      }));
+    } catch (error) {
+      console.error('Error fetching redirects:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get Global Settings (for robots.txt and global SEO)
+   */
+  static async getGlobalSettings() {
+    try {
+      const result = await fetchFromStrapi<StrapiResponse<any>>('/global-setting', {
+        populate: '*',
+      });
+      
+      return result?.data || null;
+    } catch (error) {
+      console.error('Error fetching global settings:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Convert form-based schema template to JSON-LD
+   */
+  static convertSchemaTemplateToJsonLd(template: any): any {
+    if (!template || !template.schemaType) return null;
+
+    const { schemaType, localBusiness, service, faqPage, review, customJsonLd } = template;
+
+    // If custom JSON-LD is provided, use it
+    if (customJsonLd && Object.keys(customJsonLd).length > 0) {
+      return {
+        '@context': 'https://schema.org',
+        ...customJsonLd,
+      };
+    }
+
+    switch (schemaType) {
+      case 'LocalBusiness':
+        if (!localBusiness) return null;
+        const logoUrl = getImageUrl(localBusiness.logo) || localBusiness.logoUrl;
+        const imageUrl = getImageUrl(localBusiness.image) || localBusiness.imageUrl;
+        
+        return {
+          '@context': 'https://schema.org',
+          '@type': localBusiness.businessType || 'LocalBusiness',
+          name: localBusiness.businessName,
+          url: localBusiness.url,
+          telephone: localBusiness.telephone,
+          email: localBusiness.email,
+          description: localBusiness.description,
+          priceRange: localBusiness.priceRange,
+          ...(logoUrl && { logo: logoUrl }),
+          ...(imageUrl && { image: imageUrl }),
+          address: localBusiness.address ? {
+            '@type': 'PostalAddress',
+            streetAddress: localBusiness.address.streetAddress,
+            addressLocality: localBusiness.address.addressLocality,
+            addressRegion: localBusiness.address.addressRegion,
+            postalCode: localBusiness.address.postalCode,
+            addressCountry: localBusiness.address.addressCountry || 'US',
+          } : undefined,
+          openingHours: localBusiness.openingHours ? localBusiness.openingHours.split(',').map((h: string) => h.trim()) : undefined,
+          areaServed: localBusiness.areaServed,
+          ...(localBusiness.paymentAccepted && { paymentAccepted: localBusiness.paymentAccepted }),
+          ...(localBusiness.currenciesAccepted && { currenciesAccepted: localBusiness.currenciesAccepted }),
+          ...(localBusiness.hasMap && { hasMap: localBusiness.hasMap }),
+          geo: localBusiness.serviceArea ? {
+            '@type': 'GeoCoordinates',
+            latitude: localBusiness.serviceArea.latitude,
+            longitude: localBusiness.serviceArea.longitude,
+          } : undefined,
+          aggregateRating: localBusiness.aggregateRating ? {
+            '@type': 'AggregateRating',
+            ratingValue: localBusiness.aggregateRating.ratingValue,
+            bestRating: localBusiness.aggregateRating.bestRating || 5,
+            worstRating: localBusiness.aggregateRating.worstRating || 1,
+            ratingCount: localBusiness.aggregateRating.ratingCount,
+          } : undefined,
+        };
+
+      case 'Service':
+        if (!service) return null;
+        const serviceImageUrl = getImageUrl(service.image) || service.imageUrl;
+        
+        return {
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          ...(service.name && { name: service.name }),
+          serviceType: service.serviceType,
+          ...(service.description && { description: service.description }),
+          ...(service.category && { category: service.category }),
+          ...(serviceImageUrl && { image: serviceImageUrl }),
+          provider: service.provider ? {
+            '@type': 'Organization',
+            name: service.provider.name,
+            url: service.provider.url,
+            logo: service.provider.logo,
+            sameAs: service.provider.sameAs || [],
+          } : undefined,
+          areaServed: service.areaServed,
+          serviceArea: service.serviceArea ? {
+            '@type': 'GeoCoordinates',
+            latitude: service.serviceArea.latitude,
+            longitude: service.serviceArea.longitude,
+          } : undefined,
+          availableChannel: {
+            '@type': 'ServiceChannel',
+            serviceType: service.availableChannel || 'Online',
+          },
+          offers: service.offers?.map((offer: any) => ({
+            '@type': 'Offer',
+            name: offer.name,
+            description: offer.description,
+            price: offer.price,
+            priceCurrency: offer.priceCurrency || 'USD',
+            availability: `https://schema.org/${offer.availability || 'InStock'}`,
+            url: offer.url,
+          })) || [],
+        };
+
+      case 'FAQPage':
+        if (!faqPage) return null;
+        return {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqPage.mainEntity?.map((item: any) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: item.answer,
+            },
+          })) || [],
+        };
+
+      case 'Review':
+        if (!review) return null;
+        return {
+          '@context': 'https://schema.org',
+          '@type': 'Review',
+          itemReviewed: {
+            '@type': 'Thing',
+            name: review.itemReviewed,
+          },
+          reviewRating: review.reviewRating ? {
+            '@type': 'Rating',
+            ratingValue: review.reviewRating.ratingValue,
+            bestRating: review.reviewRating.bestRating || 5,
+            worstRating: review.reviewRating.worstRating || 1,
+          } : undefined,
+          author: review.author ? {
+            '@type': 'Person',
+            name: review.author.name,
+            url: review.author.url,
+          } : undefined,
+          publisher: review.publisher ? {
+            '@type': 'Organization',
+            name: review.publisher.name,
+            url: review.publisher.url,
+            logo: review.publisher.logo,
+            sameAs: review.publisher.sameAs || [],
+          } : undefined,
+          reviewBody: review.reviewBody,
+          datePublished: review.datePublished,
+        };
+
+      default:
+        return null;
+    }
   }
 
   // ============================================

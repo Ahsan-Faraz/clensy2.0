@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import CMSAdapter from "@/lib/cms-adapter";
 
 // Get location data by slug
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> | { slug: string } }
 ) {
   try {
-    const rawSlug = params?.slug;
+    // Handle both Promise and direct params (Next.js 15+ vs 14)
+    const resolvedParams = params instanceof Promise ? await params : params;
+    const rawSlug = resolvedParams?.slug;
     // Normalize slug: handle leading/trailing slashes and arrays
     const slugValue = Array.isArray(rawSlug) ? rawSlug[0] : rawSlug;
     const slug = typeof slugValue === 'string' ? slugValue.replace(/^\/+|\/+$/g, '') : '';
@@ -44,9 +44,14 @@ export async function GET(
 // Update location data (for admin)
 export async function POST(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> | { slug: string } }
 ) {
+  // Handle both Promise and direct params (Next.js 15+ vs 14)
+  const resolvedParams = params instanceof Promise ? await params : params;
   try {
+    // Lazy import to avoid mongoose dependency in GET requests
+    const { getServerSession } = await import("next-auth");
+    const { authOptions } = await import("@/app/api/auth/[...nextauth]/route");
     const session = await getServerSession(authOptions);
 
     if (!session || (session.user as any).role !== "admin") {

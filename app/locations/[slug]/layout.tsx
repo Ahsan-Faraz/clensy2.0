@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 import CMSAdapter from "@/lib/cms-adapter";
 
 export const revalidate = 60;
 
 // Generate dynamic metadata from Strapi
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const { slug } = params;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   
   try {
     const location = await CMSAdapter.getLocationBySlug(slug);
@@ -70,11 +68,6 @@ export default function LocationLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Navbar />
-      {children}
-      <Footer />
-    </>
-  );
+  // Navbar and Footer are provided by parent layout (app/locations/layout.tsx)
+  return <>{children}</>;
 }
