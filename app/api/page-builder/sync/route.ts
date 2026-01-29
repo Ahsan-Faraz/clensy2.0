@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { clearLandingPageCache, clearAboutPageCache, clearContactPageCache } from '@/lib/cms-adapter';
+import { revalidatePath } from 'next/cache';
+import { clearLandingPageCache, clearAboutPageCache, clearContactPageCache, clearChecklistPageCache, clearFAQPageCache } from '@/lib/cms-adapter';
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || '';
@@ -30,6 +31,16 @@ const contentTypeConfig: Record<string, {
   'contact': {
     endpoint: '/api/contact',
     templateRelation: 'Contact_Page',
+    fieldMapping: {},
+  },
+  'checklist-page': {
+    endpoint: '/api/checklist-page',
+    templateRelation: 'Checklist_Page',
+    fieldMapping: {},
+  },
+  'faq-page': {
+    endpoint: '/api/faq-page',
+    templateRelation: 'FAQ_Page',
     fieldMapping: {},
   },
 };
@@ -237,14 +248,23 @@ async function syncFromTemplate(
     );
   }
 
-  // Clear the appropriate cache based on content type
+  // Clear the appropriate cache based on content type and revalidate the path
   try {
     if (contentType === 'about') {
       clearAboutPageCache();
+      revalidatePath('/company/about');
     } else if (contentType === 'contact') {
       clearContactPageCache();
+      revalidatePath('/contact');
+    } else if (contentType === 'checklist-page') {
+      clearChecklistPageCache();
+      revalidatePath('/company/checklist');
+    } else if (contentType === 'faq-page') {
+      clearFAQPageCache();
+      revalidatePath('/faq');
     } else {
       clearLandingPageCache();
+      revalidatePath('/');
     }
   } catch (e) {
     // Ignore cache clear errors

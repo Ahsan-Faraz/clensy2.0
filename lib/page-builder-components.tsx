@@ -104,6 +104,7 @@ interface SEOProps {
 interface AboutHeroProps {
   heroHeading: string;
   heroTagline: string;
+  heroBackgroundImageUrl?: string;
 }
 
 interface AboutOurStoryProps {
@@ -193,6 +194,69 @@ interface ContactConsultationProps {
   consultationButtonText: string;
 }
 
+// ==========================================================================
+// CHECKLIST PAGE COMPONENT TYPES
+// ==========================================================================
+
+interface ChecklistHeroProps {
+  heroHeading: string;
+  heroDescription: string;
+  heroSubDescription: string;
+  heroBackgroundImageUrl: string;
+  heroCtaButtonText: string;
+  heroRatingText: string;
+  heroSatisfactionText: string;
+}
+
+interface ChecklistInteractiveGuideProps {
+  interactiveGuideHeading: string;
+  interactiveGuideDescription: string;
+  floorPlanImageDesktopUrl: string;
+  floorPlanImageMobileUrl: string;
+}
+
+interface ChecklistSectionProps {
+  checklistSectionHeading: string;
+  checklistSectionDescription: string;
+  checklistData?: any; // JSON field - managed in Strapi, optional in Page Builder
+}
+
+interface ChecklistCTAProps {
+  ctaHeading: string;
+  ctaDescription: string;
+  ctaButtonText: string;
+  ctaPhoneNumber: string;
+}
+
+// ==========================================================================
+// FAQ PAGE COMPONENT TYPES
+// ==========================================================================
+
+interface FAQHeroProps {
+  heroTopLabel: string;
+  heroHeading: string;
+  heroDescription: string;
+  heroBackgroundImageUrl: string;
+}
+
+interface FAQMainSectionProps {
+  comprehensiveFAQs?: any; // JSON field - managed in Strapi, optional in Page Builder
+}
+
+interface FAQStillHaveQuestionsProps {
+  stillHaveQuestionsHeading: string;
+  stillHaveQuestionsDescription: string;
+  stillHaveQuestionsCards?: any; // JSON field - managed in Strapi, optional in Page Builder
+}
+
+interface FAQContactProps {
+  contactSectionHeading: string;
+  contactSectionDescription: string;
+  contactEmail: string;
+  contactPhone: string;
+  contactButtonText: string;
+}
+
 type PageBuilderBlocks = {
   Hero: HeroProps;
   HowItWorks: HowItWorksProps;
@@ -212,9 +276,19 @@ type PageBuilderBlocks = {
   ContactHero: ContactHeroProps;
   ContactInfo: ContactInfoProps;
   ContactConsultation: ContactConsultationProps;
+  // Checklist Page Components
+  ChecklistHero: ChecklistHeroProps;
+  ChecklistInteractiveGuide: ChecklistInteractiveGuideProps;
+  ChecklistSection: ChecklistSectionProps;
+  ChecklistCTA: ChecklistCTAProps;
+  // FAQ Page Components
+  FAQHero: FAQHeroProps;
+  FAQMainSection: FAQMainSectionProps;
+  FAQStillHaveQuestions: FAQStillHaveQuestionsProps;
+  FAQContact: FAQContactProps;
 };
 
-type Categories = "hero" | "content" | "seo" | "about" | "contact";
+type Categories = "hero" | "content" | "seo" | "about" | "contact" | "checklist" | "faq";
 
 // ============================================================================
 // CHECK ICON SVG COMPONENT
@@ -1281,14 +1355,17 @@ export const pageBuilderConfig: Config<PageBuilderBlocks, {}, Categories> = {
       fields: {
         heroHeading: { type: "text" },
         heroTagline: { type: "text" },
+        heroBackgroundImageUrl: { type: "text" },
       },
       defaultProps: {
         heroHeading: "About Clensy",
         heroTagline: "Raising the Standard, One Clean at a Time.",
+        heroBackgroundImageUrl: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069427/website-images/guvnsgfqcmcx8k1gusum.jpg",
       },
       render: (data: AboutHeroProps) => {
         const heading = getValue(data.heroHeading);
         const tagline = getValue(data.heroTagline);
+        const bgImage = getValue(data.heroBackgroundImageUrl) || "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069427/website-images/guvnsgfqcmcx8k1gusum.jpg";
 
         return (
           <section style={{
@@ -1298,23 +1375,24 @@ export const pageBuilderConfig: Config<PageBuilderBlocks, {}, Categories> = {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'linear-gradient(to right, #000, #0a0a0a)',
+            background: '#000',
             color: 'white',
             overflow: 'hidden',
           }}>
+            {/* Background Image - More visible now */}
             <div style={{
               position: 'absolute',
               inset: 0,
-              background: 'rgba(0,0,0,0.6)',
-            }}></div>
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: "url('https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069427/website-images/guvnsgfqcmcx8k1gusum.jpg')",
+              backgroundImage: `url('${bgImage}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              mixBlendMode: 'overlay',
-              opacity: 0.9,
+              opacity: 0.4,
+            }}></div>
+            {/* Dark overlay */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.5))',
             }}></div>
             <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '0 1rem', maxWidth: '56rem', margin: '0 auto' }}>
               <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', color: 'white' }}>{heading}</h1>
@@ -1773,13 +1851,547 @@ export const pageBuilderConfig: Config<PageBuilderBlocks, {}, Categories> = {
         );
       },
     },
+
+    // ==========================================================================
+    // CHECKLIST PAGE COMPONENTS
+    // ==========================================================================
+
+    ChecklistHero: {
+      fields: {
+        heroHeading: { type: "text" },
+        heroDescription: { type: "textarea" },
+        heroSubDescription: { type: "textarea" },
+        heroBackgroundImageUrl: { type: "text" },
+        heroCtaButtonText: { type: "text" },
+        heroRatingText: { type: "text" },
+        heroSatisfactionText: { type: "text" },
+      },
+      defaultProps: {
+        heroHeading: "Our Clensy Cleaning <blue>Checklist</blue>",
+        heroDescription: "We've developed a comprehensive cleaning system that ensures nothing is overlooked. Every detail matters, and our meticulous approach guarantees exceptional results.",
+        heroSubDescription: "From high-touch surfaces to hidden corners, our trained professionals follow a systematic process that transforms your space into a spotless sanctuary you can trust.",
+        heroBackgroundImageUrl: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop",
+        heroCtaButtonText: "Book Your Cleaning",
+        heroRatingText: "4.9/5 Rating",
+        heroSatisfactionText: "100% Satisfaction",
+      },
+      render: (data: ChecklistHeroProps) => {
+        const heading = getValue(data.heroHeading);
+        const headingParts = heading.split('<blue>');
+        return (
+          <section style={{
+            position: 'relative',
+            width: '100%',
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#000',
+            color: 'white',
+            overflow: 'hidden',
+            paddingTop: '4rem',
+          }}>
+            {/* Background Image */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 0,
+            }}>
+              <img 
+                src={getValue(data.heroBackgroundImageUrl)} 
+                alt="Professional cleaning service background" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.05 }}
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)' }}></div>
+            </div>
+            
+            {/* Animated Background Elements */}
+            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 0 }}>
+              <div style={{ position: 'absolute', top: '5rem', left: '2.5rem', width: '8rem', height: '8rem', background: '#3b82f6', borderRadius: '50%', filter: 'blur(3rem)', opacity: 0.2 }}></div>
+              <div style={{ position: 'absolute', bottom: '5rem', right: '2.5rem', width: '10rem', height: '10rem', background: '#a855f7', borderRadius: '50%', filter: 'blur(3rem)', opacity: 0.2 }}></div>
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '24rem', height: '24rem', background: '#60a5fa', borderRadius: '50%', filter: 'blur(3rem)', opacity: 0.1 }}></div>
+            </div>
+            
+            {/* Pattern Overlay */}
+            <div style={{ position: 'absolute', inset: 0, opacity: 0.05, zIndex: 0, backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`, backgroundSize: '60px 60px' }}></div>
+            
+            <div style={{ maxWidth: '56rem', margin: '0 auto', padding: '0 1.5rem', position: 'relative', zIndex: 10, width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '2rem 0' }}>
+                <div style={{ textAlign: 'center', width: '100%' }}>
+                  {/* Animated Check Icon */}
+                  <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '5rem', height: '5rem', borderRadius: '50%', marginBottom: '1.5rem', position: 'relative' }}>
+                    <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#3b82f6', opacity: 0.3, filter: 'blur(2rem)' }}></div>
+                    <div style={{ position: 'absolute', inset: '0.5rem', borderRadius: '50%', background: '#60a5fa', opacity: 0.4, filter: 'blur(1.5rem)' }}></div>
+                    <div style={{ position: 'relative', background: 'linear-gradient(to bottom right, #3b82f6, #2563eb)', padding: '1.25rem', borderRadius: '50%', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}>
+                      <CheckIcon className="h-10 w-10" color="white" />
+                    </div>
+                  </div>
+                  
+                  <h1 style={{ fontSize: 'clamp(2rem, 5vw, 4.5rem)', fontWeight: 800, marginBottom: '1.5rem', color: 'white', lineHeight: '1.2' }}>
+                    {headingParts[0]}
+                    {headingParts[1] && <span style={{ color: '#60a5fa' }}>{headingParts[1].replace('</blue>', '')}</span>}
+                  </h1>
+                  <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'rgba(255,255,255,0.9)', marginBottom: '1rem', maxWidth: '48rem', margin: '0 auto 1rem', lineHeight: '1.75', fontWeight: 500 }}>{getValue(data.heroDescription)}</p>
+                  <p style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.125rem)', color: 'rgba(255,255,255,0.7)', marginBottom: '2rem', maxWidth: '36rem', margin: '0 auto 2rem', lineHeight: '1.75' }}>{getValue(data.heroSubDescription)}</p>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center', marginBottom: '2rem' }}>
+                    <a href="/booking" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to right, #2563eb, #1d4ed8)', color: 'white', padding: '1rem 2rem', borderRadius: '9999px', fontWeight: 600, textDecoration: 'none', fontSize: '1.125rem', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.3)' }}>
+                      {getValue(data.heroCtaButtonText)}
+                      <svg style={{ width: '1.25rem', height: '1.25rem', marginLeft: '0.5rem' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </a>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', color: 'rgba(255,255,255,0.9)', flexWrap: 'wrap', justifyContent: 'center' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', padding: '0.5rem 0.75rem', borderRadius: '9999px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.2)' }}>
+                        <span style={{ fontWeight: 600, fontSize: '0.875rem' }}>{getValue(data.heroRatingText)}</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', padding: '0.5rem 0.75rem', borderRadius: '9999px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.2)' }}>
+                        <CheckIcon className="h-4 w-4" color="#10b981" />
+                        <span style={{ marginLeft: '0.5rem', fontWeight: 600, fontSize: '0.875rem' }}>{getValue(data.heroSatisfactionText)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Scroll Indicator */}
+            <div style={{ position: 'absolute', bottom: '1rem', left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
+              <div style={{ width: '1.25rem', height: '2rem', border: '2px solid rgba(255,255,255,0.4)', borderRadius: '9999px', display: 'flex', justifyContent: 'center', paddingTop: '0.25rem' }}>
+                <div style={{ width: '0.25rem', height: '0.5rem', background: 'rgba(255,255,255,0.4)', borderRadius: '9999px' }}></div>
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    ChecklistInteractiveGuide: {
+      fields: {
+        interactiveGuideHeading: { type: "text" },
+        interactiveGuideDescription: { type: "textarea" },
+        floorPlanImageDesktopUrl: { type: "text" },
+        floorPlanImageMobileUrl: { type: "text" },
+      },
+      defaultProps: {
+        interactiveGuideHeading: "Our Clensy Cleaning Guide",
+        interactiveGuideDescription: "Click on any room to explore our detailed cleaning protocols and see exactly what's included in each service level.",
+        floorPlanImageDesktopUrl: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069438/website-images/j5wxvoguffksq4fwffuc.svg",
+        floorPlanImageMobileUrl: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069449/website-images/rzv9r7sgs6wgchwgh7kq.svg",
+      },
+      render: (data: ChecklistInteractiveGuideProps) => {
+        return (
+          <section style={{ padding: '6rem 0', background: 'white' }}>
+            <div style={{ maxWidth: '56rem', margin: '0 auto', padding: '0 1rem' }}>
+              <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+                <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1.5rem', color: '#111827' }}>{getValue(data.interactiveGuideHeading)}</h2>
+                <p style={{ fontSize: '1.25rem', color: '#4b5563', maxWidth: '36rem', margin: '0 auto' }}>{getValue(data.interactiveGuideDescription)}</p>
+              </div>
+              <div style={{ width: '100%', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                <img 
+                  src={getValue(data.floorPlanImageDesktopUrl)} 
+                  alt="Interactive cleaning guide floor plan" 
+                  style={{ width: '100%', height: 'auto' }}
+                />
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    ChecklistSection: {
+      fields: {
+        checklistSectionHeading: { type: "text" },
+        checklistSectionDescription: { type: "textarea" },
+        // Note: checklistData is a complex JSON field managed in Strapi directly, not editable in Page Builder sidebar
+      },
+      defaultProps: {
+        checklistSectionHeading: "Clensy Cleaning Checklist",
+        checklistSectionDescription: "Choose your cleaning level to see exactly what's included in each comprehensive service package",
+        checklistData: {},
+      },
+      render: (data: ChecklistSectionProps) => {
+        const checklistData = typeof data.checklistData === 'string' ? JSON.parse(data.checklistData || '{}') : (data.checklistData || {});
+        const activeCleaningType = 'routine'; // Default to routine for preview
+        
+        // Room icons SVGs
+        const roomIcons: Record<string, string> = {
+          kitchen: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12H21M3 6H21M9 1V4M15 1V4M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><circle cx="7" cy="16" r="1" fill="currentColor" /><circle cx="12" cy="16" r="1" fill="currentColor" /><circle cx="17" cy="16" r="1" fill="currentColor" /></svg>`,
+          bathroom: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 22H15C18.866 22 22 18.866 22 15V9C22 8.44772 21.5523 8 21 8H19V6C19 3.79086 17.2091 2 15 2H9C6.79086 2 5 3.79086 5 6V8H3C2.44772 8 2 8.44772 2 9V15C2 18.866 5.13401 22 9 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M5 8V15C5 16.1046 5.89543 17 7 17H17C18.1046 17 19 16.1046 19 15V8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><circle cx="7" cy="12" r="1" fill="currentColor" /><circle cx="17" cy="12" r="1" fill="currentColor" /></svg>`,
+          bedroom: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 18V12C3 11.4477 3.44772 11 4 11H20C20.5523 11 21 11.4477 21 12V18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M2 18H22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M6 11V8C6 7.44772 6.44772 7 7 7H17C17.5523 7 18 7.44772 18 8V11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M8 7V4C8 3.44772 8.44772 3 9 3H15C15.5523 3 16 3.44772 16 4V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>`,
+          living: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 9L12 2L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M9 21V12H15V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M6 15H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M16 15H18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>`,
+        };
+        
+        const rooms = ['kitchen', 'bathroom', 'bedroom', 'living'];
+        
+        return (
+          <section style={{ padding: '6rem 0', background: 'linear-gradient(to bottom right, #1e3a8a, #1e40af, #1e3a8a)', color: 'white', position: 'relative', overflow: 'hidden' }}>
+            {/* Background blur elements */}
+            <div style={{ position: 'absolute', inset: 0, opacity: 0.1 }}>
+              <div style={{ position: 'absolute', top: '5rem', left: '5rem', width: '16rem', height: '16rem', background: 'white', borderRadius: '50%', filter: 'blur(3rem)' }}></div>
+              <div style={{ position: 'absolute', bottom: '5rem', right: '5rem', width: '20rem', height: '20rem', background: '#93c5fd', borderRadius: '50%', filter: 'blur(3rem)' }}></div>
+            </div>
+            
+            <div style={{ maxWidth: '56rem', margin: '0 auto', padding: '0 1.5rem', position: 'relative', zIndex: 10 }}>
+              <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '5rem', height: '5rem', borderRadius: '50%', marginBottom: '1.5rem', position: 'relative' }}>
+                  <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#93c5fd', opacity: 0.8, filter: 'blur(1rem)' }}></div>
+                  <div style={{ position: 'relative', background: '#60a5fa', padding: '1.25rem', borderRadius: '50%' }}>
+                    <CheckIcon className="h-10 w-10" color="white" />
+                  </div>
+                </div>
+                <h2 style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)', fontWeight: 700, marginBottom: '1rem' }}>{getValue(data.checklistSectionHeading)}</h2>
+                <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'rgba(255,255,255,0.9)', maxWidth: '36rem', margin: '0 auto', lineHeight: '1.75' }}>{getValue(data.checklistSectionDescription)}</p>
+                
+                {/* Cleaning Type Tabs (static - showing routine as active) */}
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2.5rem', marginBottom: '3rem', flexWrap: 'wrap' }}>
+                  <button style={{ padding: '1rem 2rem', borderRadius: '9999px', fontWeight: 600, transition: 'all 0.3s', background: 'white', color: '#2563eb', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.3)', transform: 'scale(1.05)' }}>Routine Cleaning</button>
+                  <button style={{ padding: '1rem 2rem', borderRadius: '9999px', fontWeight: 600, transition: 'all 0.3s', background: 'rgba(255,255,255,0.5)', color: 'white' }}>Deep Cleaning</button>
+                  <button style={{ padding: '1rem 2rem', borderRadius: '9999px', fontWeight: 600, transition: 'all 0.3s', background: 'rgba(255,255,255,0.5)', color: 'white' }}>Move In/Out Cleaning</button>
+                </div>
+              </div>
+              
+              {/* 2-column grid with all 4 rooms */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '4rem 4rem', marginBottom: '4rem' }}>
+                {rooms.map((roomKey, roomIdx) => {
+                  const room = checklistData[roomKey];
+                  if (!room || !room[activeCleaningType]) return null;
+                  const items = room[activeCleaningType] || [];
+                  
+                  return (
+                    <div key={roomKey} style={{ opacity: roomIdx < 2 ? 1 : 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
+                        <div style={{ width: '5rem', height: '5rem', background: 'rgba(255,255,255,0.1)', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '1.5rem' }}>
+                          <div style={{ color: 'white', width: '3rem', height: '3rem' }} dangerouslySetInnerHTML={{ __html: roomIcons[roomKey] || '' }} />
+                        </div>
+                        <h3 style={{ fontSize: '1.875rem', fontWeight: 700 }}>{room.title || roomKey.charAt(0).toUpperCase() + roomKey.slice(1)}</h3>
+                      </div>
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        {items.map((item: string, idx: number) => (
+                          <li key={idx} style={{ display: 'flex', alignItems: 'start', gap: '0.75rem', color: 'rgba(255,255,255,0.9)' }}>
+                            <div style={{ flexShrink: 0, marginTop: '0.25rem', width: '1.25rem', height: '1.25rem', borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <CheckIcon className="h-3 w-3" color="#2563eb" />
+                            </div>
+                            <span style={{ lineHeight: '1.5' }}>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              {/* CTA Button */}
+              <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+                <a href="/booking" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'white', color: '#2563eb', padding: '1rem 2rem', borderRadius: '9999px', fontWeight: 600, textDecoration: 'none', fontSize: '1.125rem', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.3)' }}>
+                  Get Your Custom Quote
+                  <svg style={{ width: '1.25rem', height: '1.25rem', marginLeft: '0.5rem' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    ChecklistCTA: {
+      fields: {
+        ctaHeading: { type: "text" },
+        ctaDescription: { type: "textarea" },
+        ctaButtonText: { type: "text" },
+        ctaPhoneNumber: { type: "text" },
+      },
+      defaultProps: {
+        ctaHeading: "Ready for a Spotless Home?",
+        ctaDescription: "Book your cleaning today and experience the Clensy difference. Our comprehensive checklist ensures nothing is missed.",
+        ctaButtonText: "Book Now",
+        ctaPhoneNumber: "(551) 305-4081",
+      },
+      render: (data: ChecklistCTAProps) => {
+        return (
+          <section style={{ padding: '5rem 0', background: 'white' }}>
+            <div style={{ maxWidth: '48rem', margin: '0 auto', padding: '0 1rem', textAlign: 'center' }}>
+              <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, marginBottom: '1rem', color: '#1f2937' }}>{getValue(data.ctaHeading)}</h2>
+              <p style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)', color: '#4b5563', marginBottom: '2rem', lineHeight: '1.75' }}>{getValue(data.ctaDescription)}</p>
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <a href="/booking" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#2563eb', color: 'white', padding: '0.75rem 2rem', borderRadius: '9999px', fontWeight: 500, textDecoration: 'none', fontSize: '1rem' }}>
+                  {getValue(data.ctaButtonText)}
+                </a>
+                <a href={`tel:${getValue(data.ctaPhoneNumber)}`} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'white', color: '#2563eb', border: '2px solid #2563eb', padding: '0.75rem 2rem', borderRadius: '9999px', fontWeight: 500, textDecoration: 'none', fontSize: '1rem' }}>
+                  {getValue(data.ctaPhoneNumber)}
+                </a>
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    // ==========================================================================
+    // FAQ PAGE COMPONENTS
+    // ==========================================================================
+
+    FAQHero: {
+      fields: {
+        heroTopLabel: { type: "text" },
+        heroHeading: { type: "text" },
+        heroDescription: { type: "textarea" },
+        heroBackgroundImageUrl: { type: "text" },
+      },
+      defaultProps: {
+        heroTopLabel: "Answers to your questions",
+        heroHeading: "Frequently Asked <blue>Questions</blue>",
+        heroDescription: "Find answers to common questions about our cleaning services, booking process, and pricing.",
+        heroBackgroundImageUrl: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750847616/shutterstock_2209715823_1_x80cn8.jpg",
+      },
+      render: (data: FAQHeroProps) => {
+        const heading = getValue(data.heroHeading);
+        const headingParts = heading.split('<blue>');
+        return (
+          <section style={{
+            position: 'relative',
+            width: '100%',
+            minHeight: '60vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#000',
+            color: 'white',
+            overflow: 'hidden',
+            paddingTop: '4rem',
+          }}>
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `url(${getValue(data.heroBackgroundImageUrl)})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              opacity: 0.7,
+            }}></div>
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0.7), transparent)' }}></div>
+            <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '0 1rem', maxWidth: '48rem', margin: '0 auto' }}>
+              <div style={{ display: 'inline-block', marginBottom: '1.5rem', padding: '0.5rem 1.5rem', background: '#2563eb', borderRadius: '0.5rem' }}>
+                <span style={{ color: 'white', fontWeight: 600, fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{getValue(data.heroTopLabel)}</span>
+              </div>
+              <h1 style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)', fontWeight: 700, marginBottom: '1.5rem', color: 'white', lineHeight: '1.2' }}>
+                {headingParts[0]}
+                {headingParts[1] && <span style={{ color: '#60a5fa' }}>{headingParts[1].replace('</blue>', '')}</span>}
+              </h1>
+              <p style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)', color: 'rgba(255,255,255,0.8)', marginBottom: '2rem' }}>{getValue(data.heroDescription)}</p>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    FAQMainSection: {
+      fields: {
+        // Note: comprehensiveFAQs is a complex JSON array managed in Strapi directly, not editable in Page Builder sidebar
+      },
+      defaultProps: {
+        comprehensiveFAQs: [],
+      },
+      render: (data: FAQMainSectionProps) => {
+        const faqs = typeof data.comprehensiveFAQs === 'string' ? JSON.parse(data.comprehensiveFAQs || '[]') : (data.comprehensiveFAQs || []);
+        const displayedFAQs = Array.isArray(faqs) ? faqs.slice(0, 12) : [];
+        const categories = Array.isArray(faqs) ? [...new Set(faqs.map((f: any) => f.category).filter(Boolean))] : [];
+        
+        return (
+          <section style={{ padding: '6rem 0', background: 'white' }}>
+            <div style={{ maxWidth: '48rem', margin: '0 auto', padding: '0 1rem' }}>
+              {/* Search Bar */}
+              <div style={{ marginBottom: '3rem' }}>
+                <div style={{ position: 'relative', maxWidth: '32rem', margin: '0 auto' }}>
+                  <div style={{ position: 'absolute', top: '50%', left: '0.75rem', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
+                    <svg style={{ width: '1.25rem', height: '1.25rem', color: '#9ca3af' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                  </div>
+                  <input 
+                    type="text" 
+                    placeholder={`Search from ${faqs.length || 110}+ questions about cleaning, pricing, booking, and more...`}
+                    style={{
+                      width: '100%',
+                      paddingLeft: '2.5rem',
+                      paddingRight: '0.75rem',
+                      paddingTop: '1rem',
+                      paddingBottom: '1rem',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '0.75rem',
+                      fontSize: '1rem',
+                      outline: 'none',
+                    }}
+                    disabled
+                  />
+                </div>
+                
+                {/* Category Filter */}
+                <div style={{ marginTop: '1.5rem', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem' }}>
+                  <button style={{ padding: '0.5rem 1rem', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 500, background: '#2563eb', color: 'white' }}>
+                    All Categories ({displayedFAQs.length})
+                  </button>
+                  {categories.slice(0, 5).map((cat: string, idx: number) => (
+                    <button key={idx} style={{ padding: '0.5rem 1rem', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 500, background: '#f3f4f6', color: '#374151' }}>
+                      {cat.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* FAQ Items */}
+              <div style={{ marginTop: '3rem' }}>
+                <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 1.875rem)', fontWeight: 700, marginBottom: '2rem', textAlign: 'center' }}>All Questions</h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                  {displayedFAQs.length > 0 ? displayedFAQs.map((faq: any, idx: number) => (
+                    <div key={idx} style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '0.75rem', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+                      <div style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ flex: 1, paddingRight: '1rem' }}>
+                          <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: '#111827', marginBottom: '0.5rem' }}>{faq.question || 'Question'}</h3>
+                          <div style={{ display: 'flex', alignItems: 'center', marginTop: '0.5rem' }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', padding: '0.125rem 0.625rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 500, background: '#dbeafe', color: '#1e40af' }}>
+                              {faq.category ? faq.category.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'General'}
+                            </span>
+                          </div>
+                        </div>
+                        <svg style={{ width: '1.25rem', height: '1.25rem', color: '#2563eb', flexShrink: 0 }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M6 9l6 6 6-6" />
+                        </svg>
+                      </div>
+                      <div style={{ padding: '0 1.5rem 1.5rem', borderTop: '1px solid #f3f4f6', paddingTop: '1rem', marginTop: '0' }}>
+                        <p style={{ color: '#374151', lineHeight: '1.75' }}>{faq.answer || 'Answer will appear here...'}</p>
+                      </div>
+                    </div>
+                  )) : (
+                    <div style={{ textAlign: 'center', padding: '3rem 0' }}>
+                      <svg style={{ width: '3rem', height: '3rem', margin: '0 auto 1rem', color: '#9ca3af' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                      </svg>
+                      <h3 style={{ fontSize: '1.125rem', fontWeight: 500, color: '#111827', marginBottom: '0.5rem' }}>No questions available</h3>
+                      <p style={{ color: '#6b7280' }}>Questions will appear here once they are added.</p>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Load More Button */}
+                {displayedFAQs.length > 0 && (
+                  <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+                    <button style={{ display: 'inline-flex', alignItems: 'center', padding: '0.75rem 2rem', border: 'none', borderRadius: '0.75rem', fontSize: '1rem', fontWeight: 500, background: '#2563eb', color: 'white' }}>
+                      Load More Questions
+                      <svg style={{ width: '1.25rem', height: '1.25rem', marginLeft: '0.5rem' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M6 9l6 6 6-6" />
+                      </svg>
+                    </button>
+                    <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
+                      Showing {displayedFAQs.length} of {faqs.length || 110} questions
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    FAQStillHaveQuestions: {
+      fields: {
+        stillHaveQuestionsHeading: { type: "text" },
+        stillHaveQuestionsDescription: { type: "textarea" },
+        // Note: stillHaveQuestionsCards is a JSON array managed in Strapi directly
+      },
+      defaultProps: {
+        stillHaveQuestionsHeading: "Still Have Questions?",
+        stillHaveQuestionsDescription: "Here are some other topics our customers frequently ask about.",
+        stillHaveQuestionsCards: [],
+      },
+      render: (data: FAQStillHaveQuestionsProps) => {
+        const cards = typeof data.stillHaveQuestionsCards === 'string' ? JSON.parse(data.stillHaveQuestionsCards || '[]') : (data.stillHaveQuestionsCards || []);
+        return (
+          <section style={{ padding: '4rem 0', background: '#f9fafb' }}>
+            <div style={{ maxWidth: '48rem', margin: '0 auto', padding: '0 1rem' }}>
+              <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 1.875rem)', fontWeight: 700, marginBottom: '1rem', color: '#111827' }}>{getValue(data.stillHaveQuestionsHeading)}</h2>
+                <p style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)', color: '#4b5563' }}>{getValue(data.stillHaveQuestionsDescription)}</p>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', maxWidth: '48rem', margin: '0 auto' }}>
+                {Array.isArray(cards) && cards.slice(0, 3).map((card: any, idx: number) => (
+                  <div key={idx} style={{ background: 'white', padding: '2rem', borderRadius: '1rem', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+                    <div style={{ width: '4rem', height: '4rem', borderRadius: '50%', background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+                      <ClockIcon className="h-8 w-8" color="#2563eb" />
+                    </div>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.75rem', textAlign: 'center', color: '#111827' }}>{card.title || 'Topic'}</h3>
+                    <p style={{ color: '#4b5563', marginBottom: '1rem', textAlign: 'center' }}>{card.description || ''}</p>
+                    <a href={card.buttonLink || '#'} style={{ display: 'block', textAlign: 'center', color: '#2563eb', fontWeight: 500, textDecoration: 'none' }}>
+                      {card.buttonText || 'Learn More'} →
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    FAQContact: {
+      fields: {
+        contactSectionHeading: { type: "text" },
+        contactSectionDescription: { type: "textarea" },
+        contactEmail: { type: "text" },
+        contactPhone: { type: "text" },
+        contactButtonText: { type: "text" },
+      },
+      defaultProps: {
+        contactSectionHeading: "Can't Find Your Answer?",
+        contactSectionDescription: "Our customer service team is ready to help.",
+        contactEmail: "info@clensy.com",
+        contactPhone: "(551) 305-4081",
+        contactButtonText: "Contact Us",
+      },
+      render: (data: FAQContactProps) => {
+        return (
+          <section style={{ padding: '4rem 0', background: 'white' }}>
+            <div style={{ maxWidth: '48rem', margin: '0 auto', padding: '0 1rem', textAlign: 'center' }}>
+              <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 1.875rem)', fontWeight: 700, marginBottom: '1rem', color: '#111827' }}>{getValue(data.contactSectionHeading)}</h2>
+              <p style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)', color: '#4b5563', marginBottom: '2rem' }}>{getValue(data.contactSectionDescription)}</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
+                <div style={{ background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem' }}>
+                  <h3 style={{ fontWeight: 700, marginBottom: '0.5rem', color: '#111827' }}>Email Us</h3>
+                  <p style={{ color: '#4b5563', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Send us a message and we'll respond within 24 hours.</p>
+                  <a href={`mailto:${getValue(data.contactEmail)}`} style={{ color: '#2563eb', fontWeight: 500, textDecoration: 'none' }}>
+                    {getValue(data.contactEmail)}
+                  </a>
+                </div>
+                <div style={{ background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem' }}>
+                  <h3 style={{ fontWeight: 700, marginBottom: '0.5rem', color: '#111827' }}>Call Us</h3>
+                  <p style={{ color: '#4b5563', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Speak with our customer service team directly.</p>
+                  <a href={`tel:${getValue(data.contactPhone)}`} style={{ color: '#2563eb', fontWeight: 500, textDecoration: 'none' }}>
+                    {getValue(data.contactPhone)}
+                  </a>
+                </div>
+              </div>
+              <a href="/contact" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#2563eb', color: 'white', padding: '0.75rem 2rem', borderRadius: '9999px', fontWeight: 500, textDecoration: 'none', fontSize: '1rem' }}>
+                {getValue(data.contactButtonText)}
+              </a>
+            </div>
+          </section>
+        );
+      },
+    },
   },
 
   categories: {
     hero: { title: "Landing Page - Hero", components: ["Hero"] },
-    content: { title: "Landing Page - Content", components: ["HowItWorks", "Checklist", "Comparison", "Reviews", "CTA"] },
+    content: { title: "Landing Page - Content", components: ["HowItWorks", "Comparison", "Reviews", "CTA"] }, // Checklist removed - hardcoded on site
     about: { title: "About Page", components: ["AboutHero", "AboutOurStory", "AboutWhyWeStarted", "AboutWhatMakesUsDifferent", "AboutMission", "AboutCTA"] },
     contact: { title: "Contact Page", components: ["ContactHero", "ContactInfo", "ContactConsultation"] },
+    checklist: { title: "Checklist Page", components: ["ChecklistHero", "ChecklistInteractiveGuide", "ChecklistCTA"] }, // ChecklistSection removed - hardcoded on site
+    faq: { title: "FAQ Page", components: ["FAQHero", "FAQStillHaveQuestions", "FAQContact"] }, // FAQMainSection removed - hardcoded on site
     seo: { title: "SEO", components: ["SEO"] },
   },
 

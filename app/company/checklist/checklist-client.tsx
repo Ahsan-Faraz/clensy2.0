@@ -8,6 +8,7 @@ import { Check, X, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import SEOHead from "@/components/seo-head";
+import { formatText } from "@/lib/utils/formatText";
 
 type CleaningType = "routine" | "deep" | "moving";
 type RoomType = "kitchen" | "bathroom" | "bedroom" | "living" | "entryway";
@@ -32,12 +33,73 @@ interface ModalData {
   image: string;
 }
 
+interface CMSChecklistData {
+  heroSection: {
+    heading: string;
+    description: string;
+    subDescription: string;
+    backgroundImage: string;
+    ctaButtonText: string;
+    ratingText: string;
+    satisfactionText: string;
+  };
+  interactiveGuide: {
+    heading: string;
+    description: string;
+    floorPlanDesktop: string;
+    floorPlanMobile: string;
+  };
+  checklistSection: {
+    heading: string;
+    description: string;
+    checklistData: ChecklistData;
+  };
+  ctaSection: {
+    heading: string;
+    description: string;
+    buttonText: string;
+    phoneNumber: string;
+  };
+}
+
 interface ChecklistPageClientProps {
   schemaJsonLd?: object | null;
   headScripts?: string;
   bodyEndScripts?: string;
   customCss?: string;
 }
+
+// Default fallback data
+const defaultChecklistData: ChecklistData = {
+  kitchen: {
+    title: "Kitchen",
+    routine: ["Sweep, Vacuum, & Mop Floors", "Wipe down countertops", "Wipe down Stove Top", "Clean exterior of appliances", "Sinks scrubbed and disinfected (dishes upon request)", "Wipe exterior of cabinets and handles", "Clean Stove Top", "Trash emptied"],
+    deep: ["Everything in routine +", "Clean inside microwave", "Kitchen Backsplash", "Degrease Stovetop", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Tables, chairs, & behind/under furniture", "Window Sills"],
+    moving: ["Sweep, Vacuum and mop floors thoroughly", "Clean and disinfect inside and outside of all cabinets and drawers", "Clean inside and outside of refrigerator", "Clean inside and outside of oven", "Scrub and disinfect sink and faucet", "Wipe all countertops and backsplash", "Clean exterior and interior of microwave and other appliances", "Wipe down baseboards, door frames, and light switches"],
+    image: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069417/website-images/y1jwhpsvkcdznrehbatk.jpg",
+  },
+  bathroom: {
+    title: "Bathrooms",
+    routine: ["Sweep, Vacuum, & Mop Floors", "Scrub and sanitize showers and tubs", "Clean and disinfect toilets", "Scrub and disinfect sink and countertops", "Chrome fixtures cleaned and shined", "Clean mirrors", "Towels neatly hung and folded", "Trash Emptied"],
+    deep: ["Everything in routine +", "Remove hard water stains (where possible)", "Scrub grout lines (moderate scrubbing)", "Ceiling fans and light fixtures dusted", "Dust vent covers and ceiling corners", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Window Sills"],
+    moving: ["Sweep, Vacuum and mop floors thoroughly", "Scrub and disinfect toilet (inside, outside, and behind)", "Deep clean shower/tub (remove soap scum, mildew, grout scrubbing)", "Clean inside and outside of all drawers, cabinets, and vanities", "Scrub and polish sink, faucet, and countertops", "Clean mirrors and any glass shower doors", "Wipe baseboards and door trim", "Dust and clean vents, fan covers, and corners"],
+    image: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069426/website-images/hbni4r1jfgawyay3od41.jpg",
+  },
+  bedroom: {
+    title: "Bedrooms",
+    routine: ["Sweep, Vacuum, & Mop Floors", "Beds made, linens changed (if linens are left on bed)", "Dust bedroom shelving, night stand, & bed frame", "Picture frames dusted", "Mirrors Cleaned", "Light (5 minutes) Organization of room", "Ensure overall room looks neat, tidy, and \"hotel-fresh\"", "Trash Emptied"],
+    deep: ["Everything in routine +", "Ceiling fans and light fixtures dusted", "Remove cobwebs from corners and ceilings", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Behind/under furniture", "Window Sills", "Wipe down decor items (vases, candle holders, etc.)"],
+    moving: ["Sweep, Vacuum and mop floors thoroughly", "Clean inside closets, including shelving and floor", "Wipe baseboards and door trim", "Clean interior window glass and wipe window sills", "Dust and wipe ceiling fans and light fixtures", "Clean light switches, doors, and outlet covers", "Remove cobwebs and dust from ceiling corners", "Trash Emptied"],
+    image: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069425/website-images/of8tqpfw4nky9boexhhg.jpg",
+  },
+  living: {
+    title: "Living Areas",
+    routine: ["Sweep, Vacuum, & Mop Floors", "Upholstered furniture vacuumed", "Dust all surfaces and decor", "Dust electronics and TV stands", "Fluff and straighten couch cushions & pillows", "Clean mirrors and glass surfaces", "Light (5 minutes) Organization of room", "Trash emptied"],
+    deep: ["Everything in routine +", "Vacuum inside couch cushions (if removable)", "Ceiling fans and light fixtures dusted", "Remove cobwebs from corners and ceilings", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Behind/under furniture", "Window Sills"],
+    moving: ["Sweep, Vacuum and mop floors thoroughly", "Dust and wipe all baseboards and molding", "Clean interior window glass and wipe window sills", "Remove cobwebs from ceilings and corners", "Clean doors, handles, and light switches", "Dust and wipe ceiling fans and light fixtures", "Clean inside closets and shelving (if any)", "Trash Emptied"],
+    image: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069416/website-images/ybxxaliusujslwciplyb.jpg",
+  },
+};
 
 export default function ChecklistPageClient({ schemaJsonLd, headScripts, bodyEndScripts, customCss }: ChecklistPageClientProps) {
   const [activeRoom, setActiveRoom] = useState<RoomType | null>(null);
@@ -50,6 +112,26 @@ export default function ChecklistPageClient({ schemaJsonLd, headScripts, bodyEnd
     image: "",
   });
   const [activeCleaningType, setActiveCleaningType] = useState<CleaningType>("routine");
+  const [cmsData, setCmsData] = useState<CMSChecklistData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch CMS data on mount
+  useEffect(() => {
+    const fetchChecklistData = async () => {
+      try {
+        const response = await fetch("/api/cms/checklist");
+        const result = await response.json();
+        if (result.success && result.data) {
+          setCmsData(result.data);
+        }
+      } catch (error) {
+        console.error("Error fetching Checklist data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchChecklistData();
+  }, []);
 
   // Effect to handle body scroll locking when modal is open
   useEffect(() => {
@@ -91,36 +173,56 @@ export default function ChecklistPageClient({ schemaJsonLd, headScripts, bodyEnd
     };
   }, [showModal]);
 
-  const fullChecklist: ChecklistData = {
-    kitchen: {
-      title: "Kitchen",
-      routine: ["Sweep, Vacuum, & Mop Floors", "Wipe down countertops", "Wipe down Stove Top", "Clean exterior of appliances", "Sinks scrubbed and disinfected (dishes upon request)", "Wipe exterior of cabinets and handles", "Clean Stove Top", "Trash emptied"],
-      deep: ["Everything in routine +", "Clean inside microwave", "Kitchen Backsplash", "Degrease Stovetop", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Tables, chairs, & behind/under furniture", "Window Sills"],
-      moving: ["Sweep, Vacuum and mop floors thoroughly", "Clean and disinfect inside and outside of all cabinets and drawers", "Clean inside and outside of refrigerator", "Clean inside and outside of oven", "Scrub and disinfect sink and faucet", "Wipe all countertops and backsplash", "Clean exterior and interior of microwave and other appliances", "Wipe down baseboards, door frames, and light switches"],
-      image: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069417/website-images/y1jwhpsvkcdznrehbatk.jpg",
-    },
-    bathroom: {
-      title: "Bathrooms",
-      routine: ["Sweep, Vacuum, & Mop Floors", "Scrub and sanitize showers and tubs", "Clean and disinfect toilets", "Scrub and disinfect sink and countertops", "Chrome fixtures cleaned and shined", "Clean mirrors", "Towels neatly hung and folded", "Trash Emptied"],
-      deep: ["Everything in routine +", "Remove hard water stains (where possible)", "Scrub grout lines (moderate scrubbing)", "Ceiling fans and light fixtures dusted", "Dust vent covers and ceiling corners", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Window Sills"],
-      moving: ["Sweep, Vacuum and mop floors thoroughly", "Scrub and disinfect toilet (inside, outside, and behind)", "Deep clean shower/tub (remove soap scum, mildew, grout scrubbing)", "Clean inside and outside of all drawers, cabinets, and vanities", "Scrub and polish sink, faucet, and countertops", "Clean mirrors and any glass shower doors", "Wipe baseboards and door trim", "Dust and clean vents, fan covers, and corners"],
-      image: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069426/website-images/hbni4r1jfgawyay3od41.jpg",
-    },
-    bedroom: {
-      title: "Bedrooms",
-      routine: ["Sweep, Vacuum, & Mop Floors", "Beds made, linens changed (if linens are left on bed)", "Dust bedroom shelving, night stand, & bed frame", "Picture frames dusted", "Mirrors Cleaned", "Light (5 minutes) Organization of room", "Ensure overall room looks neat, tidy, and \"hotel-fresh\"", "Trash Emptied"],
-      deep: ["Everything in routine +", "Ceiling fans and light fixtures dusted", "Remove cobwebs from corners and ceilings", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Behind/under furniture", "Window Sills", "Wipe down decor items (vases, candle holders, etc.)"],
-      moving: ["Sweep, Vacuum and mop floors thoroughly", "Clean inside closets, including shelving and floor", "Wipe baseboards and door trim", "Clean interior window glass and wipe window sills", "Dust and wipe ceiling fans and light fixtures", "Clean light switches, doors, and outlet covers", "Remove cobwebs and dust from ceiling corners", "Trash Emptied"],
-      image: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069425/website-images/of8tqpfw4nky9boexhhg.jpg",
-    },
-    living: {
-      title: "Living Areas",
-      routine: ["Sweep, Vacuum, & Mop Floors", "Upholstered furniture vacuumed", "Dust all surfaces and decor", "Dust electronics and TV stands", "Fluff and straighten couch cushions & pillows", "Clean mirrors and glass surfaces", "Light (5 minutes) Organization of room", "Trash emptied"],
-      deep: ["Everything in routine +", "Vacuum inside couch cushions (if removable)", "Ceiling fans and light fixtures dusted", "Remove cobwebs from corners and ceilings", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Behind/under furniture", "Window Sills"],
-      moving: ["Sweep, Vacuum and mop floors thoroughly", "Dust and wipe all baseboards and molding", "Clean interior window glass and wipe window sills", "Remove cobwebs from ceilings and corners", "Clean doors, handles, and light switches", "Dust and wipe ceiling fans and light fixtures", "Clean inside closets and shelving (if any)", "Trash Emptied"],
-      image: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069416/website-images/ybxxaliusujslwciplyb.jpg",
-    },
+  // Get checklist data from CMS or use defaults
+  const fullChecklist: ChecklistData = cmsData?.checklistSection?.checklistData && Object.keys(cmsData.checklistSection.checklistData).length > 0
+    ? cmsData.checklistSection.checklistData
+    : defaultChecklistData;
+
+  // Get hero data from CMS or use defaults
+  const heroData = {
+    heading: cmsData?.heroSection?.heading || "Our Clensy Cleaning <blue>Checklist</blue>",
+    description: cmsData?.heroSection?.description || "We've developed a comprehensive cleaning system that ensures nothing is overlooked. Every detail matters, and our meticulous approach guarantees exceptional results.",
+    subDescription: cmsData?.heroSection?.subDescription || "From high-touch surfaces to hidden corners, our trained professionals follow a systematic process that transforms your space into a spotless sanctuary you can trust.",
+    backgroundImage: cmsData?.heroSection?.backgroundImage || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop",
+    ctaButtonText: cmsData?.heroSection?.ctaButtonText || "Book Your Cleaning",
+    ratingText: cmsData?.heroSection?.ratingText || "4.9/5 Rating",
+    satisfactionText: cmsData?.heroSection?.satisfactionText || "100% Satisfaction",
   };
+
+  // Get interactive guide data from CMS or use defaults
+  const guideData = {
+    heading: cmsData?.interactiveGuide?.heading || "Our Clensy Cleaning Guide",
+    description: cmsData?.interactiveGuide?.description || "Click on any room to explore our detailed cleaning protocols and see exactly what's included in each service level.",
+    floorPlanDesktop: cmsData?.interactiveGuide?.floorPlanDesktop || "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069438/website-images/j5wxvoguffksq4fwffuc.svg",
+    floorPlanMobile: cmsData?.interactiveGuide?.floorPlanMobile || "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069449/website-images/rzv9r7sgs6wgchwgh7kq.svg",
+  };
+
+  // Get checklist section data from CMS or use defaults
+  const checklistSectionData = {
+    heading: cmsData?.checklistSection?.heading || "Clensy Cleaning Checklist",
+    description: cmsData?.checklistSection?.description || "Choose your cleaning level to see exactly what's included in each comprehensive service package",
+  };
+
+  // Get CTA section data from CMS or use defaults
+  const ctaData = {
+    heading: cmsData?.ctaSection?.heading || "Ready for a Spotless Home?",
+    description: cmsData?.ctaSection?.description || "Book your cleaning today and experience the Clensy difference. Our comprehensive checklist ensures nothing is missed.",
+    buttonText: cmsData?.ctaSection?.buttonText || "Book Now",
+    phoneNumber: cmsData?.ctaSection?.phoneNumber || "(551) 305-4081",
+  };
+
+  // Parse heading with <blue> tags
+  const parseHeading = (heading: string) => {
+    if (heading.includes('<blue>')) {
+      const parts = heading.split('<blue>');
+      const beforeBlue = parts[0];
+      const afterParts = parts[1]?.split('</blue>') || ['', ''];
+      return { beforeBlue, blueText: afterParts[0], afterBlue: afterParts[1] || '' };
+    }
+    return { beforeBlue: heading, blueText: '', afterBlue: '' };
+  };
+
+  const parsedHeroHeading = parseHeading(heroData.heading);
 
   const handleRoomClick = (room: RoomType) => {
     const roomTitles = { living: "Living Room", kitchen: "Kitchen", bathroom: "Bathroom", bedroom: "Bedroom", entryway: "Entryway" };
@@ -140,10 +242,10 @@ export default function ChecklistPageClient({ schemaJsonLd, headScripts, bodyEnd
         <div className="image-container">
           <div className="image-wrapper">
             <picture>
-              <source media="(max-width:450px)" srcSet="https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069449/website-images/rzv9r7sgs6wgchwgh7kq.svg" />
-              <source media="(max-width:800px)" srcSet="https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069449/website-images/rzv9r7sgs6wgchwgh7kq.svg" />
-              <source media="(max-width:1200px)" srcSet="https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069449/website-images/rzv9r7sgs6wgchwgh7kq.svg" />
-              <Image src="https://res.cloudinary.com/dgjmm3usy/image/upload/v1750069438/website-images/j5wxvoguffksq4fwffuc.svg" alt="The 50-Point Checklist" width={2000} height={1200} className="image-wrapper-item w-full h-auto" priority />
+              <source media="(max-width:450px)" srcSet={guideData.floorPlanMobile} />
+              <source media="(max-width:800px)" srcSet={guideData.floorPlanMobile} />
+              <source media="(max-width:1200px)" srcSet={guideData.floorPlanMobile} />
+              <Image src={guideData.floorPlanDesktop} alt="The 50-Point Checklist" width={2000} height={1200} className="image-wrapper-item w-full h-auto" priority />
             </picture>
           </div>
           <div className="points-wrapper absolute inset-0" data-animation="inview-fade-up" data-inview="true">
@@ -198,7 +300,7 @@ export default function ChecklistPageClient({ schemaJsonLd, headScripts, bodyEnd
         {/* Hero Section */}
         <section className="checklist-page relative h-screen pt-16 bg-black overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <Image src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop" alt="Professional cleaning service background" fill className="object-cover opacity-5" priority />
+            <Image src={heroData.backgroundImage} alt="Professional cleaning service background" fill className="object-cover opacity-5" priority />
             <div className="absolute inset-0 bg-black/80"></div>
           </div>
           <div className="absolute inset-0 overflow-hidden z-0">
@@ -218,21 +320,21 @@ export default function ChecklistPageClient({ schemaJsonLd, headScripts, bodyEnd
                   <div className="relative bg-gradient-to-br from-blue-500 to-blue-600 p-5 rounded-full shadow-2xl"><Check className="h-10 w-10 text-white" /></div>
                 </motion.div>
                 <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight">
-                  Our Clensy Cleaning <span className="text-blue-400">Checklist</span>
+                  {parsedHeroHeading.beforeBlue}{parsedHeroHeading.blueText && <span className="text-blue-400">{parsedHeroHeading.blueText}</span>}{parsedHeroHeading.afterBlue}
                 </motion.h1>
                 <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="text-lg md:text-xl max-w-4xl mx-auto mb-4 text-gray-300 leading-relaxed font-medium">
-                  We've developed a comprehensive cleaning system that ensures nothing is overlooked. Every detail matters, and our meticulous approach guarantees exceptional results.
+                  {heroData.description}
                 </motion.p>
                 <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }} className="text-base md:text-lg max-w-3xl mx-auto text-gray-400 mb-8 leading-relaxed">
-                  From high-touch surfaces to hidden corners, our trained professionals follow a systematic process that transforms your space into a spotless sanctuary you can trust.
+                  {heroData.subDescription}
                 </motion.p>
                 <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
                   <Link href="/booking/" className="inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 hover:-translate-y-1">
-                    Book Your Cleaning<ArrowRight className="ml-2 h-5 w-5" />
+                    {heroData.ctaButtonText}<ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                   <div className="flex items-center gap-6 text-gray-300">
-                    <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg"><span className="font-semibold text-sm">4.9/5 Rating</span></div>
-                    <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg"><Check className="h-4 w-4 text-green-400 mr-2" /><span className="font-semibold text-sm">100% Satisfaction</span></div>
+                    <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg"><span className="font-semibold text-sm">{heroData.ratingText}</span></div>
+                    <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg"><Check className="h-4 w-4 text-green-400 mr-2" /><span className="font-semibold text-sm">{heroData.satisfactionText}</span></div>
                   </div>
                 </motion.div>
               </div>
@@ -247,8 +349,8 @@ export default function ChecklistPageClient({ schemaJsonLd, headScripts, bodyEnd
         <section className="py-24 bg-white">
           <div className="container mx-auto px-6 sm:px-8 lg:px-12 max-w-7xl">
             <div className="text-center mb-16">
-              <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-3xl md:text-5xl font-bold mb-6 text-gray-900">Our Clensy Cleaning Guide</motion.h2>
-              <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="text-xl text-gray-600 max-w-3xl mx-auto">Click on any room to explore our detailed cleaning protocols and see exactly what's included in each service level.</motion.p>
+              <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-3xl md:text-5xl font-bold mb-6 text-gray-900">{guideData.heading}</motion.h2>
+              <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="text-xl text-gray-600 max-w-3xl mx-auto">{guideData.description}</motion.p>
             </div>
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.3 }} className="w-full mb-16">{renderHouseFloorPlan()}</motion.div>
           </div>
@@ -266,8 +368,8 @@ export default function ChecklistPageClient({ schemaJsonLd, headScripts, bodyEnd
                 <div className="absolute inset-0 rounded-full bg-blue-300 opacity-80 blur-md"></div>
                 <div className="relative bg-blue-400 p-5 rounded-full"><Check className="h-10 w-10 text-white" /></div>
               </motion.div>
-              <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-3xl md:text-5xl font-bold mb-4">Clensy Cleaning Checklist</motion.h2>
-              <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="text-xl max-w-3xl mx-auto mb-10 text-white/90 leading-relaxed">Choose your cleaning level to see exactly what's included in each comprehensive service package</motion.p>
+              <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-3xl md:text-5xl font-bold mb-4">{checklistSectionData.heading}</motion.h2>
+              <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="text-xl max-w-3xl mx-auto mb-10 text-white/90 leading-relaxed">{checklistSectionData.description}</motion.p>
               <div className="flex justify-center gap-4 mb-12 flex-wrap">
                 <button onClick={() => setActiveCleaningType("routine")} className={`px-8 py-4 rounded-full font-semibold transition-all duration-300 ${activeCleaningType === "routine" ? "bg-white text-blue-600 shadow-lg transform scale-105" : "bg-blue-700/50 text-white hover:bg-blue-700/80 hover:scale-105"}`}>Routine Cleaning</button>
                 <button onClick={() => setActiveCleaningType("deep")} className={`px-8 py-4 rounded-full font-semibold transition-all duration-300 ${activeCleaningType === "deep" ? "bg-white text-blue-600 shadow-lg transform scale-105" : "bg-blue-700/50 text-white hover:bg-blue-700/80 hover:scale-105"}`}>Deep Cleaning</button>

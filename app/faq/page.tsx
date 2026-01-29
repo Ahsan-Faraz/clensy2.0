@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { CMSAdapter } from "@/lib/cms-adapter";
-import FAQPageClient from "./faq-client";
+import DynamicFAQPage from "@/components/dynamic-faq-page";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 60;
@@ -70,7 +70,7 @@ export default async function FAQPage() {
   }
 
   return (
-    <FAQPageClient
+    <DynamicFAQPage
       schemaJsonLd={seo.schemaJsonLd}
       headScripts={seo.scripts.head}
       bodyEndScripts={seo.scripts.bodyEnd}

@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { CMSAdapter } from "@/lib/cms-adapter";
-import AboutPageClient from "./about-client";
+import DynamicAboutPage from "@/components/dynamic-about-page";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 60;
@@ -72,7 +72,7 @@ export default async function AboutPage() {
   }
 
   return (
-    <AboutPageClient
+    <DynamicAboutPage
       schemaJsonLd={seo.schemaJsonLd}
       headScripts={seo.scripts.head}
       bodyEndScripts={seo.scripts.bodyEnd}

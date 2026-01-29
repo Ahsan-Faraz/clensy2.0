@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { CMSAdapter } from "@/lib/cms-adapter";
-import HomePageClient from "@/components/home-page-client";
+import DynamicLandingPage from "@/components/dynamic-landing-page";
 
 // Force dynamic rendering since we fetch from CMS
 export const dynamic = 'force-dynamic';
@@ -90,7 +90,7 @@ export default async function Home() {
   }
 
   return (
-    <HomePageClient
+    <DynamicLandingPage
       schemaJsonLd={seo.schemaJsonLd}
       additionalSchemas={seo.additionalSchemas}
       headScripts={seo.scripts.head}

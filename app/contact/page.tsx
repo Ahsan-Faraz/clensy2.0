@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { CMSAdapter } from "@/lib/cms-adapter";
-import ContactPageClient from "./contact-client";
+import DynamicContactPage from "@/components/dynamic-contact-page";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 60;
@@ -59,5 +59,5 @@ export default async function ContactPage() {
     console.error("Failed to fetch Contact page SEO:", error);
   }
 
-  return <ContactPageClient schemaJsonLd={seo.schemaJsonLd} headScripts={seo.scripts.head} bodyEndScripts={seo.scripts.bodyEnd} customCss={seo.customCss} />;
+  return <DynamicContactPage schemaJsonLd={seo.schemaJsonLd} headScripts={seo.scripts.head} bodyEndScripts={seo.scripts.bodyEnd} customCss={seo.customCss} />;
 }

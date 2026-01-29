@@ -14,6 +14,8 @@ export async function GET() {
     { name: 'landing-page', endpoint: '/api/landing-page', templateField: 'Landing_Page' },
     { name: 'about', endpoint: '/api/about', templateField: 'About_Page' },
     { name: 'contact', endpoint: '/api/contact', templateField: 'Contact_Page' },
+    { name: 'checklist-page', endpoint: '/api/checklist-page', templateField: 'Checklist_Page' },
+    { name: 'faq-page', endpoint: '/api/faq-page', templateField: 'FAQ_Page' },
   ];
 
   for (const page of pages) {

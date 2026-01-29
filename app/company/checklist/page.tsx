@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { CMSAdapter } from "@/lib/cms-adapter";
-import ChecklistPageClient from "./checklist-client";
+import DynamicChecklistPage from "@/components/dynamic-checklist-page";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 60;
@@ -70,7 +70,7 @@ export default async function ChecklistPage() {
   }
 
   return (
-    <ChecklistPageClient
+    <DynamicChecklistPage
       schemaJsonLd={seo.schemaJsonLd}
       headScripts={seo.scripts.head}
       bodyEndScripts={seo.scripts.bodyEnd}

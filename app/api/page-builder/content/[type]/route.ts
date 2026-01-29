@@ -8,6 +8,8 @@ const contentTypeEndpoints: Record<string, string> = {
   'landing-page': '/api/landing-page',
   'about': '/api/about',
   'contact': '/api/contact',
+  'checklist-page': '/api/checklist-page',
+  'faq-page': '/api/faq-page',
 };
 
 // Template relation field names for each content type
@@ -15,6 +17,8 @@ const templateRelationFields: Record<string, string> = {
   'landing-page': 'Landing_Page',
   'about': 'About_Page',
   'contact': 'Contact_Page',
+  'checklist-page': 'Checklist_Page',
+  'faq-page': 'FAQ_Page',
 };
 
 /**

@@ -47,6 +47,8 @@ const contentTypeEndpoints: Record<string, string> = {
   'landing-page': '/api/page-builder/content/landing-page',
   'about': '/api/page-builder/content/about',
   'contact': '/api/page-builder/content/contact',
+  'checklist-page': '/api/page-builder/content/checklist-page',
+  'faq-page': '/api/page-builder/content/faq-page',
 };
 
 // Content type to template relation field mapping
@@ -54,6 +56,8 @@ const contentTypeTemplateFields: Record<string, string> = {
   'landing-page': 'Landing_Page',
   'about': 'About_Page',
   'contact': 'Contact_Page',
+  'checklist-page': 'Checklist_Page',
+  'faq-page': 'FAQ_Page',
 };
 
 function EditorPageContent() {
@@ -84,6 +88,8 @@ function EditorPageContent() {
         if (extracted === 'landing-page') return 'landing-page';
         if (extracted === 'about') return 'about';
         if (extracted === 'contact') return 'contact';
+        if (extracted === 'checklist-page') return 'checklist-page';
+        if (extracted === 'faq-page') return 'faq-page';
         return extracted;
       }
     }
@@ -556,7 +562,13 @@ NEXT_PUBLIC_PAGE_BUILDER_API_KEY=your_api_key_here
         </button>
         
         <a
-          href={parsedContentType === 'about' ? '/company/about' : parsedContentType === 'contact' ? '/contact' : '/'}
+          href={
+            parsedContentType === 'about' ? '/company/about' :
+            parsedContentType === 'contact' ? '/contact' :
+            parsedContentType === 'checklist-page' ? '/company/checklist' :
+            parsedContentType === 'faq-page' ? '/faq' :
+            '/'
+          }
           target="_blank"
           className="flex items-center justify-center gap-2 px-4 py-2 rounded-full shadow-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-all duration-200"
           title={`View ${contentTypeDisplay} page`}

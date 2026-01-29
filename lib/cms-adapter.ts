@@ -16,6 +16,10 @@ let aboutPageCache: any = null;
 let aboutPageCacheTime: number = 0;
 let contactPageCache: any = null;
 let contactPageCacheTime: number = 0;
+let checklistPageCache: any = null;
+let checklistPageCacheTime: number = 0;
+let faqPageCache: any = null;
+let faqPageCacheTime: number = 0;
 const CACHE_DURATION = process.env.NODE_ENV === 'development' ? 5000 : 60000; // 5 seconds in dev, 1 minute in prod
 
 // Function to clear the landing page cache (called after sync)
@@ -36,11 +40,25 @@ export function clearContactPageCache() {
   contactPageCacheTime = 0;
 }
 
+// Function to clear checklist page cache
+export function clearChecklistPageCache() {
+  checklistPageCache = null;
+  checklistPageCacheTime = 0;
+}
+
+// Function to clear FAQ page cache
+export function clearFAQPageCache() {
+  faqPageCache = null;
+  faqPageCacheTime = 0;
+}
+
 // Clear all page caches
 export function clearAllPageCaches() {
   clearLandingPageCache();
   clearAboutPageCache();
   clearContactPageCache();
+  clearChecklistPageCache();
+  clearFAQPageCache();
 }
 
 interface StrapiResponse<T> {
