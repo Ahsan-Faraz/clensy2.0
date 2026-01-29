@@ -9,10 +9,39 @@
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://strapi-production-8d56.up.railway.app';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
-// Cache for landing page data
+// Cache for page data
 let landingPageCache: any = null;
 let landingPageCacheTime: number = 0;
-const CACHE_DURATION = 60000; // 1 minute
+let aboutPageCache: any = null;
+let aboutPageCacheTime: number = 0;
+let contactPageCache: any = null;
+let contactPageCacheTime: number = 0;
+const CACHE_DURATION = process.env.NODE_ENV === 'development' ? 5000 : 60000; // 5 seconds in dev, 1 minute in prod
+
+// Function to clear the landing page cache (called after sync)
+export function clearLandingPageCache() {
+  landingPageCache = null;
+  landingPageCacheTime = 0;
+}
+
+// Function to clear about page cache
+export function clearAboutPageCache() {
+  aboutPageCache = null;
+  aboutPageCacheTime = 0;
+}
+
+// Function to clear contact page cache
+export function clearContactPageCache() {
+  contactPageCache = null;
+  contactPageCacheTime = 0;
+}
+
+// Clear all page caches
+export function clearAllPageCaches() {
+  clearLandingPageCache();
+  clearAboutPageCache();
+  clearContactPageCache();
+}
 
 interface StrapiResponse<T> {
   data: T;
