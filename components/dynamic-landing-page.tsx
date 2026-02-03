@@ -64,42 +64,70 @@ export default function DynamicLandingPage({
     fetchTemplateData();
   }, []);
 
-  // Split template content: before and after the hardcoded Checklist position
-  // Checklist goes after HowItWorks (or after Hero if no HowItWorks)
-  const { beforeChecklist, afterChecklist } = useMemo(() => {
+  // Split template content for hardcoded sections:
+  // 1. Checklist goes after HowItWorks (or after Hero if no HowItWorks)
+  // 2. Reviews goes after Comparison (or at the end before CTA)
+  const { beforeChecklist, betweenChecklistAndReviews, afterReviews } = useMemo(() => {
+    const emptyTemplate = { ...templateData?.templateJson, content: [] };
+    
     if (!templateData?.templateJson?.content) {
-      return { beforeChecklist: { ...templateData?.templateJson, content: [] }, afterChecklist: { ...templateData?.templateJson, content: [] } };
+      return { beforeChecklist: emptyTemplate, betweenChecklistAndReviews: emptyTemplate, afterReviews: emptyTemplate };
     }
 
     const content = templateData.templateJson.content || [];
-    let splitIndex = -1;
+    let checklistSplitIndex = -1;
+    let reviewsSplitIndex = -1;
 
-    // Find the position after HowItWorks
+    // Find the position after HowItWorks for Checklist
     for (let i = 0; i < content.length; i++) {
       if (content[i].type === 'HowItWorks') {
-        splitIndex = i + 1;
+        checklistSplitIndex = i + 1;
         break;
       }
     }
 
     // If no HowItWorks, put checklist after Hero
-    if (splitIndex === -1) {
+    if (checklistSplitIndex === -1) {
       for (let i = 0; i < content.length; i++) {
         if (content[i].type === 'Hero') {
-          splitIndex = i + 1;
+          checklistSplitIndex = i + 1;
           break;
         }
       }
     }
 
-    // If still no match, put at position 1 (after first component)
-    if (splitIndex === -1) {
-      splitIndex = Math.min(1, content.length);
+    // If still no match, put checklist at position 1 (after first component)
+    if (checklistSplitIndex === -1) {
+      checklistSplitIndex = Math.min(1, content.length);
+    }
+
+    // Find the position after Comparison for Reviews
+    for (let i = checklistSplitIndex; i < content.length; i++) {
+      if (content[i].type === 'Comparison') {
+        reviewsSplitIndex = i + 1;
+        break;
+      }
+    }
+
+    // If no Comparison found, put Reviews before CTA (or at the end)
+    if (reviewsSplitIndex === -1) {
+      for (let i = checklistSplitIndex; i < content.length; i++) {
+        if (content[i].type === 'CTA') {
+          reviewsSplitIndex = i;
+          break;
+        }
+      }
+    }
+
+    // If still no match, put Reviews at the end
+    if (reviewsSplitIndex === -1) {
+      reviewsSplitIndex = content.length;
     }
 
     return {
-      beforeChecklist: { ...templateData.templateJson, content: content.slice(0, splitIndex) },
-      afterChecklist: { ...templateData.templateJson, content: content.slice(splitIndex) },
+      beforeChecklist: { ...templateData.templateJson, content: content.slice(0, checklistSplitIndex) },
+      betweenChecklistAndReviews: { ...templateData.templateJson, content: content.slice(checklistSplitIndex, reviewsSplitIndex) },
+      afterReviews: { ...templateData.templateJson, content: content.slice(reviewsSplitIndex) },
     };
   }, [templateData]);
 
@@ -116,7 +144,7 @@ export default function DynamicLandingPage({
     );
   }
 
-  // Use Page Builder rendering with hardcoded ChecklistSection in fixed position
+  // Use Page Builder rendering with hardcoded ChecklistSection and ReviewsSection in fixed positions
   if (usePageBuilder && templateData) {
     return (
       <main className="overflow-x-hidden">
@@ -137,11 +165,23 @@ export default function DynamicLandingPage({
         {/* HARDCODED Checklist Section - Always appears in this position */}
         <ChecklistSection />
         
-        {/* Page Builder content AFTER Checklist position */}
-        {afterChecklist.content.length > 0 && (
+        {/* Page Builder content BETWEEN Checklist and Reviews */}
+        {betweenChecklistAndReviews.content.length > 0 && (
           <Render
             config={pageBuilderConfig}
-            data={{ templateJson: afterChecklist, content: templateData.content }}
+            data={{ templateJson: betweenChecklistAndReviews, content: templateData.content }}
+            strapi={{ url: STRAPI_URL, imageUrl: STRAPI_URL }}
+          />
+        )}
+        
+        {/* HARDCODED Reviews Section - Fetches own data from CMS */}
+        <ReviewsSection />
+        
+        {/* Page Builder content AFTER Reviews (typically CTA) */}
+        {afterReviews.content.length > 0 && (
+          <Render
+            config={pageBuilderConfig}
+            data={{ templateJson: afterReviews, content: templateData.content }}
             strapi={{ url: STRAPI_URL, imageUrl: STRAPI_URL }}
           />
         )}

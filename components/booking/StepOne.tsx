@@ -121,15 +121,6 @@ export const StepOne: React.FC<StepOneProps> = ({
           }
         });
 
-        // Debug logging to see what we extracted
-        console.log('Google Maps Address Components:', {
-          streetNumber,
-          route,
-          city,
-          state,
-          zipCode
-        });
-
         // Update form data with extracted address components
         onUpdateData({
           address: {
@@ -158,7 +149,6 @@ export const StepOne: React.FC<StepOneProps> = ({
           state: state || ""
         };
         
-        console.log('Saving Google Maps data to localStorage:', serviceAddress);
         localStorage.setItem('serviceAddress', JSON.stringify(serviceAddress));
         
         // Validate postal code if it was filled
@@ -518,7 +508,6 @@ export const StepOne: React.FC<StepOneProps> = ({
     setSelectedScopeGroup(groupId);
     onUpdateData({ scopeIds: [], MainScopeGroupId: groupId }); // Save main scope group id
     setValidationErrors((prev) => ({ ...prev, scopeIds: undefined }));
-    console.log("MainScopeGroupId set to:", groupId);
   };
 
   const handleScopeToggle = (scopeId: string) => {
@@ -545,12 +534,6 @@ export const StepOne: React.FC<StepOneProps> = ({
       const scope = availableScopes.find((s) => s.id === scopeId);
       if (scope && scope.frequencies && scope.frequencies.length === 1) {
         newFrequencies[scopeId] = scope.frequencies[0].FrequencyId;
-        console.log(
-          "Auto-selected frequency for scope",
-          scopeId,
-          ":",
-          scope.frequencies[0].FrequencyId
-        );
         // Clear frequency error if we auto-selected a frequency
         setValidationErrors(prev => ({
           ...prev,
@@ -573,12 +556,6 @@ export const StepOne: React.FC<StepOneProps> = ({
       scopeIds: undefined,
       frequencies: undefined,
     }));
-    console.log(
-      "Selected scopeIds:",
-      newScopes,
-      "Selected frequencyIds:",
-      newFrequencies
-    );
   };
 
   const handleFrequencyChange = (scopeId: string, frequencyId: string) => {
@@ -891,7 +868,6 @@ export const StepOne: React.FC<StepOneProps> = ({
       const response = await apiService.createOrUpdateLead(formData);
       // Support both { leadId } and { Result: { LeadId } }
       let leadId = response.leadId;
-      console.log("Response from lead creation:", response);
 
       if (!leadId && (response as any).Result && (response as any).Result.LeadId) {
         leadId = (response as any).Result.LeadId;
@@ -899,12 +875,9 @@ export const StepOne: React.FC<StepOneProps> = ({
 
       if (leadId) {
         onUpdateData({ id: String(leadId) });
-        console.log("Lead created and saved with id:", leadId);
-        // toast.success("Lead information saved successfully");
         onNext();
       } else {
         toast.error("Failed to save lead: No lead id returned");
-        console.error("Lead creation response missing id:", response);
       }
     } catch (error) {
       console.error("Failed to save lead:", error);

@@ -10,6 +10,10 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CTASection from "@/components/cta-section";
 import SEOScripts from "@/components/seo-scripts";
+import { Render } from "@wecre8websites/strapi-page-builder-react";
+import pageBuilderConfig from "@/lib/page-builder-components";
+
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
 interface FAQItem {
   question: string;
@@ -160,10 +164,13 @@ export default function DynamicServicePage() {
   const [data, setData] = useState<ServiceData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [templateData, setTemplateData] = useState<{ templateJson: any; content: any } | null>(null);
+  const [usePageBuilder, setUsePageBuilder] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch service data from CMS
         const response = await fetch(`/api/cms/services/${slug}`);
         const result = await response.json();
         
@@ -171,6 +178,28 @@ export default function DynamicServicePage() {
           setData(result.data);
         } else {
           setError(result.error || 'Service not found');
+        }
+        
+        // Also fetch Page Builder template data
+        try {
+          const pbResponse = await fetch(`/api/page-builder/content/service?slug=${encodeURIComponent(slug)}`);
+          const pbResult = await pbResponse.json();
+          
+          if (pbResult.success && pbResult.data) {
+            const content = pbResult.data;
+            const templateField = pbResult.templateField || 'Service_Page';
+            const template = content[templateField];
+            
+            if (template?.json?.content && template.json.content.length > 0) {
+              setTemplateData({
+                templateJson: template.json,
+                content,
+              });
+              setUsePageBuilder(true);
+            }
+          }
+        } catch (pbErr) {
+          console.warn('[Service Page] Page Builder template not available:', pbErr);
         }
       } catch (err) {
         console.error("Error fetching service data:", err);
@@ -228,6 +257,245 @@ export default function DynamicServicePage() {
         { title: "Monthly", color: "purple", perfectFor: ["Singles or couples", "Smaller living spaces", "Those who clean regularly", "Limited use areas"], benefits: "Good for getting a professional deep clean while handling regular maintenance yourself.", label: "Budget-Friendly Option" },
       ];
 
+  // Get FAQs with defaults
+  const faqs = data.faqs && data.faqs.length > 0
+    ? data.faqs
+    : [
+        { question: "Do I need to be present during the cleaning?", answer: "No, you don't need to be present. Many of our clients provide a key or access code so we can clean while they're away. Our cleaners are thoroughly vetted and fully insured." },
+        { question: "Can I change my cleaning schedule if needed?", answer: "Absolutely! We understand schedules change. You can reschedule cleanings with at least 48 hours notice without any fee." },
+        { question: "What cleaning products do you use?", answer: "We use high-quality, eco-friendly cleaning products as our standard. If you have specific product preferences or sensitivities, we're happy to accommodate." },
+        { question: "What if I'm not satisfied with the cleaning?", answer: "Your satisfaction is guaranteed. If you're not completely satisfied with any area we've cleaned, contact us within 24 hours and we'll return to reclean at no additional cost." },
+      ];
+
+  // Get testimonials
+  const testimonials = data.clientTestimonials && data.clientTestimonials.length > 0
+    ? data.clientTestimonials
+    : [];
+
+  // ==================== PAGE BUILDER RENDERING ====================
+  // If Page Builder template exists, use it for layout with hardcoded complex sections
+  if (usePageBuilder && templateData) {
+    return (
+      <main className="overflow-x-hidden">
+        <div className="relative z-50">
+          <Navbar />
+        </div>
+        
+        {/* Page Builder renders components (Hero, How It Works, Features, Benefits, CTA) */}
+        <Render
+          config={pageBuilderConfig}
+          data={{ templateJson: templateData.templateJson, content: templateData.content }}
+          strapi={{ url: STRAPI_URL, imageUrl: STRAPI_URL }}
+        />
+
+        {/* HARDCODED: What's Included Section (zigzag pattern with arrays) */}
+        <section className="py-24 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                {data.includedSectionHeading || `What's Included in Our ${data.name || 'Cleaning'}`}
+              </h2>
+              <p className="text-lg text-gray-600">
+                {data.includedSectionSubheading || "Our comprehensive cleaning service ensures every essential area receives meticulous attention."}
+              </p>
+            </div>
+
+            {cleaningAreas.map((area, index) => (
+              <div
+                key={index}
+                className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${index < cleaningAreas.length - 1 ? 'mb-20' : ''}`}
+              >
+                {index % 2 === 0 ? (
+                  <>
+                    <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-lg order-2 lg:order-1">
+                      <Image
+                        src={area.image || DEFAULT_IMAGES.kitchen}
+                        alt={area.imageAlt || area.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="order-1 lg:order-2">
+                      <h3 className="text-2xl font-bold mb-4">{area.title}</h3>
+                      <p className="text-gray-600 mb-6">{area.description}</p>
+                      {area.features && area.features.length > 0 && (
+                        <ul className="space-y-3">
+                          {area.features.map((feature: string, fIndex: number) => (
+                            <li key={fIndex} className="flex items-start">
+                              <Check className="h-5 w-5 mr-3 text-blue-600 flex-shrink-0 mt-0.5" />
+                              <span>{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <h3 className="text-2xl font-bold mb-4">{area.title}</h3>
+                      <p className="text-gray-600 mb-6">{area.description}</p>
+                      {area.features && area.features.length > 0 && (
+                        <ul className="space-y-3">
+                          {area.features.map((feature: string, fIndex: number) => (
+                            <li key={fIndex} className="flex items-start">
+                              <Check className="h-5 w-5 mr-3 text-blue-600 flex-shrink-0 mt-0.5" />
+                              <span>{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                    <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-lg">
+                      <Image
+                        src={area.image || DEFAULT_IMAGES.bathroom}
+                        alt={area.imageAlt || area.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* HARDCODED: Testimonials Section */}
+        {testimonials.length > 0 && (
+          <section className="py-20 bg-gray-900 text-white">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="max-w-3xl mx-auto text-center mb-16">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                  {data.clientTestimonialsHeading || "What Our Clients Say"}
+                </h2>
+                <p className="text-lg text-white/80">
+                  {data.clientTestimonialsSubheading || `Hear from our satisfied clients about their experience with our ${data.name || 'cleaning'} service.`}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {testimonials.map((testimonial: any, index: number) => (
+                  <div key={index} className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl h-full flex flex-col">
+                    <div className="flex items-center mb-4">
+                      {[...Array(testimonial.rating || 5)].map((_, i) => (
+                        <Star key={i} className="h-5 w-5 text-yellow-400" fill="currentColor" />
+                      ))}
+                    </div>
+                    <p className="text-white/80 mb-6 flex-grow">"{testimonial.review}"</p>
+                    <div className="flex items-center mt-auto">
+                      <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center mr-4">
+                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold">{testimonial.clientName}</p>
+                        <p className="text-white/60 text-sm">{testimonial.clientLocation}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* HARDCODED: Cleaning Frequency Guide */}
+        <section className="py-24 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                {data.frequencyGuideHeading || "How Often Should You Schedule Cleaning?"}
+              </h2>
+              <p className="text-lg text-gray-600">
+                {data.frequencyGuideSubheading || "Finding the right cleaning frequency depends on your specific needs."}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {frequencyOptions.map((option: any, index: number) => {
+                const colorClasses: Record<string, { bg: string; check: string }> = {
+                  green: { bg: "bg-green-600", check: "text-green-600" },
+                  blue: { bg: "bg-blue-600", check: "text-blue-600" },
+                  purple: { bg: "bg-purple-600", check: "text-purple-600" },
+                };
+                const colors = colorClasses[option.color] || colorClasses.blue;
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.2 }}
+                    viewport={{ once: true }}
+                    className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100"
+                  >
+                    <div className={`${colors.bg} p-6`}>
+                      <h3 className="text-xl font-bold text-white text-center">{option.title}</h3>
+                    </div>
+                    <div className="p-6">
+                      <div className="mb-6">
+                        <h4 className="text-lg font-semibold mb-3">Perfect For:</h4>
+                        <ul className="space-y-2">
+                          {option.perfectFor?.map((item: string, i: number) => (
+                            <li key={i} className="flex items-start">
+                              <Check className={`h-5 w-5 mr-2 ${colors.check} flex-shrink-0 mt-0.5`} />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="mb-6">
+                        <h4 className="text-lg font-semibold mb-3">Benefits:</h4>
+                        <p className="text-gray-600">{option.benefits}</p>
+                      </div>
+                      <div className="text-center pt-4 border-t border-gray-100">
+                        <span className="text-sm text-gray-500">{option.label}</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* HARDCODED: FAQ Section */}
+        <section className="py-24 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
+              <p className="text-lg text-gray-600 text-center mb-12">
+                Learn more about our {data.name || 'cleaning'} service.
+              </p>
+              <div className="space-y-8">
+                {faqs.map((faq: any, idx: number) => (
+                  <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-blue-600">
+                    <h3 className="text-xl font-semibold mb-3">{faq.question}</h3>
+                    <p className="text-gray-600">{faq.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <CTASection />
+        <Footer />
+        
+        {/* SEO Scripts */}
+        {data?.seo && (
+          <SEOScripts
+            headScripts={data.seo.headScripts}
+            bodyStartScripts={data.seo.bodyStartScripts}
+            bodyEndScripts={data.seo.bodyEndScripts}
+            schemaJsonLd={data.seo.schemaJsonLd}
+            customCss={data.seo.customCss}
+          />
+        )}
+      </main>
+    );
+  }
+
+  // ==================== FALLBACK: Original Hardcoded Rendering ====================
   return (
     <main className="overflow-x-hidden">
       <Navbar />

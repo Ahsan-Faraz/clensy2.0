@@ -654,3 +654,20 @@ section {
     height: 28px;
   }
 }
+
+/* ============================================
+   PAGE BUILDER LIBRARY OVERRIDES
+   Override any white backgrounds from @wecre8websites/strapi-page-builder-react
+   ============================================ */
+[data-puck-render],
+.puck-render-container,
+.puck-render,
+[data-puck] {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Ensure location page builder components don't get white backgrounds */
+.location-page-builder-wrapper > * {
+  background: transparent !important;
+}

@@ -1,6 +1,9 @@
 import { MetadataRoute } from 'next';
 import CMSAdapter from '@/lib/cms-adapter';
 
+// Force dynamic rendering - fetches from Strapi at runtime
+export const dynamic = 'force-dynamic';
+
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://clensy.com';
   

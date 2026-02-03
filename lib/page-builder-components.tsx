@@ -257,12 +257,125 @@ interface FAQContactProps {
   contactButtonText: string;
 }
 
+// ============================================================================
+// SERVICE PAGE COMPONENT INTERFACES
+// ============================================================================
+
+interface ServiceHeroProps {
+  heroTopLabel?: string;
+  heroHeading: string;
+  heroSubheading?: string;
+  heroBackgroundImageUrl?: string;
+  heroServiceDuration?: string;
+  heroServiceGuarantee?: string;
+}
+
+interface ServiceTrustIndicatorsProps {
+  stat1Value?: string;
+  stat1Label?: string;
+  stat2Value?: string;
+  stat2Label?: string;
+  stat3Value?: string;
+  stat3Label?: string;
+  stat4Value?: string;
+  stat4Label?: string;
+}
+
+interface ServiceFeaturesProps {
+  featureSectionHeading?: string;
+  featureSectionSubheading?: string;
+  featureSectionImageUrl?: string;
+  featurePoint1?: string;
+  featurePoint2?: string;
+  featurePoint3?: string;
+}
+
+interface ServiceHowItWorksProps {
+  howItWorksHeading?: string;
+  howItWorksSubheading?: string;
+  step1Title?: string;
+  step1Description?: string;
+  step1ImageUrl?: string;
+  step2Title?: string;
+  step2Description?: string;
+  step2ImageUrl?: string;
+  step3Title?: string;
+  step3Description?: string;
+  step3ImageUrl?: string;
+}
+
+interface ServiceBenefitsProps {
+  benefitsHeading?: string;
+  benefitsSubheading?: string;
+  benefitsImageUrl?: string;
+  benefit1Title?: string;
+  benefit1Description?: string;
+  benefit2Title?: string;
+  benefit2Description?: string;
+  benefit3Title?: string;
+  benefit3Description?: string;
+}
+
+interface ServiceCTAProps {
+  ctaHeading?: string;
+  ctaDescription?: string;
+  ctaButtonText?: string;
+  ctaButtonLink?: string;
+}
+
+// ============================================================================
+// LOCATION PAGE COMPONENT INTERFACES
+// ============================================================================
+
+interface LocationHeroProps {
+  heroTitle: string;
+  heroSubtitle?: string;
+  heroBackgroundImageUrl?: string;
+  ctaButton1Text?: string;
+  ctaButton2Text?: string;
+}
+
+// Combined interface for the 2-column main content layout
+interface LocationMainContentProps {
+  // Left column - Contact
+  contactTitle?: string;
+  phoneLabel?: string;
+  phoneNumber?: string;
+  emailLabel?: string;
+  emailAddress?: string;
+  contactCtaText?: string;
+  // Left column - Hours
+  hoursTitle?: string;
+  hours?: string; // JSON string of array [{day, hours}]
+  // Right column - Map
+  mapTitle?: string;
+  locationName?: string;
+  mapCtaText?: string;
+  // Right column - About
+  aboutTitle?: string;
+  aboutDescription?: string;
+  aboutCtaText?: string;
+}
+
+interface LocationServicesProps {
+  servicesHeading?: string;
+  servicesDescription?: string;
+}
+
+interface LocationCTAProps {
+  ctaHeading?: string;
+  ctaDescription?: string;
+  ctaButtonText?: string;
+  contactPhone?: string;
+  contactEmail?: string;
+}
+
 type PageBuilderBlocks = {
   Hero: HeroProps;
   HowItWorks: HowItWorksProps;
   Checklist: ChecklistProps;
   Comparison: ComparisonProps;
-  Reviews: ReviewsProps;
+  // Reviews: ReviewsProps; // REMOVED - Now hardcoded on Landing Page, fetches own CMS data
   CTA: CTAProps;
   SEO: SEOProps;
   // About Page Components
@@ -286,9 +399,21 @@ type PageBuilderBlocks = {
   FAQMainSection: FAQMainSectionProps;
   FAQStillHaveQuestions: FAQStillHaveQuestionsProps;
   FAQContact: FAQContactProps;
+  // Service Page Components
+  ServiceHero: ServiceHeroProps;
+  ServiceTrustIndicators: ServiceTrustIndicatorsProps;
+  ServiceFeatures: ServiceFeaturesProps;
+  ServiceHowItWorks: ServiceHowItWorksProps;
+  ServiceBenefits: ServiceBenefitsProps;
+  ServiceCTA: ServiceCTAProps;
+  // Location Page Components
+  LocationHero: LocationHeroProps;
+  LocationMainContent: LocationMainContentProps; // Combined 2-column layout (replaces individual cards)
+  LocationServices: LocationServicesProps;
+  LocationCTA: LocationCTAProps;
 };
 
-type Categories = "hero" | "content" | "seo" | "about" | "contact" | "checklist" | "faq";
+type Categories = "hero" | "content" | "seo" | "about" | "contact" | "checklist" | "faq" | "service" | "location";
 
 // ============================================================================
 // CHECK ICON SVG COMPONENT
@@ -2383,15 +2508,667 @@ export const pageBuilderConfig: Config<PageBuilderBlocks, {}, Categories> = {
         );
       },
     },
+
+    // ==========================================================================
+    // SERVICE PAGE COMPONENTS
+    // ==========================================================================
+
+    ServiceHero: {
+      fields: {
+        heroTopLabel: { type: "text" },
+        heroHeading: { type: "text" },
+        heroSubheading: { type: "textarea" },
+        heroBackgroundImageUrl: { type: "text" },
+        heroServiceDuration: { type: "text" },
+        heroServiceGuarantee: { type: "text" },
+      },
+      defaultProps: {
+        heroTopLabel: "Premium Services",
+        heroHeading: "Professional Cleaning Service",
+        heroSubheading: "Experience the difference with our professional cleaning team.",
+        heroBackgroundImageUrl: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750838311/home-2573375_1280_ckf686.png",
+        heroServiceDuration: "2-3 Hour Service",
+        heroServiceGuarantee: "100% Satisfaction",
+      },
+      render: (data: ServiceHeroProps) => {
+        const bgImage = getValue(data.heroBackgroundImageUrl) || "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750838311/home-2573375_1280_ckf686.png";
+        return (
+          <section style={{ position: 'relative', minHeight: '85vh', background: '#000', paddingTop: '64px' }}>
+            <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+              <img src={bgImage} alt={getValue(data.heroHeading)} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, black, rgba(0,0,0,0.7), transparent)' }}></div>
+            </div>
+            <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem', position: 'relative', zIndex: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'center', minHeight: 'calc(85vh - 64px)' }}>
+                <div>
+                  <div style={{ display: 'inline-block', marginBottom: '1.5rem', padding: '0.25rem 1rem', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(4px)', borderRadius: '9999px' }}>
+                    <span style={{ color: 'rgba(255,255,255,0.9)', fontSize: '0.875rem', fontWeight: 500 }}>{getValue(data.heroTopLabel)}</span>
+                  </div>
+                  <h1 style={{ fontSize: '3rem', fontWeight: 700, color: 'white', marginBottom: '1.5rem' }}>{getValue(data.heroHeading)}</h1>
+                  <p style={{ fontSize: '1.125rem', color: 'rgba(255,255,255,0.8)', marginBottom: '2rem', maxWidth: '36rem' }}>{getValue(data.heroSubheading)}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                    <a href="/contact" style={{ background: 'white', color: 'black', padding: '0.75rem 2rem', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 500, textDecoration: 'none' }}>Get a Free Quote</a>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', color: 'rgba(255,255,255,0.9)' }}>
+                      <span style={{ fontSize: '0.875rem' }}>⏱️ {getValue(data.heroServiceDuration)}</span>
+                      <span style={{ fontSize: '0.875rem' }}>✅ {getValue(data.heroServiceGuarantee)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    ServiceTrustIndicators: {
+      fields: {
+        stat1Value: { type: "text" },
+        stat1Label: { type: "text" },
+        stat2Value: { type: "text" },
+        stat2Label: { type: "text" },
+        stat3Value: { type: "text" },
+        stat3Label: { type: "text" },
+        stat4Value: { type: "text" },
+        stat4Label: { type: "text" },
+      },
+      defaultProps: {
+        stat1Value: "12K+",
+        stat1Label: "Happy Customers",
+        stat2Value: "24/7",
+        stat2Label: "Customer Support",
+        stat3Value: "4.9",
+        stat3Label: "Average Rating",
+        stat4Value: "100%",
+        stat4Label: "Satisfaction Guarantee",
+      },
+      render: (data: ServiceTrustIndicatorsProps) => {
+        return (
+          <section style={{ padding: '2.5rem 0', background: '#f9fafb' }}>
+            <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', textAlign: 'center' }}>
+                <div><div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'black', marginBottom: '0.5rem' }}>{getValue(data.stat1Value)}</div><p style={{ color: '#6b7280' }}>{getValue(data.stat1Label)}</p></div>
+                <div><div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'black', marginBottom: '0.5rem' }}>{getValue(data.stat2Value)}</div><p style={{ color: '#6b7280' }}>{getValue(data.stat2Label)}</p></div>
+                <div><div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'black', marginBottom: '0.5rem' }}>{getValue(data.stat3Value)}</div><p style={{ color: '#6b7280' }}>{getValue(data.stat3Label)}</p></div>
+                <div><div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'black', marginBottom: '0.5rem' }}>{getValue(data.stat4Value)}</div><p style={{ color: '#6b7280' }}>{getValue(data.stat4Label)}</p></div>
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    ServiceFeatures: {
+      fields: {
+        featureSectionHeading: { type: "text" },
+        featureSectionSubheading: { type: "textarea" },
+        featureSectionImageUrl: { type: "text" },
+        featurePoint1: { type: "text" },
+        featurePoint2: { type: "text" },
+        featurePoint3: { type: "text" },
+      },
+      defaultProps: {
+        featureSectionHeading: "Exceptional Cleaning Results, Every Time",
+        featureSectionSubheading: "Our professional cleaners follow a meticulous process to ensure your space receives the highest standard of cleaning.",
+        featureSectionImageUrl: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839531/image86_di8j8g.png",
+        featurePoint1: "Consistently thorough cleaning with attention to detail",
+        featurePoint2: "Eco-friendly cleaning products for a healthier environment",
+        featurePoint3: "Professionally trained and background-checked staff",
+      },
+      render: (data: ServiceFeaturesProps) => {
+        const bgImage = getValue(data.featureSectionImageUrl) || "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839531/image86_di8j8g.png";
+        const points = [getValue(data.featurePoint1), getValue(data.featurePoint2), getValue(data.featurePoint3)].filter(Boolean);
+        return (
+          <section style={{ position: 'relative', padding: '4rem 0' }}>
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #000, #1f2937)', opacity: 0.9 }}></div>
+            <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem', position: 'relative', zIndex: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'center' }}>
+                <div style={{ color: 'white' }}>
+                  <h2 style={{ fontSize: '2.25rem', fontWeight: 700, marginBottom: '1.5rem' }}>{getValue(data.featureSectionHeading)}</h2>
+                  <p style={{ fontSize: '1.125rem', color: 'rgba(255,255,255,0.8)', marginBottom: '2rem' }}>{getValue(data.featureSectionSubheading)}</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {points.map((point, index) => (
+                      <div key={index} style={{ display: 'flex', alignItems: 'flex-start' }}>
+                        <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '9999px', padding: '0.5rem', marginRight: '1rem', flexShrink: 0 }}>
+                          <div style={{ color: '#22c55e' }}>✓</div>
+                        </div>
+                        <p style={{ color: 'rgba(255,255,255,0.9)' }}>{point}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ height: '400px', borderRadius: '1rem', overflow: 'hidden' }}>
+                  <img src={bgImage} alt="Professional cleaning" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '1rem' }} />
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    ServiceHowItWorks: {
+      fields: {
+        howItWorksHeading: { type: "text" },
+        howItWorksSubheading: { type: "textarea" },
+        step1Title: { type: "text" },
+        step1Description: { type: "textarea" },
+        step1ImageUrl: { type: "text" },
+        step2Title: { type: "text" },
+        step2Description: { type: "textarea" },
+        step2ImageUrl: { type: "text" },
+        step3Title: { type: "text" },
+        step3Description: { type: "textarea" },
+        step3ImageUrl: { type: "text" },
+      },
+      defaultProps: {
+        howItWorksHeading: "How Our Service Works",
+        howItWorksSubheading: "Getting started with our premium cleaning service is seamless and convenient.",
+        step1Title: "Book Online",
+        step1Description: "Schedule your cleaning service online in minutes. Choose your preferred date and time.",
+        step1ImageUrl: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839593/image47_npjiyh.png",
+        step2Title: "We Clean",
+        step2Description: "Our professional team arrives promptly and meticulously cleans your space.",
+        step2ImageUrl: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839700/image21_qgnpkg.png",
+        step3Title: "Relax & Enjoy",
+        step3Description: "Return to a pristine, fresh space. Set up recurring cleanings to maintain it effortlessly.",
+        step3ImageUrl: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839766/image68_npznqj.png",
+      },
+      render: (data: ServiceHowItWorksProps) => {
+        const steps = [
+          { num: 1, title: getValue(data.step1Title), desc: getValue(data.step1Description), img: getValue(data.step1ImageUrl) || "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839593/image47_npjiyh.png" },
+          { num: 2, title: getValue(data.step2Title), desc: getValue(data.step2Description), img: getValue(data.step2ImageUrl) || "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839700/image21_qgnpkg.png" },
+          { num: 3, title: getValue(data.step3Title), desc: getValue(data.step3Description), img: getValue(data.step3ImageUrl) || "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839766/image68_npznqj.png" },
+        ];
+        return (
+          <section style={{ padding: '5rem 0', background: '#f9fafb' }}>
+            <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>
+              <div style={{ maxWidth: '48rem', margin: '0 auto', textAlign: 'center', marginBottom: '4rem' }}>
+                <h2 style={{ fontSize: '2.25rem', fontWeight: 700, marginBottom: '1.5rem' }}>{getValue(data.howItWorksHeading)}</h2>
+                <p style={{ fontSize: '1.125rem', color: '#6b7280' }}>{getValue(data.howItWorksSubheading)}</p>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}>
+                {steps.map((step) => (
+                  <div key={step.num} style={{ background: 'white', borderRadius: '1rem', padding: '2rem', position: 'relative' }}>
+                    <div style={{ position: 'absolute', top: '-1rem', left: '-1rem', width: '3.5rem', height: '3.5rem', background: 'black', color: 'white', borderRadius: '9999px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', fontWeight: 700 }}>{step.num}</div>
+                    <div style={{ height: '10rem', borderRadius: '0.75rem', overflow: 'hidden', marginBottom: '1.5rem', marginTop: '0.5rem' }}>
+                      <img src={step.img} alt={step.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>{step.title}</h3>
+                    <p style={{ color: '#6b7280' }}>{step.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    ServiceBenefits: {
+      fields: {
+        benefitsHeading: { type: "text" },
+        benefitsSubheading: { type: "textarea" },
+        benefitsImageUrl: { type: "text" },
+        benefit1Title: { type: "text" },
+        benefit1Description: { type: "textarea" },
+        benefit2Title: { type: "text" },
+        benefit2Description: { type: "textarea" },
+        benefit3Title: { type: "text" },
+        benefit3Description: { type: "textarea" },
+      },
+      defaultProps: {
+        benefitsHeading: "Why Choose Our Service",
+        benefitsSubheading: "Our premium cleaning service offers exceptional benefits to maintain your space in pristine condition.",
+        benefitsImageUrl: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839832/image84_rjmtgy.png",
+        benefit1Title: "Consistent Excellence",
+        benefit1Description: "Regular professional cleanings ensure your space maintains a consistently pristine appearance.",
+        benefit2Title: "Reclaimed Time & Energy",
+        benefit2Description: "Regain your valuable time by entrusting your cleaning needs to our professional team.",
+        benefit3Title: "Enhanced Well-being",
+        benefit3Description: "Regular professional cleaning significantly reduces allergens, dust, and bacteria.",
+      },
+      render: (data: ServiceBenefitsProps) => {
+        const benefits = [
+          { title: getValue(data.benefit1Title), desc: getValue(data.benefit1Description) },
+          { title: getValue(data.benefit2Title), desc: getValue(data.benefit2Description) },
+          { title: getValue(data.benefit3Title), desc: getValue(data.benefit3Description) },
+        ];
+        const bgImage = getValue(data.benefitsImageUrl) || "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839832/image84_rjmtgy.png";
+        return (
+          <section style={{ padding: '5rem 0', background: 'white' }}>
+            <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'center' }}>
+                <div>
+                  <h2 style={{ fontSize: '2.25rem', fontWeight: 700, marginBottom: '1.5rem' }}>{getValue(data.benefitsHeading)}</h2>
+                  <p style={{ fontSize: '1.125rem', color: '#6b7280', marginBottom: '2rem' }}>{getValue(data.benefitsSubheading)}</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    {benefits.map((benefit, index) => (
+                      <div key={index} style={{ display: 'flex', alignItems: 'flex-start' }}>
+                        <div style={{ background: '#f3f4f6', borderRadius: '9999px', padding: '0.5rem', marginRight: '1rem', flexShrink: 0 }}>
+                          <div style={{ color: '#22c55e' }}>✓</div>
+                        </div>
+                        <div>
+                          <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '0.5rem' }}>{benefit.title}</h3>
+                          <p style={{ color: '#6b7280' }}>{benefit.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ height: '600px', borderRadius: '1rem', overflow: 'hidden' }}>
+                  <img src={bgImage} alt="Benefits" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '1rem' }} />
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    ServiceCTA: {
+      fields: {
+        ctaHeading: { type: "text" },
+        ctaDescription: { type: "textarea" },
+        ctaButtonText: { type: "text" },
+        ctaButtonLink: { type: "text" },
+      },
+      defaultProps: {
+        ctaHeading: "Ready to Experience a Cleaner Space?",
+        ctaDescription: "Book your professional cleaning service today and enjoy a spotless home or office.",
+        ctaButtonText: "Get Started",
+        ctaButtonLink: "/booking",
+      },
+      render: (data: ServiceCTAProps) => {
+        return (
+          <section style={{ padding: '5rem 0', background: 'linear-gradient(to right, #1e40af, #3b82f6)' }}>
+            <div style={{ maxWidth: '48rem', margin: '0 auto', padding: '0 1rem', textAlign: 'center' }}>
+              <h2 style={{ fontSize: '2.25rem', fontWeight: 700, color: 'white', marginBottom: '1rem' }}>{getValue(data.ctaHeading)}</h2>
+              <p style={{ fontSize: '1.125rem', color: 'rgba(255,255,255,0.9)', marginBottom: '2rem' }}>{getValue(data.ctaDescription)}</p>
+              <a href={getValue(data.ctaButtonLink) || "/booking"} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'white', color: '#1e40af', padding: '1rem 2.5rem', borderRadius: '9999px', fontWeight: 600, textDecoration: 'none', fontSize: '1.125rem' }}>
+                {getValue(data.ctaButtonText)}
+              </a>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    // ==========================================================================
+    // LOCATION PAGE COMPONENTS
+    // ==========================================================================
+
+    LocationHero: {
+      fields: {
+        heroTitle: { type: "text" },
+        heroSubtitle: { type: "textarea" },
+        heroBackgroundImageUrl: { type: "text" },
+        ctaButton1Text: { type: "text" },
+        ctaButton2Text: { type: "text" },
+      },
+      defaultProps: {
+        heroTitle: "Professional Cleaning Services in Your Area",
+        heroSubtitle: "Expert cleaning services for homes and businesses in your neighborhood.",
+        heroBackgroundImageUrl: "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750838311/home-2573375_1280_ckf686.png",
+        ctaButton1Text: "Get a Quote",
+        ctaButton2Text: "Contact Us",
+      },
+      render: (data: LocationHeroProps) => {
+        const bgImage = getValue(data.heroBackgroundImageUrl) || "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750838311/home-2573375_1280_ckf686.png";
+        
+        // SVG Icons as components
+        const CalendarIcon = () => (
+          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        );
+        const PhoneIcon = () => (
+          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+        );
+        
+        return (
+          <section className="relative min-h-[60vh] bg-black pt-16">
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+              <img 
+                src={bgImage} 
+                alt={getValue(data.heroTitle)} 
+                className="w-full h-full object-cover brightness-90" 
+              />
+              {/* Gradient overlay matching original */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
+            </div>
+            
+            {/* Content */}
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <div className="grid grid-cols-1 gap-8 items-center min-h-[calc(60vh-64px)]">
+                <div className="flex flex-col justify-end h-full pb-16">
+                  <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 tracking-tight">
+                    {getValue(data.heroTitle)}
+                  </h1>
+                  <p className="text-xl text-gray-300 mb-8 max-w-2xl">
+                    {getValue(data.heroSubtitle)}
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-4">
+                    <a
+                      href="/booking"
+                      className="flex px-8 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors items-center"
+                    >
+                      <CalendarIcon /> {getValue(data.ctaButton1Text) || 'Get a Quote'}
+                    </a>
+                    <a
+                      href="tel:+15513054627"
+                      className="inline-flex items-center px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-md font-medium hover:bg-white/20 transition-colors"
+                    >
+                      <PhoneIcon /> {getValue(data.ctaButton2Text) || 'Contact Us'}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    // LocationMainContent - Combined 2-column layout matching original site design
+    // Replaces individual LocationContactCard, LocationHoursCard, LocationMapSection, LocationAboutSection
+    LocationMainContent: {
+      fields: {
+        // Left column - Contact
+        contactTitle: { type: "text" },
+        phoneLabel: { type: "text" },
+        phoneNumber: { type: "text" },
+        emailLabel: { type: "text" },
+        emailAddress: { type: "text" },
+        contactCtaText: { type: "text" },
+        // Left column - Hours
+        hoursTitle: { type: "text" },
+        hours: { type: "textarea" }, // JSON array string [{day, hours}]
+        // Right column - Map
+        mapTitle: { type: "text" },
+        locationName: { type: "text" },
+        mapCtaText: { type: "text" },
+        // Right column - About
+        aboutTitle: { type: "text" },
+        aboutDescription: { type: "textarea" },
+        aboutCtaText: { type: "text" },
+      },
+      defaultProps: {
+        contactTitle: "Contact Information",
+        phoneLabel: "Phone",
+        phoneNumber: "(551) 305-4627",
+        emailLabel: "Email",
+        emailAddress: "info@clensy.com",
+        contactCtaText: "Request a Quote",
+        hoursTitle: "Hours of Operation",
+        hours: JSON.stringify([
+          { day: "Monday - Friday", hours: "8:00 AM - 6:00 PM" },
+          { day: "Saturday", hours: "9:00 AM - 4:00 PM" },
+          { day: "Sunday", hours: "Closed" }
+        ]),
+        mapTitle: "Service Area",
+        locationName: "Your County",
+        mapCtaText: "SCHEDULE A CLEANING",
+        aboutTitle: "About Our Services",
+        aboutDescription: "We provide premium cleaning services to residential and commercial clients in this area. Our experienced team is dedicated to delivering exceptional results with every visit.",
+        aboutCtaText: "Get a Free Quote",
+      },
+      render: (data: LocationMainContentProps) => {
+        const phoneClean = (getValue(data.phoneNumber) || '').replace(/[^0-9+]/g, '');
+        let hoursArray: Array<{day: string, hours: string}> = [];
+        try {
+          hoursArray = JSON.parse(getValue(data.hours) || '[]');
+        } catch (e) {
+          hoursArray = [];
+        }
+
+        // SVG Icons
+        const PhoneIcon = () => (
+          <svg style={{ width: '1.25rem', height: '1.25rem', color: '#60a5fa', marginRight: '0.75rem', marginTop: '0.25rem', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+        );
+        const MailIcon = () => (
+          <svg style={{ width: '1.25rem', height: '1.25rem', color: '#60a5fa', marginRight: '0.75rem', marginTop: '0.25rem', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+        );
+        const ClockIcon = () => (
+          <svg style={{ width: '1.25rem', height: '1.25rem', color: '#60a5fa', marginRight: '0.5rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        );
+        const MapPinIcon = () => (
+          <svg style={{ width: '2rem', height: '2rem', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+        );
+        const CalendarIcon = () => (
+          <svg style={{ width: '1.25rem', height: '1.25rem', marginRight: '0.5rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+        );
+
+        return (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left Column - Contact Info and Hours */}
+              <div className="lg:col-span-1 space-y-8">
+                {/* Contact Information Card */}
+                <div className="bg-gradient-to-br from-blue-900/80 to-gray-900 rounded-xl shadow-xl overflow-hidden backdrop-blur-sm border border-blue-900/30">
+                  <div className="p-6 border-b border-gray-700">
+                    <h2 className="text-xl font-bold text-white">{getValue(data.contactTitle) || 'Contact Information'}</h2>
+                  </div>
+                  <div className="p-6 space-y-6">
+                    {getValue(data.phoneNumber) && (
+                      <div className="flex items-start">
+                        <PhoneIcon />
+                        <div>
+                          <h3 className="text-gray-300 font-medium mb-1">{getValue(data.phoneLabel) || 'Phone'}</h3>
+                          <a href={`tel:${phoneClean}`} className="text-white hover:text-blue-400 transition-colors">{getValue(data.phoneNumber)}</a>
+                        </div>
+                      </div>
+                    )}
+                    {getValue(data.emailAddress) && (
+                      <div className="flex items-start">
+                        <MailIcon />
+                        <div>
+                          <h3 className="text-gray-300 font-medium mb-1">{getValue(data.emailLabel) || 'Email'}</h3>
+                          <a href={`mailto:${getValue(data.emailAddress)}`} className="text-white hover:text-blue-400 transition-colors">{getValue(data.emailAddress)}</a>
+                        </div>
+                      </div>
+                    )}
+                    <div className="pt-4">
+                      <a href="/booking" className="inline-block w-full py-3 bg-blue-600 text-white rounded-md text-center font-medium hover:bg-blue-700 transition-colors">
+                        {getValue(data.contactCtaText) || 'Request a Quote'}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hours Card */}
+                {hoursArray.length > 0 && (
+                  <div className="bg-gradient-to-br from-gray-900 to-blue-900/70 rounded-xl shadow-xl overflow-hidden backdrop-blur-sm border border-blue-900/30">
+                    <div className="p-6 border-b border-gray-700">
+                      <h2 className="text-xl font-bold text-white flex items-center">
+                        <ClockIcon />
+                        {getValue(data.hoursTitle) || 'Hours of Operation'}
+                      </h2>
+                    </div>
+                    <div className="p-6">
+                      <div className="space-y-3">
+                        {hoursArray.map((dayHours, index) => (
+                          <div key={index}>
+                            <div className="flex justify-between items-center">
+                              <span className="text-gray-300 font-medium">{dayHours.day}</span>
+                              <span className="text-white">{dayHours.hours}</span>
+                            </div>
+                            {index < hoursArray.length - 1 && (
+                              <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent my-2"></div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Right Column - Map and Description */}
+              <div className="lg:col-span-2 space-y-8">
+                {/* Interactive Map */}
+                <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-xl overflow-hidden">
+                  <div className="p-6 border-b border-gray-700">
+                    <h2 className="text-xl font-bold text-white">{getValue(data.mapTitle) || 'Service Area'}</h2>
+                  </div>
+                  <div className="relative h-[400px] w-full">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-gray-900 flex items-center justify-center">
+                      <div className="relative">
+                        <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-xl animate-pulse">
+                          <MapPinIcon />
+                        </div>
+                        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 translate-y-full bg-white px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+                          <span className="font-semibold text-gray-800">{getValue(data.locationName) || 'Your County'} County</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Schedule Service Button */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-blue-800 to-indigo-800 text-white py-4 px-6 flex justify-center z-30">
+                      <a href="/booking" className="flex items-center font-medium hover:text-blue-200 transition-colors">
+                        <CalendarIcon /> {getValue(data.mapCtaText) || 'SCHEDULE A CLEANING'}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* About This Location */}
+                <div className="bg-gradient-to-br from-indigo-900/70 to-gray-900 rounded-xl shadow-xl overflow-hidden backdrop-blur-sm border border-indigo-900/30">
+                  <div className="p-6 border-b border-gray-700">
+                    <h2 className="text-xl font-bold text-white">{getValue(data.aboutTitle) || 'About Our Services'}</h2>
+                  </div>
+                  <div className="p-6">
+                    <div className="prose prose-invert max-w-none">
+                      {(getValue(data.aboutDescription) || '').split('\n\n').map((paragraph: string, index: number) => (
+                        <p key={index} className="text-gray-300 mb-4 leading-relaxed">{paragraph}</p>
+                      ))}
+                    </div>
+                    <div className="mt-6">
+                      <a href="/booking" className="inline-block px-8 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors">
+                        {getValue(data.aboutCtaText) || 'Get a Free Quote'}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      },
+    },
+
+    LocationServices: {
+      fields: {
+        servicesHeading: { type: "text" },
+        servicesDescription: { type: "textarea" },
+      },
+      defaultProps: {
+        servicesHeading: "Our Services in This Area",
+        servicesDescription: "We offer a full range of professional cleaning services to meet your needs.",
+      },
+      render: (data: LocationServicesProps) => {
+        const services = [
+          { name: 'Routine Cleaning', icon: '🏠', desc: 'Regular maintenance cleaning for a consistently fresh home.' },
+          { name: 'Deep Cleaning', icon: '✨', desc: 'Thorough top-to-bottom cleaning for a spotless space.' },
+          { name: 'Move In/Out Cleaning', icon: '📦', desc: 'Complete cleaning for seamless transitions.' },
+          { name: 'Airbnb Cleaning', icon: '🏨', desc: 'Quick turnaround cleaning for vacation rentals.' },
+          { name: 'Office Cleaning', icon: '🏢', desc: 'Professional cleaning for productive workspaces.' },
+          { name: 'Post-Construction', icon: '🔨', desc: 'Detailed cleanup after renovations or builds.' },
+        ];
+        
+        return (
+          <section className="py-16 bg-gradient-to-b from-gray-900 to-gray-800">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{getValue(data.servicesHeading)}</h2>
+                <p className="text-lg text-gray-300 max-w-2xl mx-auto">{getValue(data.servicesDescription)}</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {services.map((service, index) => (
+                  <div key={index} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-gray-700 hover:border-blue-500/50 transition-all hover:shadow-xl hover:shadow-blue-500/10">
+                    <div className="text-3xl mb-4">{service.icon}</div>
+                    <h3 className="text-xl font-semibold text-white mb-2">{service.name}</h3>
+                    <p className="text-gray-400">{service.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      },
+    },
+
+    LocationCTA: {
+      fields: {
+        ctaHeading: { type: "text" },
+        ctaDescription: { type: "textarea" },
+        ctaButtonText: { type: "text" },
+        contactPhone: { type: "text" },
+        contactEmail: { type: "text" },
+      },
+      defaultProps: {
+        ctaHeading: "Get Started Today",
+        ctaDescription: "Contact us for a free quote or to schedule your cleaning service.",
+        ctaButtonText: "Book Now",
+        contactPhone: "(551) 305-4627",
+        contactEmail: "info@clensy.com",
+      },
+      render: (data: LocationCTAProps) => {
+        // SVG Icons
+        const PhoneIcon = () => (
+          <svg className="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+        );
+        const MailIcon = () => (
+          <svg className="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        );
+        
+        return (
+          <section className="py-16 bg-gradient-to-b from-gray-800 to-gray-900">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{getValue(data.ctaHeading)}</h2>
+              <p className="text-lg text-gray-300 mb-8">{getValue(data.ctaDescription)}</p>
+              
+              <div className="flex flex-wrap justify-center gap-6 mb-8">
+                <a href={`tel:${(getValue(data.contactPhone) || '').replace(/[^0-9+]/g, '')}`} className="flex items-center text-white hover:text-blue-400 transition-colors">
+                  <PhoneIcon />
+                  <span>{getValue(data.contactPhone)}</span>
+                </a>
+                <a href={`mailto:${getValue(data.contactEmail)}`} className="flex items-center text-white hover:text-blue-400 transition-colors">
+                  <MailIcon />
+                  <span>{getValue(data.contactEmail)}</span>
+                </a>
+              </div>
+              
+              <a 
+                href="/booking" 
+                className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/25"
+              >
+                {getValue(data.ctaButtonText)}
+              </a>
+            </div>
+          </section>
+        );
+      },
+    },
   },
 
   categories: {
     hero: { title: "Landing Page - Hero", components: ["Hero"] },
-    content: { title: "Landing Page - Content", components: ["HowItWorks", "Comparison", "Reviews", "CTA"] }, // Checklist removed - hardcoded on site
+    content: { title: "Landing Page - Content", components: ["HowItWorks", "Comparison", "CTA"] }, // Reviews removed - now hardcoded on Landing Page
     about: { title: "About Page", components: ["AboutHero", "AboutOurStory", "AboutWhyWeStarted", "AboutWhatMakesUsDifferent", "AboutMission", "AboutCTA"] },
     contact: { title: "Contact Page", components: ["ContactHero", "ContactInfo", "ContactConsultation"] },
-    checklist: { title: "Checklist Page", components: ["ChecklistHero", "ChecklistInteractiveGuide", "ChecklistCTA"] }, // ChecklistSection removed - hardcoded on site
-    faq: { title: "FAQ Page", components: ["FAQHero", "FAQStillHaveQuestions", "FAQContact"] }, // FAQMainSection removed - hardcoded on site
+    checklist: { title: "Checklist Page", components: ["ChecklistHero", "ChecklistCTA"] },
+    faq: { title: "FAQ Page", components: ["FAQHero", "FAQStillHaveQuestions", "FAQContact"] },
+    service: { title: "Service Page", components: ["ServiceHero", "ServiceTrustIndicators", "ServiceFeatures", "ServiceHowItWorks", "ServiceBenefits", "ServiceCTA"] },
+    location: { title: "Location Page", components: ["LocationHero", "LocationMainContent", "LocationServices", "LocationCTA"] }, // MainContent replaces individual cards
     seo: { title: "SEO", components: ["SEO"] },
   },
 

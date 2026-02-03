@@ -15,8 +15,6 @@ export async function POST(request: NextRequest) {
     revalidatePath('/');
     revalidatePath('/preview');
     
-    console.log('Cache cleared and paths revalidated');
-    
     return NextResponse.json({
       success: true,
       message: 'Cache cleared successfully. Refresh your page to see changes.',

@@ -43,21 +43,39 @@ const PAGE_BUILDER_API_KEY = process.env.NEXT_PUBLIC_PAGE_BUILDER_API_KEY || '';
 const STRAPI_CLIENT_TOKEN = process.env.NEXT_PUBLIC_STRAPI_CLIENT_TOKEN || '';
 
 // Content type to API endpoint mapping - use dedicated Page Builder endpoint for raw Strapi data
-const contentTypeEndpoints: Record<string, string> = {
-  'landing-page': '/api/page-builder/content/landing-page',
-  'about': '/api/page-builder/content/about',
-  'contact': '/api/page-builder/content/contact',
-  'checklist-page': '/api/page-builder/content/checklist-page',
-  'faq-page': '/api/page-builder/content/faq-page',
+// Content type configuration
+// isSingleType: true = single type (landing-page), false = collection type (services)
+const contentTypeConfig: Record<string, { endpoint: string; templateField: string; isSingleType: boolean }> = {
+  'landing-page': { endpoint: '/api/page-builder/content/landing-page', templateField: 'Landing_Page', isSingleType: true },
+  'about': { endpoint: '/api/page-builder/content/about', templateField: 'About_Page', isSingleType: true },
+  'contact': { endpoint: '/api/page-builder/content/contact', templateField: 'Contact_Page', isSingleType: true },
+  'checklist-page': { endpoint: '/api/page-builder/content/checklist-page', templateField: 'Checklist_Page', isSingleType: true },
+  'faq-page': { endpoint: '/api/page-builder/content/faq-page', templateField: 'FAQ_Page', isSingleType: true },
+  // Collection types - require contentId
+  'service': { endpoint: '/api/page-builder/content/service', templateField: 'Service_Page', isSingleType: false },
+  'location': { endpoint: '/api/page-builder/content/location', templateField: 'Location_Page', isSingleType: false },
 };
 
-// Content type to template relation field mapping
-const contentTypeTemplateFields: Record<string, string> = {
-  'landing-page': 'Landing_Page',
-  'about': 'About_Page',
-  'contact': 'Contact_Page',
-  'checklist-page': 'Checklist_Page',
-  'faq-page': 'FAQ_Page',
+// Helper to get endpoint URL (with contentId for collection types)
+const getEndpointUrl = (contentType: string, contentId?: string | null): string => {
+  const config = contentTypeConfig[contentType];
+  if (!config) {
+    return `/api/page-builder/content/${contentType}`;
+  }
+  if (config.isSingleType) {
+    return config.endpoint;
+  }
+  // Collection type - append contentId if available
+  if (contentId && contentId !== 'undefined' && contentId !== 'null') {
+    return `${config.endpoint}?contentId=${contentId}`;
+  }
+  // Return without contentId - API will return proper error message
+  return config.endpoint;
+};
+
+// Helper to get template field
+const getTemplateField = (contentType: string): string => {
+  return contentTypeConfig[contentType]?.templateField || 'Landing_Page';
 };
 
 function EditorPageContent() {
@@ -114,7 +132,8 @@ function EditorPageContent() {
 
   useEffect(() => {
     const templateParam = parseTemplateId(searchParams);
-    const pageParam = searchParams.get('page') || searchParams.get('_contentId');
+    // Strapi passes _contentId for collection type entries
+    const pageParam = searchParams.get('page') || searchParams.get('_contentId') || searchParams.get('contentId') || searchParams.get('id');
     const typeParam = parseContentType(searchParams);
     
     // Debug: Log raw params
@@ -122,11 +141,14 @@ function EditorPageContent() {
     const rawType = searchParams.get('type');
     const rawTemplateId = searchParams.get('_templateId');
     const rawTemplate = searchParams.get('template');
+    const rawContentId = searchParams.get('_contentId');
+    const rawPage = searchParams.get('page');
 
     console.log(`[Editor] ============ URL PARAMS ============`);
     console.log(`[Editor] Raw: type=${rawType}, _contentType=${rawContentType}`);
     console.log(`[Editor] Raw: template=${rawTemplate}, _templateId=${rawTemplateId}`);
-    console.log(`[Editor] Parsed: contentType=${typeParam}, templateId=${templateParam}`);
+    console.log(`[Editor] Raw: page=${rawPage}, _contentId=${rawContentId}`);
+    console.log(`[Editor] Parsed: contentType=${typeParam}, templateId=${templateParam}, contentId=${pageParam}`);
     console.log(`[Editor] =====================================`);
 
     // Reset all state when content type changes
@@ -148,9 +170,24 @@ function EditorPageContent() {
       setLoading(true);
       setError(null);
 
-      // Get the correct endpoint for this content type
-      const endpoint = contentTypeEndpoints[contentTypeParam] || '/api/cms/landing-page';
-      const templateField = contentTypeTemplateFields[contentTypeParam] || 'Landing_Page';
+      // Check if this is a collection type that requires contentId
+      const config = contentTypeConfig[contentTypeParam];
+      const isCollectionType = config && !config.isSingleType;
+      const hasValidContentId = pageIdParam && pageIdParam !== 'undefined' && pageIdParam !== 'null';
+      
+      if (isCollectionType && !hasValidContentId) {
+        throw new Error(
+          `Content ID required for ${contentTypeParam}. ` +
+          `Please open this page from Strapi Admin → Content Manager → ${contentTypeParam} → Edit → Click "Open in Page Builder". ` +
+          `This ensures the correct entry ID is passed.`
+        );
+      }
+
+      // Get the correct endpoint for this content type (with contentId for collection types)
+      const endpoint = getEndpointUrl(contentTypeParam, pageIdParam);
+      const templateField = getTemplateField(contentTypeParam);
+      
+      console.log(`[Editor] Loading data for ${contentTypeParam}, contentId=${pageIdParam}, endpoint=${endpoint}`);
 
       // Fetch content for the specified content type
       let pageContent: any = {};
@@ -191,6 +228,12 @@ function EditorPageContent() {
         const templateResult = await templateResponse.json();
         const templateData = templateResult.data || templateResult;
         templateData.content = pageContent;
+        
+        // IMPORTANT: Use documentId for Page Builder's save functionality (Strapi v5)
+        const correctTemplateId = templateData.documentId || templateData.id || templateIdParam;
+        console.log(`[Editor] Template fetched, setting templateId to: ${correctTemplateId} (was: ${templateIdParam})`);
+        setTemplateId(String(correctTemplateId));
+        
         setInitialData(templateData);
       } else {
         // Fetch the content type to get its attached template
@@ -225,8 +268,10 @@ function EditorPageContent() {
         }
 
         if (template) {
-          const templateIdValue = template.id || template.documentId || template.data?.id;
+          // Prefer documentId for Strapi v5 (required for Page Builder's internal save)
+          const templateIdValue = template.documentId || template.id || template.data?.documentId || template.data?.id;
           if (templateIdValue) {
+            console.log(`[Editor] Setting templateId to: ${templateIdValue} (type: ${typeof templateIdValue})`);
             setTemplateId(String(templateIdValue));
             template.content = pageContent;
             setInitialData(template);
@@ -301,8 +346,9 @@ function EditorPageContent() {
     // Use URL-parsed values (more reliable than state which may be stale)
     const syncContentType = parseContentType(searchParams);
     const syncTemplateId = templateId || parseTemplateId(searchParams);
+    const syncContentId = searchParams.get('page') || searchParams.get('_contentId'); // For collection types
     
-    console.log(`[Sync] Content type from URL: ${syncContentType}, Template ID: ${syncTemplateId}`);
+    console.log(`[Sync] Content type: ${syncContentType}, Template ID: ${syncTemplateId}, Content ID: ${syncContentId}`);
     
     if (!syncTemplateId) {
       toast.error('No template ID available. Please reload the editor.');
@@ -314,7 +360,11 @@ function EditorPageContent() {
       const response = await fetch('/api/page-builder/sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contentType: syncContentType, templateId: syncTemplateId }),
+        body: JSON.stringify({ 
+          contentType: syncContentType, 
+          templateId: syncTemplateId,
+          contentId: syncContentId, // For collection types (service, location)
+        }),
       });
 
       const result = await response.json();
@@ -450,7 +500,8 @@ NEXT_PUBLIC_PAGE_BUILDER_API_KEY=your_api_key_here
       const template = templateResult.data || templateResult;
       
       // Fetch content for the current content type (use URL param, not state)
-      const endpoint = contentTypeEndpoints[currentContentType] || '/api/page-builder/content/landing-page';
+      const currentContentId = searchParams.get('page') || searchParams.get('_contentId');
+      const endpoint = getEndpointUrl(currentContentType, currentContentId);
       let pageContent = {};
       try {
         const contentResponse = await fetch(endpoint, {

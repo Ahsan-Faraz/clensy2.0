@@ -968,7 +968,6 @@ export default function ReviewsSection() {
     // For desktop
     setVisibleReviews((prev) => {
       const newCount = Math.min(prev + 8, allReviews.length);
-      console.log(`Loading more reviews: ${prev} -> ${newCount}`);
 
       // After first load more click, save the count for hide functionality
       if (loadMoreClicks === 0) {

@@ -36,11 +36,6 @@ export default function HeroSection() {
         })
         const result = await response.json()
 
-        // Add debugging
-        console.log("🔵 Hero API Response:", result)
-        console.log("🔵 Source:", result.source || 'unknown')
-        console.log("🔵 Heading:", result.data?.heading)
-
         if (result.success && result.data) {
           // Only update fields that exist and are not empty
           setHeroData((prevData) => ({
@@ -56,13 +51,8 @@ export default function HeroSection() {
                 ? result.data.backgroundImage
                 : prevData.backgroundImage,
           }))
-          
-          console.log("✅ Hero data updated:", result.data.heading)
-        } else {
-          console.warn("⚠️ No data in API response")
         }
       } catch (error) {
-        console.error("❌ Error fetching hero data:", error)
         // Keep using default data on error
       } finally {
         setIsLoaded(true)

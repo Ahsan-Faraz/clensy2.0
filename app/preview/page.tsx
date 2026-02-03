@@ -54,12 +54,6 @@ export default function PreviewPage() {
         
         // Set content (all landing page fields for Handlebars substitution)
         setContent(landingPageData);
-        
-        console.log('Preview loaded:', {
-          hasTemplate: !!template,
-          blocksCount: template.json?.blocks?.length || 0,
-          contentFields: Object.keys(landingPageData).length,
-        });
       } catch (err: any) {
         console.error('Error loading preview:', err);
         setError(err.message);

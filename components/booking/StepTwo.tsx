@@ -415,23 +415,12 @@ export const StepTwo: React.FC<StepTwoProps> = ({
       const modificationsMatch = JSON.stringify(currentModifications) === JSON.stringify(expectedRestoredData.modifications);
       
       if (answersMatch && modificationsMatch) {
-        console.log('All expected data has been restored, waiting additional time for payload stability...');
         // Wait extra time to ensure payload is completely stable
         const stabilityTimer = setTimeout(() => {
-          console.log('Data restoration complete and payload stable');
           setIsDataRestoring(false);
         }, 1000); // Additional 1 second after data matches
         
         return () => clearTimeout(stabilityTimer);
-      } else {
-        console.log('Data restoration in progress...', {
-          answersMatch,
-          modificationsMatch,
-          currentAnswersCount: Object.keys(currentAnswers).length,
-          expectedAnswersCount: Object.keys(expectedRestoredData.answers).length,
-          currentModificationsCount: currentModifications.length,
-          expectedModificationsCount: expectedRestoredData.modifications.length
-        });
       }
     }
   }, [pricingAnswers, selectedModifications, expectedRestoredData, isDataRestoring]);
@@ -467,11 +456,9 @@ export const StepTwo: React.FC<StepTwoProps> = ({
     if (shouldAutoCalculate) {
       if (modificationsChanged && !answersChanged) {
         // Rate modifications changed - immediate API call
-        console.log('Rate modifications changed, calculating price immediately...');
         calculatePrice();
       } else if (answersChanged) {
         // Required questions changed - 1.5 second timeout
-        console.log('Required questions changed, calculating price after 1.5 seconds...');
         const timer = setTimeout(() => {
           calculatePrice();
         }, 1500);
@@ -531,12 +518,6 @@ export const StepTwo: React.FC<StepTwoProps> = ({
         }
         return acc;
       }, [] as RateModification[]);
-
-      // Debug logging to show filtering process
-      console.log('All Rate Modifications from API:', modifications);
-      console.log('User Selected Scope IDs:', formData.lead.scopeIds);
-      console.log('Filtered Modifications by Scope ID:', filteredModifications);
-      console.log('Final Unique Modifications:', uniqueModifications);
 
       setRateModifications(uniqueModifications);
 
@@ -857,17 +838,10 @@ export const StepTwo: React.FC<StepTwoProps> = ({
         Questions,
       };
 
-      // Debug log to verify rate modifications are included
-      console.log('Calculate Price API Request - RateModifications:', RateModifications);
-      console.log('Calculate Price API Request - ScopesOfWork:', ScopesOfWork);
-
       const response = await apiService.calculatePrice(requestBody);
       if (response.IsSuccess && response.Result && response.Result.length > 0) {
         const scope = response.Result[0];
         const freq = scope.Frequencies && scope.Frequencies[0];
-        
-        // Debug log to verify rate modifications in API response
-        console.log('Price Calculation API Response - RateModifications:', freq?.RateModifications);
         
         if (freq) {
           // Show all price calculation details from API
@@ -996,7 +970,6 @@ export const StepTwo: React.FC<StepTwoProps> = ({
                 onChange={(e) => {
                   // Handle prefer/exclude selection properly
                   const selectedValue = e.target.value;
-                  console.log('Selected value:', selectedValue); // Debug log
                   handleAnswerChange(
                     question.QuestionId.toString(),
                     selectedValue
@@ -1577,10 +1550,6 @@ export const StepTwo: React.FC<StepTwoProps> = ({
         utm_term: "",
         utm_content: "",
       };
-
-      // Debug log to verify rate modifications are included in quote creation
-      console.log('Create Quote API Request - RateModifications:', RateModifications);
-      console.log('Create Quote API Request - ScopesOfWork:', ScopesOfWork);
 
       // Remove any keys with invalid or empty date values (e.g., empty string, null, or invalid date)
       Object.keys(quotePayload).forEach((key) => {

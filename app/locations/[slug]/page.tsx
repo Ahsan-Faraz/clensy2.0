@@ -14,6 +14,12 @@ import {
   Loader2,
 } from "lucide-react";
 import SEOScripts from "@/components/seo-scripts";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import { Render } from "@wecre8websites/strapi-page-builder-react";
+import pageBuilderConfig from "@/lib/page-builder-components";
+
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
 interface LocationData {
   name?: string;
@@ -88,10 +94,13 @@ export default function DynamicLocationPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<LocationData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [templateData, setTemplateData] = useState<{ templateJson: any; content: any } | null>(null);
+  const [usePageBuilder, setUsePageBuilder] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch location data from CMS
         const response = await fetch(`/api/cms/locations/${slug}`);
         const result = await response.json();
         
@@ -99,6 +108,28 @@ export default function DynamicLocationPage() {
           setData(result.data);
         } else {
           setError(result.error || 'Failed to load location data');
+        }
+        
+        // Also fetch Page Builder template data
+        try {
+          const pbResponse = await fetch(`/api/page-builder/content/location?slug=${encodeURIComponent(slug)}`);
+          const pbResult = await pbResponse.json();
+          
+          if (pbResult.success && pbResult.data) {
+            const content = pbResult.data;
+            const templateField = pbResult.templateField || 'Location_Page';
+            const template = content[templateField];
+            
+            if (template?.json?.content && template.json.content.length > 0) {
+              setTemplateData({
+                templateJson: template.json,
+                content,
+              });
+              setUsePageBuilder(true);
+            }
+          }
+        } catch (pbErr) {
+          console.warn('[Location Page] Page Builder template not available:', pbErr);
         }
       } catch (err) {
         console.error('Error fetching location data:', err);
@@ -148,6 +179,100 @@ export default function DynamicLocationPage() {
 
   const locationName = data.name || data.county || slug.charAt(0).toUpperCase() + slug.slice(1);
 
+  // ==================== PAGE BUILDER RENDERING ====================
+  // If Page Builder template exists, use it for layout with hardcoded Service Areas only
+  if (usePageBuilder && templateData) {
+    // Merge synced template data with CMS data as fallback
+    // PRIORITY: templateData.content (synced) > CMS data (initial fetch)
+    // This ensures "Sync to Site" changes are reflected immediately
+    const tc = templateData.content || {}; // Template content (synced data)
+    const mergedContent = {
+      ...tc,
+      // Use synced template data first, fall back to CMS data if not available
+      heroTitle: tc.heroTitle || heroSection?.title,
+      heroSubtitle: tc.heroSubtitle || heroSection?.subtitle,
+      heroBackgroundImageUrl: tc.heroBackgroundImageUrl || heroSection?.backgroundImage,
+      ctaButton1Text: tc.ctaButton1Text || heroSection?.ctaButton1,
+      ctaButton2Text: tc.ctaButton2Text || heroSection?.ctaButton2,
+      contactTitle: tc.contactTitle || contactSection?.title || 'Contact Information',
+      phoneNumber: tc.phoneNumber || contactSection?.phone,
+      emailAddress: tc.emailAddress || contactSection?.email,
+      hours: tc.hours || JSON.stringify(contactSection?.hours || []),
+      locationName: tc.locationName || locationName,
+      aboutTitle: tc.aboutTitle || aboutSection?.title,
+      aboutDescription: tc.aboutDescription || aboutSection?.description,
+    };
+
+    return (
+      <main className="overflow-x-hidden bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 min-h-screen">
+        <div className="relative z-50">
+          <Navbar />
+        </div>
+        
+        {/* Page Builder: All location components in their configured order */}
+        {/* Wrapper forces transparent background to override any Page Builder library styles */}
+        <div className="bg-transparent [&>*]:!bg-transparent [&_[data-puck-render]]:!bg-transparent">
+          <Render
+            config={pageBuilderConfig}
+            data={{ templateJson: templateData.templateJson, content: mergedContent }}
+            strapi={{ url: STRAPI_URL, imageUrl: STRAPI_URL }}
+          />
+        </div>
+
+        {/* Breadcrumb Navigation */}
+        <div className="bg-gradient-to-r from-gray-900 to-black py-4 border-y border-gray-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center text-sm text-gray-400">
+              <Link
+                href="/locations"
+                className="hover:text-blue-400 transition-colors"
+              >
+                All Locations
+              </Link>
+              <ChevronRight className="h-4 w-4 mx-2" />
+              <span className="text-white font-medium">{locationName} County</span>
+            </div>
+          </div>
+        </div>
+
+        {/* HARDCODED: Service Areas List - Always at bottom, not in Page Builder */}
+        {serviceAreas && serviceAreas.length > 0 && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="bg-gradient-to-br from-gray-900 to-blue-900/50 rounded-xl shadow-xl overflow-hidden backdrop-blur-sm border border-blue-900/30">
+              <div className="p-6 border-b border-gray-700">
+                <h2 className="text-xl font-bold text-white">Service Areas in {locationName} County</h2>
+              </div>
+              <div className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {serviceAreas.map((area: string) => (
+                    <div key={area} className="flex items-center py-3 px-4 bg-gray-700/50 border border-gray-700 rounded-lg hover:bg-blue-900/20 hover:border-blue-500/50 transition-all">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
+                      <span className="text-white">{area}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <Footer />
+        
+        {/* SEO Scripts */}
+        {data?.seo && (
+          <SEOScripts
+            headScripts={data.seo.headScripts}
+            bodyStartScripts={data.seo.bodyStartScripts}
+            bodyEndScripts={data.seo.bodyEndScripts}
+            schemaJsonLd={data.seo.schemaJsonLd}
+            customCss={data.seo.customCss}
+          />
+        )}
+      </main>
+    );
+  }
+
+  // ==================== FALLBACK: Original Hardcoded Rendering ====================
   return (
     <main className="overflow-x-hidden bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
       {/* Hero Section */}

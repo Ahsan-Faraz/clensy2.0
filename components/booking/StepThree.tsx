@@ -49,11 +49,8 @@ export const StepThree: React.FC<StepThreeProps> = ({ formData, onUpdateData, on
         const expiryValue = tokenData.expiry
         setCardToken(tokenValue)
         setCardExpiry(expiryValue)
-        console.log("Token received: " + tokenValue)
-        console.log("Expiry received: " + expiryValue)
-        console.log("Token received from: " + event.data)
       } catch (error) {
-        console.error("Error parsing token data:", error)
+        // Ignore parse errors from other message events
       }
     }
 
@@ -485,10 +482,6 @@ export const StepThree: React.FC<StepThreeProps> = ({ formData, onUpdateData, on
             IsRecurring: true
           })) : [],
       }))
-
-      // Debug log to verify rate modifications are included in book quote
-      console.log('Book Quote API Request - Selected Modifications:', formData.selectedModifications);
-      console.log('Book Quote API Request - ScopesOfWork with RateModifications:', scopesOfWork);
 
       // Compose the request body
       const requestBody = {
