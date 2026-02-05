@@ -1,7 +1,7 @@
 'use client';
 
-import { Render } from "@wecre8websites/strapi-page-builder-react";
-import { useEffect, useState } from "react";
+import { Render, RenderBlock } from "@wecre8websites/strapi-page-builder-react";
+import { useEffect, useState, useMemo } from "react";
 import pageBuilderConfig from "@/lib/page-builder-components";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -111,49 +111,99 @@ export default function DynamicServicePage({ slug, serviceData }: DynamicService
     );
   }
 
-  // Use Page Builder rendering with hardcoded complex sections
+  // Use Page Builder rendering with hardcoded complex sections INTERLEAVED at correct positions
   if (usePageBuilder && templateData) {
+    // Get the blocks from templateJson
+    const blocks = templateData.templateJson?.content || [];
+    
+    // Define which hardcoded section should appear AFTER which block type
+    // Based on original service page order:
+    // Hero → TrustIndicators → [ZIGZAG] → Features → HowItWorks → Benefits → [TESTIMONIALS] → [FREQUENCY] → [FAQ] → CTA
+    const hardcodedAfterBlock: Record<string, React.ReactNode[]> = {
+      'ServiceTrustIndicators': [
+        <WhatsIncludedSection 
+          key="whats-included"
+          heading={data?.includedSectionHeading || `What's Included in Our ${data?.name || 'Cleaning'}`}
+          subheading={data?.includedSectionSubheading || "Our comprehensive cleaning service ensures every essential area receives meticulous attention."}
+          cleaningAreas={cleaningAreas}
+        />
+      ],
+      'ServiceBenefits': [
+        ...(testimonials.length > 0 ? [
+          <TestimonialsSection 
+            key="testimonials"
+            heading={data?.clientTestimonialsHeading || "What Our Clients Say"}
+            subheading={data?.clientTestimonialsSubheading || `Hear from our satisfied clients about their experience with our ${data?.name || 'cleaning'} service.`}
+            testimonials={testimonials}
+          />
+        ] : []),
+        <FrequencyGuideSection 
+          key="frequency-guide"
+          heading={data?.frequencyGuideHeading || "How Often Should You Schedule Cleaning?"}
+          subheading={data?.frequencyGuideSubheading || "Finding the right cleaning frequency depends on your specific needs and preferences."}
+          frequencyOptions={frequencyOptions}
+        />,
+        <FAQSection 
+          key="faq"
+          serviceName={data?.name || 'Cleaning'}
+          faqs={faqs}
+        />
+      ],
+    };
+
+    // Track which hardcoded sections have been rendered
+    const renderedHardcodedSections = new Set<string>();
+
+    // Build the page by rendering blocks and inserting hardcoded sections at correct positions
+    const renderContent = () => {
+      const content: React.ReactNode[] = [];
+      
+      blocks.forEach((block: any, index: number) => {
+        const blockType = block.type;
+        
+        // Render the canvas block
+        content.push(
+          <RenderBlock
+            key={`block-${index}`}
+            config={pageBuilderConfig}
+            block={block}
+            content={templateData.content}
+            strapi={{ url: STRAPI_URL, imageUrl: STRAPI_URL }}
+          />
+        );
+        
+        // Check if any hardcoded sections should appear after this block type
+        if (hardcodedAfterBlock[blockType] && !renderedHardcodedSections.has(blockType)) {
+          hardcodedAfterBlock[blockType].forEach((section) => {
+            content.push(section);
+          });
+          renderedHardcodedSections.add(blockType);
+        }
+      });
+      
+      // If some hardcoded sections weren't rendered (because their trigger block wasn't in canvas),
+      // render them at the end in correct order
+      const orderedHardcodedKeys = ['ServiceTrustIndicators', 'ServiceBenefits'];
+      orderedHardcodedKeys.forEach((key) => {
+        if (!renderedHardcodedSections.has(key) && hardcodedAfterBlock[key]) {
+          hardcodedAfterBlock[key].forEach((section) => {
+            content.push(section);
+          });
+          renderedHardcodedSections.add(key);
+        }
+      });
+      
+      return content;
+    };
+
     return (
       <main className="overflow-x-hidden">
         <div className="relative z-50">
           <Navbar />
         </div>
         
-        {/* Page Builder: All service components in their configured order */}
-        <Render
-          config={pageBuilderConfig}
-          data={{ templateJson: templateData.templateJson, content: templateData.content }}
-          strapi={{ url: STRAPI_URL, imageUrl: STRAPI_URL }}
-        />
-
-        {/* HARDCODED: What's Included Section (complex with arrays) */}
-        <WhatsIncludedSection 
-          heading={data?.includedSectionHeading || `What's Included in Our ${data?.name || 'Cleaning'}`}
-          subheading={data?.includedSectionSubheading || "Our comprehensive cleaning service ensures every essential area receives meticulous attention."}
-          cleaningAreas={cleaningAreas}
-        />
-
-        {/* HARDCODED: Testimonials Section (complex with arrays) */}
-        {testimonials.length > 0 && (
-          <TestimonialsSection 
-            heading={data?.clientTestimonialsHeading || "What Our Clients Say"}
-            subheading={data?.clientTestimonialsSubheading || `Hear from our satisfied clients about their experience with our ${data?.name || 'cleaning'} service.`}
-            testimonials={testimonials}
-          />
-        )}
-
-        {/* HARDCODED: Cleaning Frequency Guide (complex with arrays) */}
-        <FrequencyGuideSection 
-          heading={data?.frequencyGuideHeading || "How Often Should You Schedule Cleaning?"}
-          subheading={data?.frequencyGuideSubheading || "Finding the right cleaning frequency depends on your specific needs and preferences."}
-          frequencyOptions={frequencyOptions}
-        />
-
-        {/* HARDCODED: FAQ Section (complex with arrays) */}
-        <FAQSection 
-          serviceName={data?.name || 'Cleaning'}
-          faqs={faqs}
-        />
+        {/* Render blocks with interleaved hardcoded sections */}
+        {renderContent()}
 
         {/* Fallback CTA */}
         <CTASection />

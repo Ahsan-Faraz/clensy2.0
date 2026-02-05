@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import SEOScripts from "@/components/seo-scripts";
 import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
+// Footer is provided by parent layout (app/locations/layout.tsx)
 import { Render } from "@wecre8websites/strapi-page-builder-react";
 import pageBuilderConfig from "@/lib/page-builder-components";
 
@@ -256,7 +256,7 @@ export default function DynamicLocationPage() {
           </div>
         )}
 
-        <Footer />
+        {/* Footer is provided by parent layout (app/locations/layout.tsx) */}
         
         {/* SEO Scripts */}
         {data?.seo && (

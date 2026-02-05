@@ -1047,7 +1047,34 @@ export const pageBuilderConfig: Config<PageBuilderBlocks, {}, Categories> = {
       fields: {
         comparisonHeading: { type: "text" },
         comparisonDescription: { type: "textarea" },
-        // comparisonFeatures is managed via CMS content, not editable in sidebar
+        comparisonFeatures: {
+          type: "array",
+          arrayFields: {
+            name: { type: "text", label: "Feature Name" },
+            clensy: { 
+              type: "radio",
+              label: "Clensy Has This",
+              options: [
+                { label: "Yes", value: true },
+                { label: "No", value: false },
+              ],
+            },
+            others: { 
+              type: "radio",
+              label: "Others Have This",
+              options: [
+                { label: "Yes", value: true },
+                { label: "No", value: false },
+              ],
+            },
+          },
+          defaultItemProps: {
+            name: "New Feature",
+            clensy: true,
+            others: false,
+          },
+          getItemSummary: (item: any) => item.name || "Unnamed Feature",
+        },
       },
       defaultProps: {
         comparisonHeading: "The Clensy Difference",
@@ -1068,7 +1095,14 @@ export const pageBuilderConfig: Config<PageBuilderBlocks, {}, Categories> = {
         // Use prop values directly - Page Builder handles all data flow
         const heading = getValue(data.comparisonHeading);
         const description = getValue(data.comparisonDescription);
-        const features = data.comparisonFeatures;
+        const features = data.comparisonFeatures || [];
+        
+        // Helper to convert radio values (may be string or boolean) to boolean
+        const toBool = (val: any): boolean => {
+          if (typeof val === 'boolean') return val;
+          if (val === 'true' || val === true) return true;
+          return false;
+        };
 
         return (
           <section style={{ padding: '4rem 0', background: '#f9fafb' }}>
@@ -1136,20 +1170,34 @@ export const pageBuilderConfig: Config<PageBuilderBlocks, {}, Categories> = {
                       <span style={{ color: '#1f2937', fontWeight: 500 }}>{feature.name}</span>
                     </div>
                     <div style={{ padding: '1.25rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                      <div style={{
-                        width: '2rem',
-                        height: '2rem',
-                        background: '#007BFF',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                        <CheckIcon className="h-5 w-5" color="white" />
-                      </div>
+                      {toBool(feature.clensy) ? (
+                        <div style={{
+                          width: '2rem',
+                          height: '2rem',
+                          background: '#007BFF',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                          <CheckIcon className="h-5 w-5" color="white" />
+                        </div>
+                      ) : (
+                        <div style={{
+                          width: '2rem',
+                          height: '2rem',
+                          background: '#e5e7eb',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                          <span style={{ color: '#9ca3af', fontSize: '0.75rem' }}>—</span>
+                        </div>
+                      )}
                     </div>
                     <div style={{ padding: '1.25rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                      {feature.others ? (
+                      {toBool(feature.others) ? (
                         <div style={{
                           width: '2rem',
                           height: '2rem',
