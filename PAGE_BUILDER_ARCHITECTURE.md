@@ -471,7 +471,7 @@ NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
 STRAPI_API_TOKEN=your_full_access_token
 
 # Page Builder
-NEXT_PUBLIC_PAGE_BUILDER_API_KEY=your_api_key
+STRAPI_PAGE_BUILDER_API_KEY=your_api_key
 NEXT_PUBLIC_STRAPI_CLIENT_TOKEN=your_client_token
 ```
 

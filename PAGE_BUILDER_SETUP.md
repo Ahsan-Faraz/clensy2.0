@@ -43,7 +43,7 @@ NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
 STRAPI_API_TOKEN=your_strapi_api_token_here
 
 # Page Builder API Key (get from pagebuilder.wc8.io)
-NEXT_PUBLIC_PAGE_BUILDER_API_KEY=your_page_builder_api_key_here
+STRAPI_PAGE_BUILDER_API_KEY=your_page_builder_api_key_here
 ```
 
 ### Getting Your API Key

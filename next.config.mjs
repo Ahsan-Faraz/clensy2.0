@@ -84,7 +84,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "frame-ancestors 'self' http://localhost:1337 https://*.railway.app https://*.up.railway.app https://strapi-production-8d56.up.railway.app https://*.onrender.com https://strapi1-1-6oqs.onrender.com;",
+            value: "frame-ancestors 'self' http://localhost:1337 https://*.railway.app https://*.up.railway.app https://strapi-production-8d56.up.railway.app;",
           },
         ],
       },
