@@ -74,10 +74,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic service pages
+  // Dynamic service pages - use revalidate for static generation
   let servicePages: MetadataRoute.Sitemap = [];
   try {
-    const services = await CMSAdapter.getAllServices();
+    const services = await CMSAdapter.getAllServices({ revalidate: 3600 });
     servicePages = services
       .filter((service) => service.slug) // Only include services with slugs
       .map((service) => ({
@@ -90,10 +90,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching services for sitemap:', error);
   }
 
-  // Dynamic location pages
+  // Dynamic location pages - use revalidate for static generation
   let locationPages: MetadataRoute.Sitemap = [];
   try {
-    const locations = await CMSAdapter.getAllLocations();
+    const locations = await CMSAdapter.getAllLocations({ revalidate: 3600 });
     locationPages = locations
       .filter((location) => location.slug) // Only include locations with slugs
       .map((location) => ({
@@ -106,17 +106,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching locations for sitemap:', error);
   }
 
-  // Generic pages from Strapi (if page content type exists)
-  let genericPages: MetadataRoute.Sitemap = [];
-  try {
-    const globalSettings = await CMSAdapter.getGlobalSettings();
-    // Check if we should include generic pages
-    // This would require a getAllPages method if you have a generic page content type
-  } catch (error) {
-    // Silently fail if pages don't exist
-  }
-
-  return [...staticPages, ...servicePages, ...locationPages, ...genericPages];
+  return [...staticPages, ...servicePages, ...locationPages];
 }
 
 

@@ -39,8 +39,8 @@ const PageEditor = dynamic(
 );
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
-const PAGE_BUILDER_API_KEY = process.env.NEXT_PUBLIC_PAGE_BUILDER_API_KEY || '';
-const STRAPI_CLIENT_TOKEN = process.env.NEXT_PUBLIC_STRAPI_CLIENT_TOKEN || '';
+const PAGE_BUILDER_API_KEY = process.env.STRAPI_PAGE_BUILDER_API_KEY || '';
+const STRAPI_CLIENT_TOKEN = process.env.NEXT_STRAPI_CLIENT_TOKEN || '';
 
 // Content type to API endpoint mapping - use dedicated Page Builder endpoint for raw Strapi data
 // Content type configuration
@@ -445,7 +445,7 @@ function EditorPageContent() {
               <li>Add it to your <code className="bg-gray-100 px-1 rounded">.env</code> file:</li>
             </ol>
             <pre className="mt-2 bg-gray-800 text-green-400 p-2 rounded text-xs overflow-x-auto">
-NEXT_PUBLIC_PAGE_BUILDER_API_KEY=your_api_key_here
+STRAPI_PAGE_BUILDER_API_KEY=your_api_key_here
             </pre>
           </div>
         </div>

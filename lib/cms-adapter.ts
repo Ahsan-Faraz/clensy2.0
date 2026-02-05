@@ -76,9 +76,10 @@ async function fetchFromStrapi<T>(
     filters?: object;
     status?: 'draft' | 'published';
     revalidate?: number;
+    cache?: RequestCache;
   } = {}
 ): Promise<T | null> {
-  const { populate, filters, status } = options;
+  const { populate, filters, status, revalidate, cache: cacheOption } = options;
   
   const params = new URLSearchParams();
   
@@ -127,10 +128,18 @@ async function fetchFromStrapi<T>(
       headers['strapi-encode-source-maps'] = 'true';
     }
 
-    const response = await fetch(url, {
-      headers,
-      cache: 'no-store',
-    });
+    // Determine fetch options based on cache/revalidate settings
+    const fetchOptions: RequestInit = { headers };
+    if (revalidate !== undefined) {
+      // Use Next.js revalidate for ISR
+      (fetchOptions as any).next = { revalidate };
+    } else if (cacheOption) {
+      fetchOptions.cache = cacheOption;
+    } else {
+      fetchOptions.cache = 'no-store';
+    }
+
+    const response = await fetch(url, fetchOptions);
     
     if (!response.ok) {
       const bodyText = await response.text().catch(() => '');
@@ -1120,13 +1129,15 @@ export class CMSAdapter {
   /**
    * Get All Services (for listing)
    */
-  static async getAllServices() {
+  static async getAllServices(options?: { revalidate?: number }) {
+    const fetchOptions = options?.revalidate !== undefined ? { revalidate: options.revalidate } : {};
     // First, try published
     let result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
       populate: {
         heroBackgroundImage: { populate: '*' },
       },
       status: 'published',
+      ...fetchOptions,
     });
     // If none published, fallback to draft
     if (!result?.data || result.data.length === 0) {
@@ -1135,6 +1146,7 @@ export class CMSAdapter {
           heroBackgroundImage: { populate: '*' },
         },
         status: 'draft',
+        ...fetchOptions,
       });
     }
     
@@ -1153,13 +1165,15 @@ export class CMSAdapter {
   /**
    * Get All Locations (for listing)
    */
-  static async getAllLocations() {
+  static async getAllLocations(options?: { revalidate?: number }) {
+    const fetchOptions = options?.revalidate !== undefined ? { revalidate: options.revalidate } : {};
     // First, try published
     let result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
       populate: {
         heroBackgroundImage: { populate: '*' },
       },
       status: 'published',
+      ...fetchOptions,
     });
     // If none published, fallback to draft
     if (!result?.data || result.data.length === 0) {
@@ -1168,6 +1182,7 @@ export class CMSAdapter {
           heroBackgroundImage: { populate: '*' },
         },
         status: 'draft',
+        ...fetchOptions,
       });
     }
     

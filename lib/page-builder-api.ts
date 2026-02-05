@@ -5,7 +5,7 @@
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || '';
-const PAGE_BUILDER_API_KEY = process.env.NEXT_PUBLIC_PAGE_BUILDER_API_KEY || '';
+const PAGE_BUILDER_API_KEY = process.env.STRAPI_PAGE_BUILDER_API_KEY || '';
 
 interface StrapiResponse<T> {
   data: T;
