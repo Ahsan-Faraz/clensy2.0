@@ -6,7 +6,7 @@
  */
 
 // Default to the deployed Strapi if NEXT_PUBLIC_STRAPI_URL is not provided
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://strapi-production-8d56.up.railway.app';
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://72.60.27.190';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 // Cache for page data
