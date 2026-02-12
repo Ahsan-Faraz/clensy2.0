@@ -106,7 +106,7 @@ export async function GET(
     
     // Check if template field exists and needs deep population
     if (templateField && content[templateField]) {
-      console.log(`[PageBuilder Content] Template field "${templateField}" exists, fetching with deep populate...`);
+      (`[PageBuilder Content] Template field "${templateField}" exists, fetching with deep populate...`);
       
       // Try deep populate to get template.json
       let deepUrl: string;
@@ -138,9 +138,9 @@ export async function GET(
           } else {
             content = deepData.data || content;
           }
-          console.log(`[PageBuilder Content] Deep populate successful`);
+          (`[PageBuilder Content] Deep populate successful`);
         } else {
-          console.log(`[PageBuilder Content] Deep populate failed, using basic populate`);
+          (`[PageBuilder Content] Deep populate failed, using basic populate`);
         }
       }
     } else {

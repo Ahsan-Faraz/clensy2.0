@@ -106,7 +106,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching locations for sitemap:', error);
   }
 
-  return [...staticPages, ...servicePages, ...locationPages];
+  // Dynamic CMS pages (articles, pillar pages, supporting content)
+  let cmsPages: MetadataRoute.Sitemap = [];
+  try {
+    const pages = await CMSAdapter.getAllPages({ revalidate: 3600 });
+    cmsPages = pages
+      .filter((page) => page.slug && !page.excludeFromSitemap)
+      .map((page) => ({
+        url: `${baseUrl}/${page.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      }));
+  } catch (error) {
+    console.error('Error fetching pages for sitemap:', error);
+  }
+
+  return [...staticPages, ...servicePages, ...locationPages, ...cmsPages];
 }
 
 

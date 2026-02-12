@@ -1123,6 +1123,17 @@ export class CMSAdapter {
         step2: data.step2ImageAlt || 'Professional cleaning team at work',
         step3: data.step3ImageAlt || `Clean and fresh space after ${data.name.toLowerCase()} service`,
       },
+      // HTML Blocks (for embeds, iframes, maps, etc.)
+      htmlBlocks: (data.htmlBlocks || []).map((block: any) => ({
+        blockName: block.blockName || '',
+        htmlContent: block.htmlContent || '',
+        placement: block.placement || 'before-footer',
+        customPosition: block.customPosition || '',
+        cssClasses: block.cssClasses || '',
+        cssId: block.cssId || '',
+        order: block.order || 0,
+        isActive: block.isActive !== false,
+      })).filter((block: any) => block.isActive && block.htmlContent),
     };
   }
   
@@ -1196,6 +1207,102 @@ export class CMSAdapter {
       heroTitle: location.heroTitle || '',
       heroSubtitle: location.heroSubtitle || '',
       heroBackgroundImage: getImageUrl(location.heroBackgroundImage) || location.heroBackgroundImageUrl || '',
+    }));
+  }
+
+  // ============================================
+  // PAGE (COLLECTION TYPE) METHODS
+  // ============================================
+
+  /**
+   * Get Page by Slug
+   */
+  static async getPageBySlug(slug: string, status: 'draft' | 'published' = 'published') {
+    if (!slug) return null;
+
+    // Try with specified status first
+    let result = await fetchFromStrapi<StrapiResponse<any[]>>('/pages', {
+      filters: { slug: { $eq: slug } },
+      populate: '*',
+      status,
+    });
+
+    // Fallback to opposite status if not found
+    if (!result?.data || result.data.length === 0) {
+      const fallbackStatus = status === 'published' ? 'draft' : 'published';
+      result = await fetchFromStrapi<StrapiResponse<any[]>>('/pages', {
+        filters: { slug: { $eq: slug } },
+        populate: '*',
+        status: fallbackStatus,
+      });
+    }
+
+    if (!result?.data || result.data.length === 0) return null;
+
+    const data = result.data[0];
+
+    return {
+      id: data.id,
+      title: data.title || '',
+      slug: data.slug || slug,
+      content: data.content || '',
+      htmlBlocks: data.htmlBlocks || '',
+      featuredImage: getImageUrl(data.featuredImage) || '',
+      excludeFromSitemap: data.excludeFromSitemap || false,
+      seo: {
+        metaTitle: data.seo?.metaTitle || data.title || '',
+        metaDescription: data.seo?.metaDescription || '',
+        keywords: data.seo?.keywords || '',
+        canonicalURL: data.seo?.canonicalURL || `https://clensy.com/${data.slug}`,
+        metaRobots: data.seo?.metaRobots || 'index, follow',
+        structuredData: data.seo?.structuredData || null,
+      },
+      openGraph: {
+        ogTitle: data.openGraph?.ogTitle || data.title || '',
+        ogDescription: data.openGraph?.ogDescription || '',
+        ogImage: getImageUrl(data.openGraph?.ogImage) || getImageUrl(data.featuredImage) || '',
+        twitterCard: data.openGraph?.twitterCard || 'summary_large_image',
+      },
+      scripts: {
+        headScripts: getScriptsForPlacement(data, 'head'),
+        bodyStartScripts: getScriptsForPlacement(data, 'body-start'),
+        bodyEndScripts: getScriptsForPlacement(data, 'body-end'),
+      },
+    };
+  }
+
+  /**
+   * Get All Pages (for listing / sitemap)
+   */
+  static async getAllPages(options?: { revalidate?: number }) {
+    const fetchOptions = options?.revalidate !== undefined ? { revalidate: options.revalidate } : {};
+
+    // First, try published
+    let result = await fetchFromStrapi<StrapiResponse<any[]>>('/pages', {
+      populate: '*',
+      status: 'published',
+      ...fetchOptions,
+    });
+
+    // If none published, fallback to draft
+    if (!result?.data || result.data.length === 0) {
+      result = await fetchFromStrapi<StrapiResponse<any[]>>('/pages', {
+        populate: '*',
+        status: 'draft',
+        ...fetchOptions,
+      });
+    }
+
+    if (!result?.data) return [];
+
+    return result.data.map((page: any) => ({
+      id: page.id,
+      title: page.title || '',
+      slug: page.slug || '',
+      content: page.content || '',
+      htmlBlocks: page.htmlBlocks || '',
+      featuredImage: getImageUrl(page.featuredImage) || '',
+      excludeFromSitemap: page.excludeFromSitemap || false,
     }));
   }
 

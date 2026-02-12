@@ -10,6 +10,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CTASection from "@/components/cta-section";
 import SEOScripts from "@/components/seo-scripts";
+import HTMLBlockRenderer from "@/components/html-block-renderer";
 import { Render } from "@wecre8websites/strapi-page-builder-react";
 import pageBuilderConfig from "@/lib/page-builder-components";
 
@@ -141,6 +142,15 @@ interface ServiceData {
     step2: string;
     step3: string;
   };
+  htmlBlocks?: Array<{
+    blockName?: string;
+    htmlContent: string;
+    placement: string;
+    customPosition?: string;
+    cssClasses?: string;
+    cssId?: string;
+    order: number;
+  }>;
 }
 
 // Default fallback images
