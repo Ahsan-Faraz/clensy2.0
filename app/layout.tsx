@@ -3,10 +3,39 @@ import type { Metadata } from "next"
 import Script from "next/script"
 import "./globals.css"
 import Providers from "./providers"
-import GlobalHeadScripts from "@/components/global-head-scripts"
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://72.60.27.190';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
+
+/**
+ * Parse HTML string and extract meta tag attributes for server-side rendering.
+ * This ensures meta tags appear in the raw HTML source (critical for SEO verification).
+ */
+function parseMetaTags(html: string): Array<Record<string, string>> {
+  const metaTags: Array<Record<string, string>> = [];
+  const metaRegex = /<meta\s+([^>]*?)\s*\/?>/gi;
+  let match;
+  while ((match = metaRegex.exec(html)) !== null) {
+    const attrs: Record<string, string> = {};
+    const attrRegex = /(\w[\w-]*)=["']([^"']*?)["']/g;
+    let attrMatch;
+    while ((attrMatch = attrRegex.exec(match[1])) !== null) {
+      attrs[attrMatch[1]] = attrMatch[2];
+    }
+    if (Object.keys(attrs).length > 0) {
+      metaTags.push(attrs);
+    }
+  }
+  return metaTags;
+}
+
+/**
+ * Extract non-meta content (scripts, links, etc.) from HTML string.
+ * Returns HTML with meta tags removed.
+ */
+function getNonMetaHtml(html: string): string {
+  return html.replace(/<meta\s+[^>]*?\s*\/?>/gi, '').trim();
+}
 
 async function getGlobalScripts(): Promise<{ globalHeadScripts: string; globalBodyEndScripts: string }> {
   try {
@@ -44,6 +73,10 @@ export default async function RootLayout({
 }>) {
   const { globalHeadScripts, globalBodyEndScripts } = await getGlobalScripts();
 
+  // Parse meta tags server-side so they appear in raw HTML source
+  const metaTags = globalHeadScripts ? parseMetaTags(globalHeadScripts) : [];
+  const nonMetaScripts = globalHeadScripts ? getNonMetaHtml(globalHeadScripts) : '';
+
   return (
     <html lang="en">
       <head>
@@ -57,9 +90,17 @@ export default async function RootLayout({
           async
           src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
         />
-        {/* Global Head Scripts from Strapi (Google Search Console verification, analytics, etc.) */}
-        {globalHeadScripts && (
-          <GlobalHeadScripts html={globalHeadScripts} />
+        {/* Server-rendered meta tags from Strapi (Google Search Console verification, etc.) */}
+        {metaTags.map((attrs, i) => (
+          <meta key={`global-meta-${i}`} {...attrs} />
+        ))}
+        {/* Non-meta head scripts (analytics, tracking, etc.) */}
+        {nonMetaScripts && (
+          <Script
+            id="global-head-scripts"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{ __html: nonMetaScripts }}
+          />
         )}
       </head>
       {/* suppressHydrationWarning avoids extension-added attributes (e.g. cz-shortcut-listen) causing hydration mismatches */}
