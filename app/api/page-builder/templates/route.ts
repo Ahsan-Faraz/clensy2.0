@@ -24,7 +24,6 @@ export async function GET(request: NextRequest) {
     let lastResponse: Response | null = null;
     
     for (const url of endpoints) {
-      console.log(`Trying endpoint: ${url}`);
       try {
         const response = await fetch(url, {
           headers: {
@@ -36,28 +35,20 @@ export async function GET(request: NextRequest) {
 
         if (response.ok) {
           const data = await response.json();
-          console.log(`✅ Success with endpoint: ${url}`);
-          console.log(`Response structure:`, Object.keys(data));
           return NextResponse.json({ success: true, data });
         } else {
           const errorText = await response.text();
-          console.log(`❌ Failed with endpoint ${url}: ${response.status}`);
-          console.log(`Error details:`, errorText.substring(0, 300));
           lastError = errorText;
           lastResponse = response;
         }
       } catch (err: any) {
-        console.log(`Error with endpoint ${url}:`, err.message);
         lastError = err.message;
       }
     }
 
     // If all endpoints failed, return error with helpful message
     const errorText = lastError || 'All endpoint attempts failed';
-    console.error('❌ All Strapi API endpoints failed.');
-    console.error('Last status:', lastResponse?.status);
-    console.error('Last error:', errorText.substring(0, 500));
-    console.error('Attempted endpoints:', endpoints);
+    console.error('All Strapi API endpoints failed. Last status:', lastResponse?.status);
     
     // Provide helpful error message
     let helpfulMessage = `Failed to fetch templates. All ${endpoints.length} endpoint attempts failed.`;

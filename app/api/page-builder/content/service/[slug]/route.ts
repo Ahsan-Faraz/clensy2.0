@@ -24,8 +24,6 @@ export async function GET(
     // Fetch service by slug with all relations populated
     // Use populate=* to get all relations including the template
     const url = `${STRAPI_URL}/api/services?filters[slug][$eq]=${slug}&populate=*`;
-    console.log(`[PageBuilder Service Content] Fetching: ${url}`);
-    
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -54,13 +52,6 @@ export async function GET(
     }
     
     const service = services[0];
-    
-    console.log(`[PageBuilder Service Content] Found service: ${service.name}, id: ${service.id}`);
-    console.log(`[PageBuilder Service Content] Template field "Service_Page":`, service.Service_Page ? 'EXISTS' : 'MISSING');
-    
-    if (service.Service_Page) {
-      console.log(`[PageBuilder Service Content] Template ID: ${service.Service_Page.id}, has json: ${!!service.Service_Page.json}`);
-    }
     
     return NextResponse.json({ 
       success: true, 

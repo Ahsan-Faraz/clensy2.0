@@ -1,14 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { Check } from "lucide-react"
 import { formatText } from "@/lib/utils/formatText"
 
-
-// Default data in case the API call fails
+// Default data — renders instantly at build time (SSG) before any CMS data arrives
 const defaultHeroData = {
   topLabel: "Professional Cleaning Services",
   heading: "Professional cleaning for your home",
@@ -20,61 +18,23 @@ const defaultHeroData = {
     "https://res.cloudinary.com/dgjmm3usy/image/upload/v1751356490/shutterstock_2392393465__3_.jpg-0LMVCo8sUiQDVXDeUykdUtzKRTrvHa_qkbjiu.jpg",
 }
 
-export default function HeroSection() {
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [heroData, setHeroData] = useState(defaultHeroData)
+export interface HeroSectionProps {
+  data?: Partial<typeof defaultHeroData>
+}
 
-
-  useEffect(() => {
-    // Load hero data from API
-    const fetchHeroData = async () => {
-      try {
-        // Add cache busting for development - ensures fresh data
-        const cacheBuster = new URLSearchParams({ _t: Date.now().toString() });
-        const response = await fetch(`/api/cms/hero?${cacheBuster.toString()}`, {
-          cache: 'no-store', // Disable cache
-        })
-        const result = await response.json()
-
-        if (result.success && result.data) {
-          // Only update fields that exist and are not empty
-          setHeroData((prevData) => ({
-            topLabel: result.data.topLabel || prevData.topLabel,
-            heading: result.data.heading || prevData.heading,
-            subheading: result.data.subheading || prevData.subheading,
-            buttonText: result.data.buttonText || prevData.buttonText,
-            feature1: result.data.feature1 || prevData.feature1,
-            feature2: result.data.feature2 || prevData.feature2,
-            // Keep the existing backgroundImage if the API doesn't provide one
-            backgroundImage:
-              result.data.backgroundImage && result.data.backgroundImage.trim() !== ""
-                ? result.data.backgroundImage
-                : prevData.backgroundImage,
-          }))
-        }
-      } catch (error) {
-        // Keep using default data on error
-      } finally {
-        setIsLoaded(true)
-      }
-    }
-
-    fetchHeroData()
-    
-    // Optional: Refresh data every 5 seconds in development to see changes
-    if (process.env.NODE_ENV === 'development') {
-      const interval = setInterval(fetchHeroData, 5000)
-      return () => clearInterval(interval)
-    }
-  }, [])
-
-  // Don't render until we have loaded the data to prevent flickering
-  if (!isLoaded) {
-    return (
-      <section className="relative min-h-screen pt-16 flex items-center justify-center">
-        <div className="text-white">Loading...</div>
-      </section>
-    )
+export default function HeroSection({ data }: HeroSectionProps) {
+  // Merge server-provided CMS data with defaults (CMS wins when present)
+  const heroData = {
+    topLabel: data?.topLabel || defaultHeroData.topLabel,
+    heading: data?.heading || defaultHeroData.heading,
+    subheading: data?.subheading || defaultHeroData.subheading,
+    buttonText: data?.buttonText || defaultHeroData.buttonText,
+    feature1: data?.feature1 || defaultHeroData.feature1,
+    feature2: data?.feature2 || defaultHeroData.feature2,
+    backgroundImage:
+      data?.backgroundImage && data.backgroundImage.trim() !== ""
+        ? data.backgroundImage
+        : defaultHeroData.backgroundImage,
   }
 
   return (
@@ -90,7 +50,6 @@ export default function HeroSection() {
             priority
             unoptimized // Add this if you're having issues with external images
             onError={(e) => {
-              console.error("Image failed to load:", heroData.backgroundImage)
               // Fallback to default image on error
               const target = e.target as HTMLImageElement
               target.src = defaultHeroData.backgroundImage

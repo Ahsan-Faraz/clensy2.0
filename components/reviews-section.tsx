@@ -5,44 +5,28 @@ import { useInView } from "react-intersection-observer";
 import { Star } from "lucide-react";
 import { formatText } from "@/lib/utils/formatText";
 
-export default function ReviewsSection() {
+interface ReviewsData {
+  heading: string;
+  buttonText: string;
+}
+
+export interface ReviewsSectionProps {
+  data?: Partial<ReviewsData>;
+}
+
+export default function ReviewsSection({ data }: ReviewsSectionProps) {
   const controls = useAnimation();
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
-  const [isLoaded, setIsLoaded] = useState(false);
   const [visibleReviews, setVisibleReviews] = useState(8); // Start with 8 reviews for desktop
   const [visibleMobileReviews, setVisibleMobileReviews] = useState(2); // Start with 2 reviews for mobile
   const [loadMoreClicks, setLoadMoreClicks] = useState(0); // Track load more clicks
   const [reviewsAfterFirstLoad, setReviewsAfterFirstLoad] = useState(8); // Track reviews after first load more
-  const [reviewsData, setReviewsData] = useState({
-    heading: "What People Are <blue>Saying About Us</blue>",
-    buttonText: "Load More",
-  });
 
-  // Fetch reviews data from API
-  useEffect(() => {
-    const fetchReviewsData = async () => {
-      try {
-        const response = await fetch("/api/cms/reviews");
-        const result = await response.json();
-
-        if (result.success && result.data) {
-          setReviewsData({
-            heading:
-              result.data.heading ||
-              "What People Are <blue>Saying About Us</blue>",
-            buttonText: result.data.buttonText || "Load More",
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching reviews data:", error);
-        // Keep using default data on error
-      } finally {
-        setIsLoaded(true);
-      }
-    };
-
-    fetchReviewsData();
-  }, []);
+  // Merge server-provided CMS data with defaults
+  const reviewsData: ReviewsData = {
+    heading: data?.heading || "What People Are <blue>Saying About Us</blue>",
+    buttonText: data?.buttonText || "Load More",
+  };
 
   useEffect(() => {
     if (inView) {

@@ -23,7 +23,7 @@ export async function fetchTemplate(templateId: number | string) {
         'Content-Type': 'application/json',
         ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
       },
-      cache: 'no-store',
+      next: { revalidate: 60 },
     });
 
     if (!response.ok) {
@@ -49,7 +49,7 @@ export async function fetchTemplates() {
         'Content-Type': 'application/json',
         ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
       },
-      cache: 'no-store',
+      next: { revalidate: 60 },
     });
 
     if (!response.ok) {
@@ -75,7 +75,7 @@ export async function fetchLandingPage() {
         'Content-Type': 'application/json',
         ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
       },
-      cache: 'no-store',
+      next: { revalidate: 60 },
     });
 
     if (!response.ok) {

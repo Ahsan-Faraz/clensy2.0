@@ -13,7 +13,6 @@ const contentTypeConfig: Record<string, { endpoint: string; templateField: strin
   'faq-page': { endpoint: '/api/faq-page', templateField: 'FAQ_Page', isSingleType: true },
   // Collection types - require contentId
   'service': { endpoint: '/api/services', templateField: 'Service_Page', isSingleType: false },
-  'location': { endpoint: '/api/locations', templateField: 'Location_Page', isSingleType: false },
 };
 
 /**
@@ -64,8 +63,6 @@ export async function GET(
       );
     }
     
-    console.log(`[PageBuilder Content] Fetching: ${url}`);
-    
     let response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -101,8 +98,6 @@ export async function GET(
     } else {
       content = data.data || {};
     }
-    
-    console.log(`[PageBuilder Content] ${type} data keys:`, Object.keys(content).slice(0, 15));
     
     // Check if template field exists and needs deep population
     if (templateField && content[templateField]) {
@@ -143,19 +138,6 @@ export async function GET(
           (`[PageBuilder Content] Deep populate failed, using basic populate`);
         }
       }
-    } else {
-      console.log(`[PageBuilder Content] Template field "${templateField}": ${content[templateField] ? 'EXISTS' : 'MISSING'}`);
-    }
-    
-    if (templateField && content[templateField]) {
-      const template = content[templateField];
-      console.log(`[PageBuilder Content] Template object:`, JSON.stringify({
-        id: template.id,
-        documentId: template.documentId,
-        name: template.name,
-        hasJson: !!template.json,
-        allKeys: Object.keys(template)
-      }));
     }
     
     return NextResponse.json({ 

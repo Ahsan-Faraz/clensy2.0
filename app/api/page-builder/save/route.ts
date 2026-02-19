@@ -15,13 +15,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Saving page builder data:', {
-      contentType,
-      templateId,
-      pageDataType: typeof pageData,
-      pageDataKeys: pageData ? Object.keys(pageData) : [],
-    });
-
     // Extract content field updates from pageData
     // pageData contains the template structure (blocks) and component props
     // We need to extract prop values and update the landing page content fields
@@ -46,8 +39,6 @@ export async function POST(request: NextRequest) {
         }
       });
     }
-
-    console.log('Content field updates extracted:', Object.keys(contentUpdates));
 
     // First, update the template with the page builder structure (blocks/order)
     // The template's json field stores the page structure
@@ -110,8 +101,6 @@ export async function POST(request: NextRequest) {
         console.error('Landing page update error:', errorText);
         // Don't throw - template update succeeded, content update is secondary
         console.warn('Template saved but content fields update failed');
-      } else {
-        console.log('Landing page content fields updated successfully');
       }
     }
 

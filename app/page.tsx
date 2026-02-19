@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 import { CMSAdapter } from "@/lib/cms-adapter";
+import { fetchLandingPage } from "@/lib/page-builder-api";
 import DynamicLandingPage from "@/components/dynamic-landing-page";
 
-// Force dynamic rendering since we fetch from CMS
-export const dynamic = 'force-dynamic';
-export const revalidate = 60; // Revalidate every 60 seconds
+// ISR: revalidate every 60 seconds
+export const revalidate = 60;
 
 // Default SEO data as fallback
 const defaultSEO = {
@@ -76,26 +76,60 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// Server component that fetches SEO data and renders client component
+/**
+ * Home page — Server Component (SSG + ISR)
+ * 
+ * Fetches ALL CMS data in parallel at build time / every 60s revalidation.
+ * Passes pre-fetched data as props so client components render instantly
+ * with no loading spinners or client-side API calls.
+ */
 export default async function Home() {
-  let seo = defaultSEO;
-  
-  try {
-    const fetchedSeo = await CMSAdapter.getLandingPageSEO();
-    if (fetchedSeo) {
-      seo = fetchedSeo;
-    }
-  } catch (error) {
-    console.error("Failed to fetch SEO data for page:", error);
-  }
+  // Fetch ALL data in parallel — single server-side round-trip
+  const [
+    seo,
+    heroData,
+    howItWorksData,
+    ctaData,
+    comparisonData,
+    reviewsData,
+    checklistData,
+    services,
+    locations,
+    pageBuilderResult,
+  ] = await Promise.all([
+    CMSAdapter.getLandingPageSEO().catch(() => null),
+    CMSAdapter.getHeroSection().catch(() => null),
+    CMSAdapter.getHowItWorks().catch(() => null),
+    CMSAdapter.getCTASection().catch(() => null),
+    CMSAdapter.getComparisonSection().catch(() => null),
+    CMSAdapter.getReviewsSection().catch(() => null),
+    CMSAdapter.getChecklistSection().catch(() => null),
+    CMSAdapter.getAllServices().catch(() => []),
+    CMSAdapter.getAllLocations().catch(() => []),
+    fetchLandingPage().catch(() => null),
+  ]);
+
+  const seoData = seo || defaultSEO;
+
+  // Extract page builder content from Strapi response
+  const pageBuilderContent = pageBuilderResult?.data || null;
 
   return (
     <DynamicLandingPage
-      schemaJsonLd={seo.schemaJsonLd}
-      additionalSchemas={seo.additionalSchemas}
-      headScripts={seo.scripts.head}
-      bodyEndScripts={seo.scripts.bodyEnd}
-      customCss={seo.customCss}
+      schemaJsonLd={seoData.schemaJsonLd}
+      additionalSchemas={seoData.additionalSchemas}
+      headScripts={seoData.scripts.head}
+      bodyEndScripts={seoData.scripts.bodyEnd}
+      customCss={seoData.customCss}
+      heroData={heroData}
+      howItWorksData={howItWorksData}
+      ctaData={ctaData}
+      comparisonData={comparisonData}
+      reviewsData={reviewsData}
+      checklistData={checklistData}
+      services={services}
+      locations={locations}
+      pageBuilderContent={pageBuilderContent}
     />
   );
 }

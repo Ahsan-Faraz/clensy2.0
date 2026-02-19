@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { CMSAdapter } from "@/lib/cms-adapter";
 import TermsOfServiceClient from "./terms-of-service-client";
 
-export const dynamic = 'force-dynamic';
 export const revalidate = 60;
 
 const defaultSEO = {

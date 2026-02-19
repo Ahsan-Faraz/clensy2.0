@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Clock, Calendar, Check, Smartphone, Bell, MapPin } from "lucide-react";
 import Image from "next/image";
 import { formatText } from "@/lib/utils/formatText";
 
-
-// Default data in case the API call fails
+// Default data — renders instantly at build time (SSG)
 const defaultData = {
   step1: {
     title: "Order online",
@@ -32,56 +31,34 @@ const defaultData = {
   buttonText: "Book Now",
 };
 
-export default function HowItWorks() {
+export interface HowItWorksProps {
+  data?: Partial<typeof defaultData & { step1: Partial<typeof defaultData.step1>; step2: Partial<typeof defaultData.step2>; step3: Partial<typeof defaultData.step3> }>
+}
+
+export default function HowItWorks({ data }: HowItWorksProps) {
   const controls = useAnimation();
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
   const [activeTab, setActiveTab] = useState("booking");
-  const [sectionData, setSectionData] = useState(defaultData);
-  const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    // Fetch how-it-works data
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/cms/how-it-works");
-        const result = await response.json();
-
-        if (result.success && result.data) {
-          setSectionData({
-            step1: {
-              title: result.data.step1?.title || defaultData.step1.title,
-              description:
-                result.data.step1?.description || defaultData.step1.description,
-              featureText:
-                result.data.step1?.featureText || defaultData.step1.featureText,
-            },
-            step2: {
-              title: result.data.step2?.title || defaultData.step2.title,
-              description:
-                result.data.step2?.description || defaultData.step2.description,
-              featureText:
-                result.data.step2?.featureText || defaultData.step2.featureText,
-            },
-            step3: {
-              title: result.data.step3?.title || defaultData.step3.title,
-              description:
-                result.data.step3?.description || defaultData.step3.description,
-              featureText:
-                result.data.step3?.featureText || defaultData.step3.featureText,
-            },
-            buttonText: result.data.buttonText || defaultData.buttonText,
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching how-it-works data:", error);
-        // Keep using default data on error
-      } finally {
-        setIsLoaded(true);
-      }
-    };
-
-    fetchData();
-  }, []);
+  // Merge server-provided CMS data with defaults
+  const sectionData = {
+    step1: {
+      title: data?.step1?.title || defaultData.step1.title,
+      description: data?.step1?.description || defaultData.step1.description,
+      featureText: data?.step1?.featureText || defaultData.step1.featureText,
+    },
+    step2: {
+      title: data?.step2?.title || defaultData.step2.title,
+      description: data?.step2?.description || defaultData.step2.description,
+      featureText: data?.step2?.featureText || defaultData.step2.featureText,
+    },
+    step3: {
+      title: data?.step3?.title || defaultData.step3.title,
+      description: data?.step3?.description || defaultData.step3.description,
+      featureText: data?.step3?.featureText || defaultData.step3.featureText,
+    },
+    buttonText: data?.buttonText || defaultData.buttonText,
+  };
 
   useEffect(() => {
     if (inView) {

@@ -35,7 +35,9 @@ export async function GET(request: NextRequest) {
 
     // Default: use CMSAdapter for formatted data (used by the actual site)
     const data = await CMSAdapter.getAboutPage();
-    return NextResponse.json({ success: true, data });
+    return NextResponse.json({ success: true, data }, {
+      headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' },
+    });
   } catch (error: any) {
     console.error("Error fetching about page:", error);
     return NextResponse.json(

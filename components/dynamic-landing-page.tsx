@@ -1,7 +1,7 @@
 'use client';
 
 import { Render } from "@wecre8websites/strapi-page-builder-react";
-import { useEffect, useState, useMemo } from "react";
+import { useMemo } from "react";
 import pageBuilderConfig from "@/lib/page-builder-components";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -20,6 +20,18 @@ interface DynamicLandingPageProps {
   headScripts?: string;
   bodyEndScripts?: string;
   customCss?: string;
+  // SSG: All section data pre-fetched from server
+  heroData?: any;
+  howItWorksData?: any;
+  ctaData?: any;
+  comparisonData?: any;
+  reviewsData?: any;
+  checklistData?: any;
+  services?: any[];
+  locations?: any[];
+  // SSG: Page builder template data pre-fetched from server
+  pageBuilderContent?: any;
+  pageBuilderTemplateField?: string;
 }
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
@@ -30,39 +42,33 @@ export default function DynamicLandingPage({
   headScripts,
   bodyEndScripts,
   customCss,
+  heroData,
+  howItWorksData,
+  ctaData,
+  comparisonData,
+  reviewsData,
+  checklistData,
+  services,
+  locations,
+  pageBuilderContent,
+  pageBuilderTemplateField,
 }: DynamicLandingPageProps) {
-  const [templateData, setTemplateData] = useState<{ templateJson: any; content: any } | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [usePageBuilder, setUsePageBuilder] = useState(false);
+  // Determine if page builder should be used (template data was provided from server)
+  const usePageBuilder = Boolean(pageBuilderContent);
+  const templateField = pageBuilderTemplateField || 'Landing_Page';
 
-  useEffect(() => {
-    const fetchTemplateData = async () => {
-      try {
-        const response = await fetch('/api/page-builder/content/landing-page');
-        const result = await response.json();
-
-        if (result.success && result.data) {
-          const content = result.data;
-          const templateField = result.templateField || 'Landing_Page';
-          const template = content[templateField];
-          
-          if (template?.json?.content && template.json.content.length > 0) {
-            setTemplateData({
-              templateJson: template.json,
-              content,
-            });
-            setUsePageBuilder(true);
-          }
-        }
-      } catch (err) {
-        console.error('[DynamicLandingPage] Error:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTemplateData();
-  }, []);
+  // Parse page builder template data
+  const templateData = useMemo(() => {
+    if (!pageBuilderContent) return null;
+    const template = pageBuilderContent[templateField];
+    if (template?.json?.content && template.json.content.length > 0) {
+      return {
+        templateJson: template.json,
+        content: pageBuilderContent,
+      };
+    }
+    return null;
+  }, [pageBuilderContent, templateField]);
 
   // Split template content for hardcoded sections:
   // 1. Checklist goes after HowItWorks (or after Hero if no HowItWorks)
@@ -131,26 +137,13 @@ export default function DynamicLandingPage({
     };
   }, [templateData]);
 
-  if (isLoading) {
-    return (
-      <main className="overflow-x-hidden">
-        <SEOHead schemaJsonLd={schemaJsonLd} additionalSchemas={additionalSchemas} headScripts={headScripts} bodyEndScripts={bodyEndScripts} customCss={customCss} />
-        <Navbar />
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        </div>
-        <Footer />
-      </main>
-    );
-  }
-
   // Use Page Builder rendering with hardcoded ChecklistSection and ReviewsSection in fixed positions
   if (usePageBuilder && templateData) {
     return (
       <main className="overflow-x-hidden">
         <SEOHead schemaJsonLd={schemaJsonLd} additionalSchemas={additionalSchemas} headScripts={headScripts} bodyEndScripts={bodyEndScripts} customCss={customCss} />
         <div className="relative z-50">
-          <Navbar />
+          <Navbar services={services} locations={locations} />
         </div>
         
         {/* Page Builder content BEFORE Checklist position */}
@@ -163,7 +156,7 @@ export default function DynamicLandingPage({
         )}
         
         {/* HARDCODED Checklist Section - Always appears in this position */}
-        <ChecklistSection />
+        <ChecklistSection data={checklistData} />
         
         {/* Page Builder content BETWEEN Checklist and Reviews */}
         {betweenChecklistAndReviews.content.length > 0 && (
@@ -174,8 +167,8 @@ export default function DynamicLandingPage({
           />
         )}
         
-        {/* HARDCODED Reviews Section - Fetches own data from CMS */}
-        <ReviewsSection />
+        {/* HARDCODED Reviews Section */}
+        <ReviewsSection data={reviewsData} />
         
         {/* Page Builder content AFTER Reviews (typically CTA) */}
         {afterReviews.content.length > 0 && (
@@ -186,25 +179,25 @@ export default function DynamicLandingPage({
           />
         )}
         
-        <Footer />
+        <Footer services={services} locations={locations} />
       </main>
     );
   }
 
-  // Fallback to original hardcoded layout
+  // Fallback to original hardcoded layout (SSG: all data passed as props)
   return (
     <main className="overflow-x-hidden">
       <SEOHead schemaJsonLd={schemaJsonLd} additionalSchemas={additionalSchemas} headScripts={headScripts} bodyEndScripts={bodyEndScripts} customCss={customCss} />
-      <Navbar />
-      <HeroSection />
+      <Navbar services={services} locations={locations} />
+      <HeroSection data={heroData} />
       <div className="max-w-full">
-        <HowItWorks />
-        <ChecklistSection />
-        <ReviewsSection />
-        <ComparisonSection />
-        <CTASection />
+        <HowItWorks data={howItWorksData} />
+        <ChecklistSection data={checklistData} />
+        <ReviewsSection data={reviewsData} />
+        <ComparisonSection data={comparisonData} />
+        <CTASection data={ctaData} />
       </div>
-      <Footer />
+      <Footer services={services} locations={locations} />
     </main>
   );
 }

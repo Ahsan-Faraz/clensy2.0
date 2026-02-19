@@ -4,7 +4,8 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 3600,
     remotePatterns: [
       {
         protocol: "https",
@@ -45,15 +46,6 @@ const nextConfig = {
     config.resolve.conditionNames = ['import', 'require', 'default'];
     
     // Fix for handlebars - ignore require.extensions
-    config.ignoreWarnings = [
-      ...(config.ignoreWarnings || []),
-      {
-        module: /node_modules\/handlebars/,
-        message: /require\.extensions/,
-      },
-    ];
-    
-    // Fix for handlebars - ignore require.extensions warning
     config.ignoreWarnings = [
       ...(config.ignoreWarnings || []),
       {

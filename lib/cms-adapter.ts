@@ -20,7 +20,7 @@ let checklistPageCache: any = null;
 let checklistPageCacheTime: number = 0;
 let faqPageCache: any = null;
 let faqPageCacheTime: number = 0;
-const CACHE_DURATION = process.env.NODE_ENV === 'development' ? 5000 : 60000; // 5 seconds in dev, 1 minute in prod
+const CACHE_DURATION = process.env.NODE_ENV === 'development' ? 5000 : 300000; // 5 seconds in dev, 5 minutes in prod
 
 // Function to clear the landing page cache (called after sync)
 export function clearLandingPageCache() {
@@ -136,7 +136,8 @@ async function fetchFromStrapi<T>(
     } else if (cacheOption) {
       fetchOptions.cache = cacheOption;
     } else {
-      fetchOptions.cache = 'no-store';
+      // Default: revalidate every 60s instead of no-store for better performance
+      (fetchOptions as any).next = { revalidate: 60 };
     }
 
     const response = await fetch(url, fetchOptions);

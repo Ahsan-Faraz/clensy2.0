@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { CMSAdapter } from '@/lib/cms-adapter';
 
-export const dynamic = 'force-dynamic';
 export const revalidate = 60;
 
 export async function GET() {
@@ -31,7 +30,9 @@ export async function GET() {
       });
     }
     
-    return NextResponse.json({ success: true, data });
+    return NextResponse.json({ success: true, data }, {
+      headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' },
+    });
   } catch (error) {
     console.error('Error fetching privacy policy:', error);
     return NextResponse.json(

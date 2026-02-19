@@ -576,8 +576,6 @@ export const StepOne: React.FC<StepOneProps> = ({
       frequencies: true,
       scopeIds: true
     }));
-    
-    console.log("Frequency selected for scope", scopeId, ":", frequencyId);
   };
 
   const handleAnswerChange = (questionId: number, value: any) => {

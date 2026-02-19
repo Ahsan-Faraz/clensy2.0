@@ -56,7 +56,6 @@ const contentTypeConfig: Record<string, { endpoint: string; templateField: strin
   'faq-page': { endpoint: '/api/page-builder/content/faq-page', templateField: 'FAQ_Page', isSingleType: true },
   // Collection types - require contentId
   'service': { endpoint: '/api/page-builder/content/service', templateField: 'Service_Page', isSingleType: false },
-  'location': { endpoint: '/api/page-builder/content/location', templateField: 'Location_Page', isSingleType: false },
 };
 
 // Helper to get endpoint URL (with contentId for collection types)
@@ -139,21 +138,6 @@ function EditorPageContent({ strapiUrl, pageBuilderApiKey, strapiClientToken }: 
     const pageParam = searchParams.get('page') || searchParams.get('_contentId') || searchParams.get('contentId') || searchParams.get('id');
     const typeParam = parseContentType(searchParams);
     
-    // Debug: Log raw params
-    const rawContentType = searchParams.get('_contentType');
-    const rawType = searchParams.get('type');
-    const rawTemplateId = searchParams.get('_templateId');
-    const rawTemplate = searchParams.get('template');
-    const rawContentId = searchParams.get('_contentId');
-    const rawPage = searchParams.get('page');
-
-    console.log(`[Editor] ============ URL PARAMS ============`);
-    console.log(`[Editor] Raw: type=${rawType}, _contentType=${rawContentType}`);
-    console.log(`[Editor] Raw: template=${rawTemplate}, _templateId=${rawTemplateId}`);
-    console.log(`[Editor] Raw: page=${rawPage}, _contentId=${rawContentId}`);
-    console.log(`[Editor] Parsed: contentType=${typeParam}, templateId=${templateParam}, contentId=${pageParam}`);
-    console.log(`[Editor] =====================================`);
-
     // Reset all state when content type changes
     setTemplateId(templateParam);
     setPageId(pageParam);
@@ -190,8 +174,6 @@ function EditorPageContent({ strapiUrl, pageBuilderApiKey, strapiClientToken }: 
       const endpoint = getEndpointUrl(contentTypeParam, pageIdParam);
       const templateField = getTemplateField(contentTypeParam);
       
-      console.log(`[Editor] Loading data for ${contentTypeParam}, contentId=${pageIdParam}, endpoint=${endpoint}`);
-
       // Fetch content for the specified content type
       let pageContent: any = {};
       try {
@@ -234,7 +216,6 @@ function EditorPageContent({ strapiUrl, pageBuilderApiKey, strapiClientToken }: 
         
         // IMPORTANT: Use documentId for Page Builder's save functionality (Strapi v5)
         const correctTemplateId = templateData.documentId || templateData.id || templateIdParam;
-        console.log(`[Editor] Template fetched, setting templateId to: ${correctTemplateId} (was: ${templateIdParam})`);
         setTemplateId(String(correctTemplateId));
         
         setInitialData(templateData);
@@ -252,29 +233,15 @@ function EditorPageContent({ strapiUrl, pageBuilderApiKey, strapiClientToken }: 
 
         const contentData = await contentResponse.json();
         
-        // The new endpoint returns { success: true, data: {...raw strapi content...} }
-        console.log(`[Editor] ${contentTypeParam} response success:`, contentData.success);
-        
         // Get the raw Strapi data
         const data = contentData.data || {};
         
-        console.log(`[Editor] ${contentTypeParam} data keys:`, Object.keys(data).slice(0, 20));
-        console.log(`[Editor] Looking for template field: "${templateField}"`);
-        console.log(`[Editor] Template field exists:`, templateField in data);
-        
         const template = data[templateField];
-
-        if (template) {
-          console.log(`[Editor] Template FOUND:`, { id: template.id, documentId: template.documentId, name: template.name });
-        } else {
-          console.log(`[Editor] Template NOT FOUND in fields:`, Object.keys(data).join(', '));
-        }
 
         if (template) {
           // Prefer documentId for Strapi v5 (required for Page Builder's internal save)
           const templateIdValue = template.documentId || template.id || template.data?.documentId || template.data?.id;
           if (templateIdValue) {
-            console.log(`[Editor] Setting templateId to: ${templateIdValue} (type: ${typeof templateIdValue})`);
             setTemplateId(String(templateIdValue));
             template.content = pageContent;
             setInitialData(template);
@@ -350,8 +317,6 @@ function EditorPageContent({ strapiUrl, pageBuilderApiKey, strapiClientToken }: 
     const syncContentType = parseContentType(searchParams);
     const syncTemplateId = templateId || parseTemplateId(searchParams);
     const syncContentId = searchParams.get('page') || searchParams.get('_contentId'); // For collection types
-    
-    console.log(`[Sync] Content type: ${syncContentType}, Template ID: ${syncTemplateId}, Content ID: ${syncContentId}`);
     
     if (!syncTemplateId) {
       toast.error('No template ID available. Please reload the editor.');
@@ -560,9 +525,6 @@ STRAPI_PAGE_BUILDER_API_KEY=your_api_key_here
   const parsedContentType = parseContentType(searchParams);
   const contentTypeDisplay = parsedContentType.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   
-  // Debug: log current state vs URL at render time
-  console.log(`[Editor Render] State contentType: ${contentType}, Parsed from URL: ${parsedContentType}, TemplateId: ${templateId}`);
-
   return (
     <div className="w-full h-screen relative">
       <Toaster position="top-right" richColors closeButton />

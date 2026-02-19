@@ -14,50 +14,71 @@ interface Location {
   county: string;
 }
 
-export default function Navbar() {
+// Hardcoded defaults — render these instantly while CMS data loads
+const DEFAULT_SERVICES: Service[] = [
+  { name: 'Routine Cleaning', slug: 'routine-cleaning', serviceType: 'routine' },
+  { name: 'Deep Cleaning', slug: 'deep-cleaning', serviceType: 'deep' },
+  { name: 'Airbnb Cleaning', slug: 'airbnb-cleaning', serviceType: 'airbnb' },
+  { name: 'Move In/Out Cleaning', slug: 'moving-cleaning', serviceType: 'moving' },
+  { name: 'Post-Construction Cleaning', slug: 'post-construction-cleaning', serviceType: 'post-construction' },
+  { name: 'Office Cleaning', slug: 'office-cleaning', serviceType: 'office' },
+];
+
+const DEFAULT_LOCATIONS: Location[] = [
+  { name: 'Bergen County', slug: 'bergen', county: 'Bergen County' },
+  { name: 'Hudson County', slug: 'hudson', county: 'Hudson County' },
+  { name: 'Essex County', slug: 'essex', county: 'Essex County' },
+  { name: 'Passaic County', slug: 'passaic', county: 'Passaic County' },
+  { name: 'Union County', slug: 'union', county: 'Union County' },
+  { name: 'Morris County', slug: 'morris', county: 'Morris County' },
+];
+
+export interface NavbarProps {
+  services?: Service[];
+  locations?: Location[];
+}
+
+export default function Navbar({ services: propServices, locations: propLocations }: NavbarProps) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [visible, setVisible] = useState(true);  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   
-  // Dynamic data from Strapi
-  const [services, setServices] = useState<Service[]>([]);
-  const [locations, setLocations] = useState<Location[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Fallback state for when no props are provided (non-landing pages)
+  const [fetchedServices, setFetchedServices] = useState<Service[]>([]);
+  const [fetchedLocations, setFetchedLocations] = useState<Location[]>([]);
 
-  // Fetch services and locations from Strapi
+  // Fetch from CMS only if no server props were provided (non-landing pages)
   useEffect(() => {
+    if (propServices !== undefined && propLocations !== undefined) return;
     const fetchData = async () => {
       try {
         const [servicesRes, locationsRes] = await Promise.all([
           fetch('/api/cms/services'),
           fetch('/api/cms/locations')
         ]);
-        
         const servicesData = await servicesRes.json();
         const locationsData = await locationsRes.json();
-        
         if (servicesData.success && (servicesData.data?.length ?? 0) > 0) {
-          setServices(servicesData.data);
-        } else {
-          setServices([]);
+          setFetchedServices(servicesData.data);
         }
         if (locationsData.success && (locationsData.data?.length ?? 0) > 0) {
-          setLocations(locationsData.data);
-        } else {
-          setLocations([]);
+          setFetchedLocations(locationsData.data);
         }
-      } catch (error) {
-        console.error('Error fetching nav data:', error);
-        setServices([]);
-        setLocations([]);
-      } finally {
-        setLoading(false);
+      } catch {
+        // Silently fail - defaults are already shown
       }
     };
-
     fetchData();
-  }, []);
+  }, [propServices, propLocations]);
+
+  // Priority: server props > client-fetched CMS data > hardcoded defaults
+  const services = (propServices && propServices.length > 0)
+    ? propServices
+    : (fetchedServices.length > 0 ? fetchedServices : DEFAULT_SERVICES);
+  const locations = (propLocations && propLocations.length > 0)
+    ? propLocations
+    : (fetchedLocations.length > 0 ? fetchedLocations : DEFAULT_LOCATIONS);
 
   useEffect(() => {
     const handleScroll = () => {

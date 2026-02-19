@@ -44,20 +44,20 @@ Clensy-3admin/
 ```
 User clicks "Open in Page Builder" in Strapi Admin
     ↓
-Strapi redirects to: http://localhost:3000/editor?_contentType=api::location.location&_templateId=abc123&_contentId=xyz789
+Strapi redirects to: http://localhost:3000/editor?_contentType=api::service.service&_templateId=abc123&_contentId=xyz789
     ↓
 app/editor/page.tsx loads
     ↓
 Parses URL params:
-  - _contentType → "location"
+  - _contentType → "service"
   - _templateId → "abc123" (documentId)
   - _contentId → "xyz789" (for collection types)
     ↓
-Fetches content from: /api/page-builder/content/location?contentId=xyz789
+Fetches content from: /api/page-builder/content/service?contentId=xyz789
     ↓
-API route fetches from Strapi: GET /api/locations/xyz789?populate=*
+API route fetches from Strapi: GET /api/services/xyz789?populate=*
     ↓
-Extracts template relation: content.Location_Page
+Extracts template relation: content.Service_Page
     ↓
 Fetches template: GET /api/page-builder/templates/abc123
     ↓
@@ -101,7 +101,7 @@ app/editor/page.tsx → handleSyncToSite()
     ↓
 POST /api/page-builder/sync
   Body: {
-    contentType: "location",
+    contentType: "service",
     templateId: "abc123",
     contentId: "xyz789"
   }
@@ -114,9 +114,9 @@ app/api/page-builder/sync/route.ts:
   5. Filters out invalid fields
   6. Removes 'id' fields from components
   7. Deep merges with existing content
-  8. PUT /api/locations/xyz789 with updated data
+  8. PUT /api/services/xyz789 with updated data
     ↓
-Strapi updates location entry
+Strapi updates service entry
     ↓
 Response: { success: true, fieldsUpdated: 5 }
     ↓
@@ -126,17 +126,17 @@ Frontend shows success toast
 ### **4. Rendering on Live Site**
 
 ```
-User visits: /locations/morris-county
+User visits: /services/airbnb-cleaning
     ↓
-app/locations/[slug]/page.tsx loads
+app/services/[slug]/page.tsx loads
     ↓
-Fetches location data: GET /api/cms/locations/morris-county
+Fetches service data: GET /api/cms/services/airbnb-cleaning
     ↓
-Also fetches Page Builder template: GET /api/page-builder/content/location?slug=morris-county
+Also fetches Page Builder template: GET /api/page-builder/content/service?slug=airbnb-cleaning
     ↓
 If template exists:
-  - Extracts template.json from Location_Page relation
-  - Merges location content with template
+  - Extracts template.json from Service_Page relation
+  - Merges service content with template
   - Renders using <Render /> component
     ↓
 <Render /> component:
@@ -210,7 +210,8 @@ export const pageBuilderConfig: Config<PageBuilderBlocks, {}, Categories> = {
 - `Hero`, `HowItWorks`, `CTA` - Landing page
 - `AboutHero`, `AboutOurStory` - About page
 - `ServiceHero`, `ServiceFeatures` - Service pages
-- `LocationHero`, `LocationMainContent` - Location pages
+
+> **Note**: Location pages do NOT use Page Builder. They are managed via Strapi Content Manager only.
 
 ---
 
@@ -219,13 +220,13 @@ export const pageBuilderConfig: Config<PageBuilderBlocks, {}, Categories> = {
 
 **Flow**:
 ```
-GET /api/page-builder/content/location?slug=morris-county
+GET /api/page-builder/content/service?slug=airbnb-cleaning
     ↓
-1. Maps "location" → endpoint: "/api/locations"
-2. Fetches: GET /api/locations?filters[slug][$eq]=morris-county&populate=*
-3. Extracts Location_Page relation (template)
+1. Maps "service" → endpoint: "/api/services"
+2. Fetches: GET /api/services?filters[slug][$eq]=airbnb-cleaning&populate=*
+3. Extracts Service_Page relation (template)
 4. Deep populates template.json
-5. Returns: { success: true, data: {...location data...} }
+5. Returns: { success: true, data: {...service data...} }
 ```
 
 **Returns**:
@@ -233,15 +234,15 @@ GET /api/page-builder/content/location?slug=morris-county
 {
   "success": true,
   "data": {
-    "name": "Morris County",
+    "name": "Airbnb Cleaning",
     "heroTitle": "...",
-    "Location_Page": {
+    "Service_Page": {
       "id": 1,
       "documentId": "abc123",
       "json": {
         "content": [
-          { "type": "LocationHero", "props": {...} },
-          { "type": "LocationMainContent", "props": {...} }
+          { "type": "ServiceHero", "props": {...} },
+          { "type": "ServiceFeatures", "props": {...} }
         ]
       }
     }
@@ -257,41 +258,39 @@ GET /api/page-builder/content/location?slug=morris-county
 **Flow**:
 ```
 POST /api/page-builder/sync
-Body: { contentType: "location", templateId: "abc123", contentId: "xyz789" }
+Body: { contentType: "service", templateId: "abc123", contentId: "xyz789" }
     ↓
-1. Fetches current content: GET /api/locations/xyz789
+1. Fetches current content: GET /api/services/xyz789
 2. Fetches template: GET /api/page-builder/templates/abc123
 3. Extracts template.json.content[] array
 4. For each component:
-   - Extracts props (heroTitle, phoneNumber, etc.)
-   - Maps field names: phoneNumber → contactPhone
+   - Extracts props (heroTitle, etc.)
+   - Maps field names as configured
    - Filters invalid fields
 5. Removes 'id' from component arrays
 6. Deep merges with existing content
-7. PUT /api/locations/xyz789
-   Body: { data: { heroTitle: "...", contactPhone: "..." } }
+7. PUT /api/services/xyz789
+   Body: { data: { heroTitle: "..." } }
 ```
 
 **Field Mapping**:
 ```typescript
 fieldMapping: {
-  'phoneNumber': 'contactPhone',      // Page Builder → Strapi
-  'emailAddress': 'contactEmail',
-  'heroTitle': 'heroTitle',
-  'locationName': 'name',
+  'heroTitle': 'heroTitle',            // Page Builder → Strapi
+  'heroSubtitle': 'heroSubtitle',
 }
 ```
 
 ---
 
-### **5. `app/locations/[slug]/page.tsx`** - Live Site Page
-**Purpose**: Renders location page using Page Builder template
+### **5. `app/services/[slug]/page.tsx`** - Live Site Page
+**Purpose**: Renders service page using Page Builder template
 
 **Flow**:
 ```
-User visits /locations/morris-county
+User visits /services/airbnb-cleaning
     ↓
-1. Fetches location data from CMS
+1. Fetches service data from CMS
 2. Fetches Page Builder template
 3. If template exists:
    - Merges content with template
@@ -307,7 +306,7 @@ User visits /locations/morris-county
   config={pageBuilderConfig}
   data={{
     templateJson: template.json,    // Template structure
-    content: locationData            // Actual content values
+    content: serviceData             // Actual content values
   }}
   strapi={{ url, imageUrl }}
 />
@@ -326,8 +325,8 @@ User visits /locations/morris-county
 - Shared across entries if same template used
 
 **Content** (Strapi content type):
-- Stored in `Location`, `Service`, etc. content types
-- Contains **actual content values** (heroTitle, contactPhone, etc.)
+- Stored in `Service`, etc. content types
+- Contains **actual content values** (heroTitle, etc.)
 - Synced FROM template props TO content fields
 
 ### **Single Types vs Collection Types**
@@ -338,12 +337,14 @@ User visits /locations/morris-county
 - URL: `/api/landing-page` (no ID needed)
 - Example: `GET /api/page-builder/content/landing-page`
 
-**Collection Types** (service, location):
+**Collection Types** (service):
 - MULTIPLE entries exist
-- Template relation: `Service_Page`, `Location_Page`
+- Template relation: `Service_Page`
 - URL: `/api/services/{id}` or `/api/services?slug=xxx`
 - Example: `GET /api/page-builder/content/service?contentId=xyz789`
 - **Each entry should have its own template** for content isolation
+
+> **Note**: Location pages are NOT managed via Page Builder. They use Strapi Content Manager directly.
 
 ### **Component Props Flow**
 
@@ -364,7 +365,7 @@ User visits /locations/morris-county
    contentUpdates.heroHeading = "New Heading"
     ↓
 6. Maps to Strapi field
-   location.heroTitle = "New Heading"
+   service.heroTitle = "New Heading"
     ↓
 7. Live site renders
    <Render /> reads template.json.content[]

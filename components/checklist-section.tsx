@@ -189,14 +189,25 @@ interface ChecklistData {
   buttonText: string
 }
 
-export default function ChecklistSection() {
+export interface ChecklistSectionProps {
+  data?: Partial<ChecklistData>
+}
+
+export default function ChecklistSection({ data: cmsData }: ChecklistSectionProps) {
   const [activeRoom, setActiveRoom] = useState("living")
   const [cleaningType, setCleaningType] = useState("routine")
   const controls = useAnimation()
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true })
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [checklistData, setChecklistData] = useState<ChecklistData>(defaultData)
-  const [dataVersion, setDataVersion] = useState(0)
+
+  // Merge server-provided CMS data with defaults
+  const checklistData: ChecklistData = {
+    heading: cmsData?.heading || defaultData.heading,
+    description: cmsData?.description || defaultData.description,
+    checklistItems: cmsData?.checklistItems && Object.keys(cmsData.checklistItems).length > 0
+      ? cmsData.checklistItems as ChecklistData['checklistItems']
+      : defaultData.checklistItems,
+    buttonText: cmsData?.buttonText || defaultData.buttonText,
+  }
 
 
   // Modal state
@@ -215,39 +226,6 @@ export default function ChecklistSection() {
       controls.start("visible")
     }
   }, [controls, inView])
-
-  // Fetch checklist data from API
-  useEffect(() => {
-    const fetchChecklistData = async () => {
-      try {
-        const timestamp = new Date().getTime()
-        const response = await fetch(`/api/cms/checklist?t=${timestamp}`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
-          }
-        })
-        const result = await response.json()
-        if (result.success && result.data) {
-          const newData = {
-            heading: result.data.heading || defaultData.heading,
-            description: result.data.description || defaultData.description,
-            checklistItems: result.data.checklistItems || defaultData.checklistItems,
-            buttonText: result.data.buttonText || defaultData.buttonText,
-          }
-          setChecklistData(newData)
-        }
-      } catch (error) {
-        console.error("Error fetching checklist data:", error)
-        // Keep using default data on error
-      } finally {
-        setIsLoaded(true)
-      }
-    }
-
-    fetchChecklistData()
-  }, [dataVersion])
 
   // Handle room click for modal
   const handleRoomClick = (room: RoomType) => {

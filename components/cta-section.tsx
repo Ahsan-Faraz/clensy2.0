@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Phone, Calendar } from "lucide-react";
 import { formatText } from "@/lib/utils/formatText";
 
-
-// Default data in case the API call fails
+// Default data — renders instantly at build time (SSG)
 const defaultData = {
   heading: "Home cleaning you can trust",
   description:
@@ -42,60 +41,35 @@ interface CTAData {
   };
 }
 
-export default function CTASection() {
+export interface CTASectionProps {
+  data?: Partial<CTAData>
+}
+
+export default function CTASection({ data }: CTASectionProps) {
   const controls = useAnimation();
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [ctaData, setCTAData] = useState<CTAData>(defaultData);
+
+  // Merge server-provided CMS data with defaults
+  const ctaData: CTAData = {
+    heading: data?.heading || defaultData.heading,
+    description: data?.description || defaultData.description,
+    leftCard: {
+      title: data?.leftCard?.title || defaultData.leftCard.title,
+      description: data?.leftCard?.description || defaultData.leftCard.description,
+      buttonText: data?.leftCard?.buttonText || defaultData.leftCard.buttonText,
+    },
+    rightCard: {
+      title: data?.rightCard?.title || defaultData.rightCard.title,
+      description: data?.rightCard?.description || defaultData.rightCard.description,
+      buttonText: data?.rightCard?.buttonText || defaultData.rightCard.buttonText,
+    },
+  };
 
   useEffect(() => {
     if (inView) {
       controls.start("visible");
     }
   }, [controls, inView]);
-
-  // Fetch CTA data from API
-  useEffect(() => {
-    const fetchCTAData = async () => {
-      try {
-        const response = await fetch("/api/cms/cta");
-        const result = await response.json();
-        
-        if (result.success && result.data) {
-          setCTAData({
-            heading: result.data.heading || defaultData.heading,
-            description: result.data.description || defaultData.description,
-            leftCard: {
-              title: result.data.leftCard?.title || defaultData.leftCard.title,
-              description:
-                result.data.leftCard?.description ||
-                defaultData.leftCard.description,
-              buttonText:
-                result.data.leftCard?.buttonText ||
-                defaultData.leftCard.buttonText,
-            },
-            rightCard: {
-              title:
-                result.data.rightCard?.title || defaultData.rightCard.title,
-              description:
-                result.data.rightCard?.description ||
-                defaultData.rightCard.description,
-              buttonText:
-                result.data.rightCard?.buttonText ||
-                defaultData.rightCard.buttonText,
-            },
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching CTA data:", error);
-        // Keep using default data on error
-      } finally {
-        setIsLoaded(true);
-      }
-    };
-
-    fetchCTAData();
-  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },

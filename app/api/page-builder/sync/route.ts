@@ -86,45 +86,6 @@ const contentTypeConfig: Record<string, {
     },
     isSingleType: false,
   },
-  'location': {
-    endpoint: '/api/locations', // plural for collection types
-    templateRelation: 'Location_Page',
-    // Map Page Builder field names to Strapi schema field names
-    // Strapi location schema has FLAT fields (not nested): heroTitle, heroSubtitle, contactPhone, contactEmail, aboutTitle, aboutDescription
-    fieldMapping: {
-      // LocationHero fields -> Strapi flat fields
-      'heroTitle': 'heroTitle',
-      'heroSubtitle': 'heroSubtitle',
-      'heroBackgroundImageUrl': 'heroBackgroundImageUrl',
-      'ctaButton1Text': 'ctaButton1Text',
-      'ctaButton2Text': 'ctaButton2Text',
-      // LocationMainContent fields -> Strapi flat fields
-      'phoneNumber': 'contactPhone',
-      'emailAddress': 'contactEmail',
-      'aboutTitle': 'aboutTitle',
-      'aboutDescription': 'aboutDescription',
-      'locationName': 'name',
-      // Fields that don't exist in Strapi schema - skip them
-      'contactTitle': null,
-      'phoneLabel': null,
-      'emailLabel': null,
-      'contactCtaText': null,
-      'hoursTitle': null,
-      'hours': null, // operatingHours is a component, not a JSON string
-      'mapTitle': null,
-      'mapCtaText': null,
-      'aboutCtaText': null,
-      // LocationServices fields don't exist
-      'servicesHeading': null,
-      'servicesDescription': null,
-      // LocationCTA fields don't exist
-      'ctaHeading': null,
-      'ctaDescription': null,
-      'ctaButtonText': null,
-      'ctaButtonLink': null,
-    },
-    isSingleType: false,
-  },
 };
 
 /**
@@ -168,8 +129,6 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-
-    console.log(`[Sync] Starting sync for ${contentType}, template: ${providedTemplateId || 'auto-detect'}, contentId: ${contentId || 'N/A'}`);
 
     // Fetch current content to preserve existing fields
     // For collection types, we need to fetch a specific entry
@@ -231,8 +190,6 @@ async function syncFromTemplate(
   config: typeof contentTypeConfig[string],
   contentId?: string // For collection types
 ) {
-  console.log(`[Sync] Fetching template: ${templateId}`);
-  
   // Fetch all templates and find the one we need
   const templatesUrl = `${STRAPI_URL}/api/page-builder/templates`;
   const templatesResponse = await fetch(templatesUrl, {
@@ -270,14 +227,10 @@ async function syncFromTemplate(
     );
   }
   
-  console.log(`[Sync] Found template: ${template.name} (id=${template.id}, documentId=${template.documentId})`);
-  
   const templateJson = template.json || {};
   
   // Page Builder uses "content" array
   const contentArray = templateJson.content || templateJson.blocks || [];
-  
-  console.log(`[Sync] Template "${template.name || templateId}" has ${contentArray.length} components`);
   
   // Extract component props
   const contentUpdates: any = {};
@@ -306,10 +259,6 @@ async function syncFromTemplate(
     });
   }
   
-  console.log(`[Sync] Fields to update:`, Object.keys(contentUpdates));
-
-  console.log(`[Sync] Found ${Object.keys(contentUpdates).length} fields to update for ${contentType}`);
-
   if (Object.keys(contentUpdates).length === 0) {
     return NextResponse.json({
       success: true,
@@ -365,7 +314,7 @@ async function syncFromTemplate(
   });
   
   if (skippedFields.length > 0) {
-    console.log(`[Sync] Skipped fields not in Strapi schema: ${skippedFields.join(', ')}`);
+    // Some fields skipped - not in Strapi schema
   }
   
   // Preserve existing fields that we're not updating
@@ -459,18 +408,6 @@ async function syncFromTemplate(
     ? `${STRAPI_URL}${config.endpoint}`
     : `${STRAPI_URL}${config.endpoint}/${contentId}`;
     
-  console.log(`[Sync] Updating ${contentType} at: ${updateUrl}`);
-  console.log(`[Sync] Fields being updated:`, Object.keys(validUpdates));
-  
-  // NOTE: For collection types (services, locations), each entry should have its own template
-  // If all entries share the same template, layout changes will affect all entries
-  if (!config.isSingleType && contentId) {
-    console.log(`[Sync] Template ID: ${templateId}, Content ID: ${contentId}`);
-    console.log(`[Sync] ⚠️  If layout changes affect all ${contentType} entries, each entry needs its own template in Strapi.`);
-  }
-  
-  console.log(`[Sync] Data being sent (first 1000 chars):`, JSON.stringify(updatedData).slice(0, 1000));
-    
   const updateResponse = await fetch(updateUrl, {
     method: 'PUT',
     headers: {
@@ -490,9 +427,6 @@ async function syncFromTemplate(
     }
     
     console.error(`[Sync] Failed to update ${contentType}: ${updateResponse.status}`);
-    console.error(`[Sync] Strapi error:`, errorDetails);
-    console.error(`[Sync] Attempted to update fields:`, Object.keys(validUpdates));
-    console.error(`[Sync] Full data sent:`, JSON.stringify(updatedData, null, 2));
     
     return NextResponse.json(
       { 
@@ -525,10 +459,6 @@ async function syncFromTemplate(
       // Revalidate all service pages
       revalidatePath('/services/[slug]', 'page');
       revalidatePath('/services');
-    } else if (contentType === 'location') {
-      // Revalidate all location pages
-      revalidatePath('/locations/[slug]', 'page');
-      revalidatePath('/locations');
     } else {
       clearLandingPageCache();
       revalidatePath('/');
@@ -537,8 +467,6 @@ async function syncFromTemplate(
     console.warn('[Sync] Cache clear warning:', e);
     // Ignore cache clear errors
   }
-
-  console.log(`[Sync] Success: Updated ${actualUpdatesCount} fields for ${contentType} (skipped ${skippedFields.length})`);
 
   return NextResponse.json({
     success: true,

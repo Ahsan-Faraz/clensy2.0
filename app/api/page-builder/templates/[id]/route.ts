@@ -20,8 +20,6 @@ export async function GET(
 
     // Fetch all templates and filter (more reliable than individual endpoint)
     // Try Strapi v5 standard API format: /api/plugin::page-builder.template
-    console.log(`Fetching template with ID: ${templateId}`);
-    
     const endpoints = [
       // Content API (standard Strapi v5 format)
       `${STRAPI_URL}/api/plugin::page-builder.template`,
@@ -38,7 +36,6 @@ export async function GET(
     let allResponse: Response | null = null;
     
     for (const url of endpoints) {
-      console.log(`Trying templates endpoint: ${url}`);
       try {
         const response = await fetch(url, {
           headers: {
@@ -50,15 +47,11 @@ export async function GET(
         
         if (response.ok) {
           allData = await response.json();
-          console.log(`Success fetching templates from: ${url}`);
           allResponse = response;
           break;
-        } else {
-          const errorText = await response.text();
-          console.log(`Failed with ${url}: ${response.status} - ${errorText.substring(0, 200)}`);
         }
       } catch (err: any) {
-        console.log(`Error with ${url}:`, err.message);
+        // Endpoint failed, try next
       }
     }
     
@@ -78,7 +71,6 @@ export async function GET(
     
     // allData is already populated in the loop above
     const templates = allData.data || [];
-    console.log(`Found ${templates.length} templates`);
     
     // Try to find template by id or documentId (Strapi v5 uses documentId)
     const foundTemplate = templates.find((t: any) => 
@@ -89,13 +81,6 @@ export async function GET(
     );
     
     if (foundTemplate) {
-      console.log(`Found template:`, {
-        id: foundTemplate.id || foundTemplate.documentId,
-        name: foundTemplate.name || 'Unnamed',
-        hasJson: !!foundTemplate.json,
-        jsonKeys: foundTemplate.json ? Object.keys(foundTemplate.json) : [],
-        jsonBlocks: foundTemplate.json?.blocks ? foundTemplate.json.blocks.length : 0,
-      });
       return NextResponse.json({ success: true, data: foundTemplate });
     } else {
       const availableIds = templates.map((t: any) => ({
@@ -103,7 +88,6 @@ export async function GET(
         documentId: t.documentId,
         name: t.name || 'Unnamed'
       }));
-      console.log(`Template ${templateId} not found. Available templates:`, availableIds);
       
       return NextResponse.json(
         { 

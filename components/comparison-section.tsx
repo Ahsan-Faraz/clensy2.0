@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Check, ShieldCheck, Phone, Leaf, Users, UserCheck, Settings, Medal, Calendar, Sparkles } from "lucide-react"
@@ -94,41 +94,26 @@ interface ComparisonData {
   features: Feature[]
 }
 
-export default function ComparisonSection() {
+export interface ComparisonSectionProps {
+  data?: Partial<ComparisonData>
+}
+
+export default function ComparisonSection({ data }: ComparisonSectionProps) {
   const controls = useAnimation()
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true })
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [comparisonData, setComparisonData] = useState<ComparisonData>(defaultData)
+
+  // Merge server-provided CMS data with defaults
+  const comparisonData: ComparisonData = {
+    heading: data?.heading || defaultData.heading,
+    description: data?.description || defaultData.description,
+    features: data?.features && data.features.length > 0 ? data.features : defaultData.features,
+  }
 
   useEffect(() => {
     if (inView) {
       controls.start("visible")
     }
   }, [controls, inView])
-
-  // Fetch comparison data from API
-  useEffect(() => {
-    const fetchComparisonData = async () => {
-      try {
-        const response = await fetch("/api/cms/comparison")
-        const result = await response.json()
-        if (result.success && result.data) {
-          setComparisonData({
-            heading: result.data.heading || defaultData.heading,
-            description: result.data.description || defaultData.description,
-            features: result.data.features || defaultData.features,
-          })
-        }
-      } catch (error) {
-        console.error("Error fetching comparison data:", error)
-        // Keep using default data on error
-      } finally {
-        setIsLoaded(true)
-      }
-    }
-
-    fetchComparisonData()
-  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
