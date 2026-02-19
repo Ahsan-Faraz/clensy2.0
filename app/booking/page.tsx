@@ -11,15 +11,6 @@ import { StepTwo } from "../../components/booking/StepTwo";
 import { StepThree } from "../../components/booking/StepThree";
 import { BookingSuccess } from "../../components/booking/BookingSuccess";
 import type { BookingData, Lead } from "../../types/booking";
-import {
-  Star,
-  Sparkles,
-  Shield,
-  Clock,
-  Calendar,
-  CheckCircle,
-} from "lucide-react";
-import Image from "next/image";
 
 function Booking() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -90,7 +81,7 @@ function Booking() {
     <div className="min-h-screen">
       <Toaster position="top-right" richColors closeButton duration={5000} />
 
-    <Navbar/>
+      <Navbar />
       <section className="h-[50vh] relative pt-16 flex items-center">
         {/* Background image with overlay */}
         <div className="absolute inset-0 z-0">
@@ -131,9 +122,9 @@ function Booking() {
                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                 className="text-base md:text-lg text-white/80 mb-6 max-w-xl"
               >
-                We offer reliable, personalized service with flexible
-                scheduling to suit your needs. Whether it's a quick fix or a
-                full solution, we're just a click away.
+                We offer reliable, personalized service with flexible scheduling
+                to suit your needs. Whether it's a quick fix or a full solution,
+                we're just a click away.
               </motion.p>
 
               <motion.div
