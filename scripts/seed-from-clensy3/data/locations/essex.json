@@ -1,0 +1,51 @@
+{
+  "data": {
+    "name": "Essex County",
+    "slug": "essex",
+    "county": "Essex",
+    "state": "NJ",
+    "heroTitle": "Essex County",
+    "heroSubtitle": "Professional Cleaning Services in Essex County, NJ",
+    "heroBackgroundImageUrl": "https://images.squarespace-cdn.com/content/v1/619d5ebc238e542fb0c33dc1/1638832803220-BZGEE966XUF7ZT2OXSI3/pasted-image-0-1.png",
+    "ctaButton1Text": "SCHEDULE SERVICE",
+    "ctaButton2Text": "CALL US NOW",
+    "contactPhone": "551-305-4081",
+    "contactEmail": "essex@clensy.com",
+    "contactAddress": "123 Essex Ave, Essex County, NJ 07000",
+    "operatingHours": [
+      { "day": "Monday", "hours": "8:00 am - 6:00 pm" },
+      { "day": "Tuesday", "hours": "8:00 am - 6:00 pm" },
+      { "day": "Wednesday", "hours": "8:00 am - 6:00 pm" },
+      { "day": "Thursday", "hours": "8:00 am - 6:00 pm" },
+      { "day": "Friday", "hours": "8:00 am - 6:00 pm" },
+      { "day": "Saturday", "hours": "9:00 am - 3:00 pm" },
+      { "day": "Sunday", "hours": "Closed" }
+    ],
+    "serviceAreas": [
+      { "name": "Belleville", "slug": "belleville" },
+      { "name": "Bloomfield", "slug": "bloomfield" },
+      { "name": "Caldwell", "slug": "caldwell" },
+      { "name": "Cedar Grove", "slug": "cedar-grove" },
+      { "name": "East Orange", "slug": "east-orange" },
+      { "name": "Essex Fells", "slug": "essex-fells" },
+      { "name": "Fairfield", "slug": "fairfield" },
+      { "name": "Glen Ridge", "slug": "glen-ridge" },
+      { "name": "Irvington", "slug": "irvington" },
+      { "name": "Livingston", "slug": "livingston" },
+      { "name": "Maplewood", "slug": "maplewood" },
+      { "name": "Millburn", "slug": "millburn" },
+      { "name": "Montclair", "slug": "montclair" },
+      { "name": "Newark", "slug": "newark" },
+      { "name": "North Caldwell", "slug": "north-caldwell" },
+      { "name": "Nutley", "slug": "nutley" },
+      { "name": "Orange", "slug": "orange" },
+      { "name": "Roseland", "slug": "roseland" },
+      { "name": "South Orange", "slug": "south-orange" },
+      { "name": "Verona", "slug": "verona" },
+      { "name": "West Caldwell", "slug": "west-caldwell" },
+      { "name": "West Orange", "slug": "west-orange" }
+    ],
+    "aboutTitle": "About Our Essex County Services",
+    "aboutDescription": "Serving Essex County with top-quality cleaning services for both residential and commercial properties. Our team of professional cleaners is dedicated to providing exceptional service with attention to detail."
+  }
+}

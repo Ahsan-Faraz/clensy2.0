@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL = (process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337').replace(/\/+$/, '');
+const STRAPI_API_PREFIX = (process.env.STRAPI_API_PREFIX || '/admin/api').replace(/^\/+|\/+$/g, '') || 'api';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || '';
 
 export async function GET(
@@ -18,18 +19,14 @@ export async function GET(
       );
     }
 
-    // Fetch all templates and filter (more reliable than individual endpoint)
-    // Try Strapi v5 standard API format: /api/plugin::page-builder.template
+    const prefix = STRAPI_API_PREFIX;
     const endpoints = [
-      // Content API (standard Strapi v5 format)
-      `${STRAPI_URL}/api/plugin::page-builder.template`,
-      `${STRAPI_URL}/api/plugin::page-builder.template?populate=*`,
-      // Content Manager API (admin API)
-      `${STRAPI_URL}/api/content-manager/collection-types/plugin::page-builder.template`,
-      `${STRAPI_URL}/api/content-manager/collection-types/plugin::page-builder.template?page=1&pageSize=100`,
-      // Plugin custom routes (if plugin exposes them)
-      `${STRAPI_URL}/api/page-builder/templates`,
-      `${STRAPI_URL}/api/page-builder/templates?populate=*`,
+      `${STRAPI_URL}/${prefix}/plugin::page-builder.template`,
+      `${STRAPI_URL}/${prefix}/plugin::page-builder.template?populate=*`,
+      `${STRAPI_URL}/${prefix}/content-manager/collection-types/plugin::page-builder.template`,
+      `${STRAPI_URL}/${prefix}/content-manager/collection-types/plugin::page-builder.template?page=1&pageSize=100`,
+      `${STRAPI_URL}/${prefix}/page-builder/templates`,
+      `${STRAPI_URL}/${prefix}/page-builder/templates?populate=*`,
     ];
     
     let allData: any = null;

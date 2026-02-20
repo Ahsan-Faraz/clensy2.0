@@ -147,12 +147,22 @@ export default function Navbar({ services: propServices, locations: propLocation
     }
   };
 
-  // Separate services by type
-  const residentialServices = services.filter(s => 
-    ['routine', 'deep', 'airbnb', 'moving', 'post-construction', 'extras'].includes(s.serviceType)
-  );
-  const commercialServices = services.filter(s => 
-    ['office', 'medical', 'gym', 'school', 'retail', 'property', 'other-commercial'].includes(s.serviceType)
+  // Residential order: Routine → Deep → Move In/Out → Post-Construction → Airbnb → Extras
+  const RESIDENTIAL_ORDER = ['routine', 'deep', 'moving', 'post-construction', 'airbnb', 'extras'];
+  // Commercial order: Other Commercial last
+  const COMMERCIAL_ORDER = ['office', 'medical', 'gym', 'school', 'retail', 'property', 'other-commercial'];
+
+  const residentialServices = services
+    .filter((s) => RESIDENTIAL_ORDER.includes(s.serviceType))
+    .sort((a, b) => RESIDENTIAL_ORDER.indexOf(a.serviceType) - RESIDENTIAL_ORDER.indexOf(b.serviceType));
+  const commercialServices = services
+    .filter((s) => COMMERCIAL_ORDER.includes(s.serviceType))
+    .sort((a, b) => COMMERCIAL_ORDER.indexOf(a.serviceType) - COMMERCIAL_ORDER.indexOf(b.serviceType));
+
+  // Locations order: Bergen → Hudson → Essex → Passaic → Union → Morris
+  const LOCATION_ORDER = ['bergen', 'hudson', 'essex', 'passaic', 'union', 'morris'];
+  const sortedLocations = [...locations].sort(
+    (a, b) => LOCATION_ORDER.indexOf(a.slug) - LOCATION_ORDER.indexOf(b.slug)
   );
 
   return (
@@ -264,18 +274,18 @@ export default function Navbar({ services: propServices, locations: propLocation
                   <a href="/locations" className={`flex items-center ${textColor} hover:opacity-80 transition-opacity`}>
                     <span className="text-sm font-medium">Locations</span>
                   </a>
-                  <div className="dropdown-content apple-dropdown-content absolute left-1/2 transform -translate-x-1/2 mt-2 w-[300px] z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 bg-white rounded-lg shadow-lg p-6">
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-3">Service Areas</h4>
-                      <ul className="space-y-2 grid grid-cols-2">
-                        {locations.map((location) => (
-                          <li key={location.slug}>
-                            <a href={`/locations/${location.slug}`} className="block text-gray-600 hover:text-gray-900 transition-colors">
-                              {location.name || location.county}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
+                  <div className="dropdown-content apple-dropdown-content absolute left-1/2 transform -translate-x-1/2 mt-2 w-[320px] z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 bg-white rounded-xl shadow-xl border border-gray-100 p-6">
+                    <h4 className="font-semibold text-gray-900 mb-4">Service Areas</h4>
+                    <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+                      {sortedLocations.map((location) => (
+                        <a
+                          key={location.slug}
+                          href={`/locations/${location.slug}`}
+                          className="block py-2 px-3 -mx-3 -my-1 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors text-sm font-medium"
+                        >
+                          {location.name || location.county}
+                        </a>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -454,15 +464,15 @@ export default function Navbar({ services: propServices, locations: propLocation
                     </button>
                     {openDropdown === 'locations' && (
                       <div className="mt-2 pl-4 bg-gray-50 rounded-lg p-4">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          {locations.map((location) => (
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                          {sortedLocations.map((location) => (
                             <a
                               key={location.slug}
                               href={`/locations/${location.slug}`}
-                              className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
+                              className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded-lg px-3 -mx-1 transition-colors"
                               onClick={closeAllDropdowns}
                             >
-                              {location.name || location.county} County
+                              {location.name || location.county}
                             </a>
                           ))}
                         </div>

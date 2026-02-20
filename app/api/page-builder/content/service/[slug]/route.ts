@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL = (process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337').replace(/\/+$/, '');
+const STRAPI_API_PREFIX = (process.env.STRAPI_API_PREFIX || '/admin/api').replace(/^\/+|\/+$/g, '') || 'api';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || '';
+
+function strapiUrl(path: string, query?: string): string {
+  const p = path.startsWith('/') ? path.slice(1) : path;
+  return query ? `${STRAPI_URL}/${STRAPI_API_PREFIX}/${p}?${query}` : `${STRAPI_URL}/${STRAPI_API_PREFIX}/${p}`;
+}
 
 /**
  * Fetches raw Strapi data for a specific Service entry for the Page Builder editor.
@@ -23,7 +29,7 @@ export async function GET(
 
     // Fetch service by slug with all relations populated
     // Use populate=* to get all relations including the template
-    const url = `${STRAPI_URL}/api/services?filters[slug][$eq]=${slug}&populate=*`;
+    const url = strapiUrl('services', `filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`);
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',

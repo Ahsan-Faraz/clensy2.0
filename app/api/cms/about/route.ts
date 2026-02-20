@@ -11,7 +11,8 @@ export async function GET(request: NextRequest) {
 
     // If raw param is set, fetch directly from Strapi with template relation
     if (raw === 'true') {
-      const url = `${STRAPI_URL}/api/about?populate=*`;
+      const prefix = (process.env.STRAPI_API_PREFIX || '/admin/api').replace(/^\/+|\/+$/g, '') || 'api';
+      const url = `${STRAPI_URL.replace(/\/+$/, '')}/${prefix}/about?populate=*`;
       
       const response = await fetch(url, {
         headers: {

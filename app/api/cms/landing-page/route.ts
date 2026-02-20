@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import CMSAdapter from "@/lib/cms-adapter";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL = (process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337').replace(/\/+$/, '');
+const STRAPI_API_PREFIX = (process.env.STRAPI_API_PREFIX || '/admin/api').replace(/^\/+|\/+$/g, '') || 'api';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || '';
 
 export async function GET(request: NextRequest) {
@@ -24,7 +25,7 @@ export async function GET(request: NextRequest) {
     let response: Response | null = null;
     
     for (const populate of populateVariations) {
-      const url = `${STRAPI_URL}/api/landing-page?${populate}`;
+      const url = `${STRAPI_URL}/${STRAPI_API_PREFIX}/landing-page?${populate}`;
       
       response = await fetch(url, {
         headers: {

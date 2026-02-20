@@ -1,0 +1,52 @@
+{
+  "data": {
+    "name": "School Cleaning",
+    "slug": "school-cleaning",
+    "serviceType": "school",
+    "heroTopLabel": "Premium Educational Facility Services",
+    "heroHeading": "School & Childcare Cleaning Services",
+    "heroSubheading": "Specialized cleaning and sanitization services designed for educational environments, ensuring a healthy, safe space for students, teachers, and staff.",
+    "heroBackgroundImageUrl": "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=2032&auto=format&fit=crop",
+    "heroServiceDuration": "Education Specialists",
+    "heroServiceGuarantee": "100% Satisfaction",
+    "includedSectionHeading": "Our Educational Facility Cleaning Services",
+    "includedSectionSubheading": "We provide comprehensive cleaning solutions tailored to meet the unique demands of schools, daycares, and educational environments.",
+    "cleaningAreas": [
+      {
+        "title": "Classrooms & Learning Spaces",
+        "description": "Create an optimal learning environment with thoroughly sanitized classrooms, desks, and educational equipment.",
+        "imageUrl": "https://images.unsplash.com/photo-1588072432836-e10032774350?q=80&w=2072&auto=format&fit=crop",
+        "features": ["Desk and chair sanitization", "Whiteboard and smartboard cleaning", "Educational equipment disinfection", "Floor cleaning and maintenance", "Window and glass surface cleaning", "Air vent cleaning and dust removal"]
+      },
+      {
+        "title": "Cafeterias & Food Service Areas",
+        "description": "Maintain the highest hygiene standards in food service areas with specialized cleaning protocols for health and safety compliance.",
+        "imageUrl": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop",
+        "features": ["Food preparation surface sanitization", "Kitchen equipment deep cleaning", "Dining table and chair disinfection", "Floor degreasing and sanitization", "Trash removal and bin sanitization", "Health code compliance cleaning"]
+      },
+      {
+        "title": "Restrooms & Common Areas",
+        "description": "Ensure student and staff health with thorough sanitization of high-traffic areas and restroom facilities.",
+        "imageUrl": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=500&auto=format&fit=crop",
+        "features": ["Toilet and urinal deep cleaning", "Sink and faucet sanitization", "Mirror and fixture cleaning", "Floor mopping and disinfection", "Supply restocking and maintenance", "Hallway and corridor cleaning"]
+      }
+    ],
+    "featureSectionHeading": "Why Choose Our School Cleaning Services",
+    "featureSectionSubheading": "We understand the unique challenges of maintaining educational facilities and provide specialized solutions for a safe learning environment.",
+    "featureSectionPoints": ["Child-Safe Products: Non-toxic, eco-friendly products safe for children", "Flexible Scheduling: After-hours, weekends, and holiday cleaning options", "Health-Focused Approach: Protocols that reduce spread of germs for students and staff"],
+    "faqs": [
+      { "question": "Do you use child-safe cleaning products?", "answer": "Yes, absolutely. We exclusively use non-toxic, eco-friendly cleaning products that are specifically approved for educational facilities. All our products are safe for children and meet or exceed school district safety standards." },
+      { "question": "Can you clean during school hours?", "answer": "We typically recommend after-hours cleaning to minimize disruption to classes and ensure thorough cleaning. However, we can work during school hours for emergency cleanings or specific areas as needed, following all safety protocols." },
+      { "question": "How do you handle sensitive areas like computer labs and libraries?", "answer": "We have specialized protocols for technology-rich environments. Our team uses appropriate cleaning methods for electronic equipment, delicate materials, and valuable resources while ensuring thorough sanitization of these important learning spaces." },
+      { "question": "What's included in your school cleaning checklist?", "answer": "Our comprehensive checklist includes classroom sanitization, restroom deep cleaning, cafeteria hygiene protocols, hallway maintenance, gym and sports facility cleaning, office areas, and specialized cleaning for labs and libraries. We customize our checklist based on your facility's specific needs." }
+    ],
+    "customData": {
+      "trustIndicators": [
+        { "number": "450+", "text": "Educational Facilities" },
+        { "number": "24/7", "text": "School Support" },
+        { "number": "4.9", "text": "Industry Rating" },
+        { "number": "100%", "text": "Safety Guarantee" }
+      ]
+    }
+  }
+}

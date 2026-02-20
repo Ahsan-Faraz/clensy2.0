@@ -1,0 +1,49 @@
+{
+  "data": {
+    "name": "Post-Construction Cleaning",
+    "slug": "post-construction-cleaning",
+    "serviceType": "post-construction",
+    "heroTopLabel": "Post-Construction Cleaning Experts",
+    "heroHeading": "From Construction Zone to Move-In Ready",
+    "heroSubheading": "Specialized cleanup services to remove construction debris, dust, and residue, making your newly constructed or renovated space pristine and ready for use.",
+    "heroBackgroundImageUrl": "https://progressivecleaningcorp.com/wp-content/uploads/2023/08/Post-Construction-Cleaning-Alexandria-VA.jpg",
+    "heroServiceDuration": "Thorough Service",
+    "heroServiceGuarantee": "100% Satisfaction",
+    "includedSectionHeading": "Complete Post-Construction Cleanup Solution",
+    "includedSectionSubheading": "Our specialized teams are equipped to tackle the unique challenges of construction cleanup, from removing fine dust to eliminating paint splatter and construction adhesives.",
+    "cleaningAreas": [
+      {
+        "title": "Debris Removal",
+        "description": "We remove all construction debris, nails, screws, and other potentially hazardous materials that may have been left behind.",
+        "imageUrl": "https://luxurycleaningny.com/wp-content/uploads/2021/07/post-construction-cleaning-services-1080x675.jpg",
+        "features": ["Complete removal of all construction waste", "Detailed cleanup of small particles and leftover materials", "Safe disposal of hazardous materials", "Thorough inspection for hidden construction debris"]
+      },
+      {
+        "title": "Dust Elimination",
+        "description": "We tackle the fine construction dust that settles everywhere, using specialized equipment and techniques to ensure a clean, breathable environment.",
+        "imageUrl": "https://s1.kaercher-media.com/media/image/selection/127074/d0/bauendreinigung-header.webp",
+        "features": ["HEPA filtered vacuums for fine dust particles", "Comprehensive dusting of all surfaces", "Air filter cleaning or replacement", "Air vent and duct cleaning"]
+      },
+      {
+        "title": "Surface Finishing",
+        "description": "We clean and polish all surfaces, from windows to fixtures, removing any construction residue to reveal the beauty of your new space.",
+        "imageUrl": "https://fmccompanies.com/wp-content/uploads/2021/08/floorvac-1024x637.jpeg",
+        "features": ["Removal of paint splatter and adhesives", "Streak-free window and glass cleaning", "Fixture polishing and detail work", "Final touch-ups for a perfect finish"]
+      }
+    ],
+    "howItWorksHeading": "Our Post-Construction Cleaning Process",
+    "howItWorksSubheading": "Our systematic approach ensures no detail is overlooked.",
+    "step1Title": "Initial Assessment & Debris Removal",
+    "step1Description": "We begin by assessing the site and removing all large debris, construction materials, and trash. Our team carefully inspects for nails, screws, and other potentially hazardous items.",
+    "step2Title": "Dust Elimination & Surface Cleaning",
+    "step2Description": "We use HEPA filter vacuums to remove construction dust from all surfaces, including hard-to-reach areas. Our team wipes down all surfaces to remove dust and debris.",
+    "step3Title": "Floor & Surface Detailing",
+    "step3Description": "We deep clean all flooring surfaces, from hardwood to carpet, removing construction residue, paint drips, and adhesives. Baseboards, trim, and door frames are carefully wiped down.",
+    "faqs": [
+      { "question": "When is the best time to schedule post-construction cleaning?", "answer": "The ideal time is after all construction work is complete, including painting, fixture installation, and any final inspections. We recommend waiting 24-48 hours after the last worker leaves to allow dust to settle before our team arrives." },
+      { "question": "How long does post-construction cleaning take?", "answer": "The duration depends on the size and condition of the space. Typically, a residential project takes 6-12 hours, while commercial spaces may require 1-3 days. We'll provide a detailed time estimate after assessing your specific project." },
+      { "question": "Do you remove construction debris and materials?", "answer": "Yes, we remove smaller construction debris like nails, screws, wood chips, and drywall dust. However, large materials like lumber, drywall sheets, or appliance packaging should be removed by the contractors before our arrival." },
+      { "question": "What safety measures do you take during post-construction cleaning?", "answer": "Our team uses professional-grade safety equipment including respirators, safety glasses, and protective clothing. We follow OSHA guidelines and use HEPA-filtered vacuums to safely remove construction dust and particles." }
+    ]
+  }
+}

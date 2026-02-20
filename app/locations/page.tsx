@@ -21,7 +21,7 @@ export default function LocationsPage() {
       city: "Oradell, NJ 07649",
       phone: "551-305-4081",
       image:
-        "https://www.northjersey.com/gcdn/presto/2020/11/27/PNJM/718c5a20-c480-4df5-bf12-006e5614d111-112720-Paramus-BlackFriday-002.JPG?crop=6015,3384,x0,y308",
+        "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1920",
       slug: "bergen",
     },
     {

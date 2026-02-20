@@ -1,0 +1,72 @@
+{
+  "data": {
+    "name": "Deep Cleaning",
+    "slug": "deep-cleaning",
+    "serviceType": "deep",
+    "heroTopLabel": "Premium Deep Cleaning Service",
+    "heroHeading": "Thorough Deep Cleaning for a Fresh Start",
+    "heroSubheading": "Our comprehensive deep cleaning service reaches every corner, tackling built-up grime, dust, and neglected areas that routine cleaning misses.",
+    "heroBackgroundImageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop",
+    "heroServiceDuration": "4-6 Hour Service",
+    "heroServiceGuarantee": "100% Satisfaction",
+    "includedSectionHeading": "The Deep Cleaning Difference",
+    "includedSectionSubheading": "See the dramatic transformation our deep cleaning service delivers.",
+    "cleaningAreas": [
+      {
+        "title": "Deep Bathroom Sanitizing",
+        "description": "Our deep bathroom cleaning goes beyond the basics. We descale shower heads, clean grout lines, sanitize behind toilets, and tackle every nook and cranny for a truly spotless bathroom.",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839467/image51_rdeigp.png",
+        "features": ["Descale shower heads and clean grout", "Sanitize behind toilets and under sinks", "Deep clean all fixtures and surfaces", "Remove soap scum and hard water stains"]
+      },
+      {
+        "title": "Kitchen Deep Clean",
+        "description": "We clean inside ovens, refrigerators, and cabinet interiors. Every surface gets thorough attention, including often-neglected areas that routine cleaning misses.",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750841898/image73_lowp7v.png",
+        "features": ["Inside oven and refrigerator cleaning", "Cabinet interior and exterior wipe-down", "Backsplash and exhaust fan cleaning", "All appliance exteriors and interiors"]
+      },
+      {
+        "title": "Living Areas Refresh",
+        "description": "Comprehensive dusting of all surfaces including baseboards, door frames, and ceiling fans. We move furniture to clean beneath and behind for a truly fresh space.",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750841934/image80_lzfymb.png",
+        "features": ["Dust baseboards, door frames, ceiling fans", "Move furniture for thorough vacuuming", "Clean under rugs and in corners", "Window sill and blind cleaning"]
+      }
+    ],
+    "benefitsHeading": "Why Choose Deep Cleaning",
+    "benefitsSubheading": "Understanding the difference helps you choose the right option for your needs.",
+    "benefit1Title": "Comprehensive Coverage",
+    "benefit1Description": "We dust all surfaces including baseboards, door frames, and ceiling fans. Deep bathroom sanitizing, inside appliance cleaning, and detailed floor care.",
+    "benefit2Title": "Fresh Start",
+    "benefit2Description": "Ideal for move-in/move-out, seasonal refresh, or special occasions. Addresses years of accumulated dirt and grime.",
+    "benefit3Title": "Professional Results",
+    "benefit3Description": "Our team uses professional-grade equipment and techniques to deliver results that exceed expectations.",
+    "clientTestimonialsHeading": "What Our Clients Say",
+    "clientTestimonialsSubheading": "Hear from our satisfied clients about their experience with our deep cleaning service.",
+    "clientTestimonials": [
+      { "rating": 5, "review": "I couldn't believe the difference after Clensy's deep cleaning service. Areas I didn't even notice were dirty are now spotless. The attention to detail was incredible and it feels like we have a brand new home!", "clientName": "Rebecca Thompson", "clientLocation": "Montclair, NJ", "avatarBgColor": "purple-500" },
+      { "rating": 5, "review": "We had Clensy do a deep clean before moving into our new home. The previous owners had pets, and there was dust everywhere. After the deep cleaning, it felt like a completely different house - fresh, clean, and ready for our family.", "clientName": "Daniel Morgan", "clientLocation": "Jersey City, NJ", "avatarBgColor": "orange-500" },
+      { "rating": 5, "review": "I scheduled a deep cleaning after renovating my kitchen and bathroom. The construction dust was everywhere! Clensy's team removed every trace of dust and grime. Their deep cleaning service is worth every penny for the results they deliver.", "clientName": "Jennifer Park", "clientLocation": "Hoboken, NJ", "avatarBgColor": "teal-500" }
+    ],
+    "faqs": [
+      { "question": "How often should I get a deep cleaning?", "answer": "For most homes, we recommend a deep cleaning 2-4 times per year, depending on your lifestyle and needs. Many customers opt for seasonal deep cleanings, while maintaining regular routine cleanings in between." },
+      { "question": "How long does deep cleaning take?", "answer": "A deep cleaning typically takes 4-6 hours depending on the size of your home and its condition. For larger homes or homes requiring extensive deep cleaning, we may recommend a team of cleaners or multiple sessions." },
+      { "question": "What's the difference between routine and deep cleaning?", "answer": "Routine cleaning focuses on maintaining everyday cleanliness, while deep cleaning addresses built-up dirt, grime, and hard-to-reach areas. Deep cleaning includes tasks like cleaning inside appliances, behind furniture, tackling grout, and addressing areas that aren't part of regular maintenance." },
+      { "question": "Should I prepare my home before a deep cleaning?", "answer": "For the most effective deep cleaning, we recommend removing clutter from surfaces and floors. This allows our team to focus on the detailed cleaning tasks rather than organizing your belongings." }
+    ],
+    "customData": {
+      "whenToChoose": {
+        "heading": "When to Choose Deep Cleaning",
+        "subheading": "Our deep cleaning service is ideal for specific situations when standard cleaning isn't enough.",
+        "options": [
+          { "title": "Moving In or Out", "description": "Start fresh in your new home or ensure you leave your old one in perfect condition for the next residents. Deep cleaning addresses years of accumulated dirt." },
+          { "title": "Seasonal Refresh", "description": "Ideal for spring cleaning or seasonal refreshes when homes need extra attention after prolonged indoor time during winter months." },
+          { "title": "Special Occasions", "description": "Preparing for holidays, important guests, or events? Deep cleaning ensures your home is immaculate for those special moments that matter." }
+        ]
+      },
+      "comparison": {
+        "heading": "Deep Cleaning vs. Regular Cleaning",
+        "regularCleaning": { "title": "Regular Cleaning", "subtitle": "Maintenance cleaning for already-clean homes", "frequency": "Weekly or bi-weekly" },
+        "deepCleaning": { "title": "Deep Cleaning", "subtitle": "Intensive cleaning for neglected or heavily used areas", "frequency": "Quarterly or seasonally" }
+      }
+    }
+  }
+}

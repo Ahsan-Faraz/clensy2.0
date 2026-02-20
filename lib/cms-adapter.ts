@@ -8,6 +8,8 @@
 // Default to the deployed Strapi if NEXT_PUBLIC_STRAPI_URL is not provided
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://72.60.27.190';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
+// Strapi rest.prefix: '/admin/api' in config/api.ts — Content API is at /admin/api, not /api
+const STRAPI_API_PREFIX = process.env.STRAPI_API_PREFIX || '/admin/api';
 
 // Cache for page data
 let landingPageCache: any = null;
@@ -21,6 +23,16 @@ let checklistPageCacheTime: number = 0;
 let faqPageCache: any = null;
 let faqPageCacheTime: number = 0;
 const CACHE_DURATION = process.env.NODE_ENV === 'development' ? 5000 : 300000; // 5 seconds in dev, 5 minutes in prod
+
+// Location caches (5 min prod) - dramatically reduces Strapi round-trips
+const locationBySlugCache = new Map<string, { data: any; time: number }>();
+let allLocationsCache: any[] | null = null;
+let allLocationsCacheTime: number = 0;
+
+// Service caches - same pattern as locations
+const serviceBySlugCache = new Map<string, { data: any; time: number }>();
+let allServicesCache: any[] | null = null;
+let allServicesCacheTime: number = 0;
 
 // Function to clear the landing page cache (called after sync)
 export function clearLandingPageCache() {
@@ -52,6 +64,20 @@ export function clearFAQPageCache() {
   faqPageCacheTime = 0;
 }
 
+// Clear location caches (call after location content updates)
+export function clearLocationCaches() {
+  locationBySlugCache.clear();
+  allLocationsCache = null;
+  allLocationsCacheTime = 0;
+}
+
+// Clear service caches (call after service content updates)
+export function clearServiceCaches() {
+  serviceBySlugCache.clear();
+  allServicesCache = null;
+  allServicesCacheTime = 0;
+}
+
 // Clear all page caches
 export function clearAllPageCaches() {
   clearLandingPageCache();
@@ -59,11 +85,45 @@ export function clearAllPageCaches() {
   clearContactPageCache();
   clearChecklistPageCache();
   clearFAQPageCache();
+  clearLocationCaches();
+  clearServiceCaches();
 }
 
 interface StrapiResponse<T> {
   data: T;
   meta?: any;
+}
+
+/**
+ * Build Strapi v5 populate query params from object (selective populate for smaller payloads)
+ */
+function buildPopulateParams(populate: Record<string, any>, prefix = 'populate'): string[] {
+  const pairs: string[] = [];
+  const entries = Object.entries(populate);
+  entries.forEach(([key, value], i) => {
+    if (value === true || value === '*') {
+      pairs.push(`${prefix}[${i}]=${key}`);
+    } else if (value && typeof value === 'object' && value.populate) {
+      const nested = buildPopulateParams(value.populate, `${prefix}[${key}][populate]`);
+      pairs.push(...nested);
+    } else if (value && typeof value === 'object') {
+      const nested = buildPopulateParams(value, `${prefix}[${key}]`);
+      pairs.push(...nested);
+    }
+  });
+  return pairs;
+}
+
+function appendPopulateToParams(params: URLSearchParams, populate: string | Record<string, any>) {
+  if (populate === '*' || typeof populate === 'string') {
+    params.append('populate', typeof populate === 'string' ? populate : '*');
+  } else if (populate && typeof populate === 'object') {
+    const pairs = buildPopulateParams(populate);
+    pairs.forEach((p) => {
+      const [k, v] = p.split('=');
+      params.append(k, v);
+    });
+  }
 }
 
 /**
@@ -83,14 +143,8 @@ async function fetchFromStrapi<T>(
   
   const params = new URLSearchParams();
   
-  // Strapi v5 REST prefers bracket syntax; to avoid 400, use simple populate=*
   if (populate) {
-    if (populate === '*' || typeof populate === 'string') {
-      params.append('populate', typeof populate === 'string' ? populate : '*');
-    } else {
-      // For arrays or objects, fall back to populate=*
-      params.append('populate', '*');
-    }
+    appendPopulateToParams(params, populate);
   }
   
   if (filters) {
@@ -110,10 +164,10 @@ async function fetchFromStrapi<T>(
   }
   
   const queryString = params.toString();
-  // Ensure no double slashes
   const base = STRAPI_URL.replace(/\/+$/, '');
-  const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  const url = `${base}/api${path}${queryString ? `?${queryString}` : ''}`;
+  const prefix = STRAPI_API_PREFIX.replace(/^\/+|\/+$/g, '') || 'api';
+  const path = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+  const url = `${base}/${prefix}/${path}${queryString ? `?${queryString}` : ''}`;
   
   try {
     const headers: HeadersInit = {
@@ -150,9 +204,21 @@ async function fetchFromStrapi<T>(
       );
       return null;
     }
-    
-    const data = await response.json();
-    return data as T;
+
+    // Strapi may return HTML (404/login page) instead of JSON - don't parse as JSON
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      console.error(`Strapi fetch returned non-JSON (${contentType}) for ${endpoint}`);
+      return null;
+    }
+
+    try {
+      const data = await response.json();
+      return data as T;
+    } catch (parseErr) {
+      console.error(`Strapi fetch JSON parse failed for ${endpoint}:`, parseErr);
+      return null;
+    }
   } catch (error) {
     console.error(`Strapi fetch failed for ${endpoint}:`, error);
     return null;
@@ -786,28 +852,54 @@ export class CMSAdapter {
   }
   
   /**
-   * Get Location by Slug
+   * Get Location by Slug (cached, selective populate, prefers custom by-slug endpoint)
    */
   static async getLocationBySlug(slug: string, status: 'draft' | 'published' = 'published') {
     if (!slug) return null;
 
-    // try with specified status first
-    let result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
-      filters: { slug: { $eq: slug } },
-      populate: '*',
-      status: status,
-    });
-    // fallback to opposite status if not found
-    if (!result?.data || result.data.length === 0) {
+    const cacheKey = `${slug}:${status}`;
+    const cached = locationBySlugCache.get(cacheKey);
+    if (cached && Date.now() - cached.time < CACHE_DURATION) {
+      return cached.data;
+    }
+
+    // Selective populate: only fields needed for location pages (much smaller payload)
+    const locationPopulate = {
+      heroBackgroundImage: true,
+      operatingHours: true,
+      serviceAreas: true,
+      seo: true,
+      openGraph: { populate: { ogImage: true } },
+      localSeo: true,
+      schema: true,
+      scripts: true,
+    };
+
+    // Try custom Strapi endpoint first (faster, optimized query)
+    let result: StrapiResponse<any> | null = await fetchFromStrapi<StrapiResponse<any>>(
+      `/locations/by-slug/${encodeURIComponent(slug)}`,
+      { populate: locationPopulate, status, revalidate: 60 }
+    );
+
+    // Fallback to standard filtered endpoint if custom route returns 404/empty
+    if (!result?.data) {
+      result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
+        filters: { slug: { $eq: slug } },
+        populate: locationPopulate,
+        status: status,
+      });
+    }
+    if (!result?.data || (Array.isArray(result.data) && result.data.length === 0)) {
       const fallbackStatus = status === 'published' ? 'draft' : 'published';
       result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
         filters: { slug: { $eq: slug } },
-        populate: '*',
+        populate: locationPopulate,
         status: fallbackStatus,
       });
     }
     // Fallback: fetch all and filter client-side (avoids slug/filters issues)
-    if (!result?.data || result.data.length === 0) {
+    const dataArray = Array.isArray(result?.data) ? result.data : (result?.data ? [result.data] : []);
+    if (dataArray.length === 0) {
       const all = await this.getAllLocations();
       const found = all.find((loc) => loc.slug === slug);
       if (!found) return null;
@@ -849,9 +941,9 @@ export class CMSAdapter {
         imageAlt: { heroBackground: '' },
       };
     }
-    
-    const data = result.data[0];
-    return {
+
+    const data = dataArray[0];
+    const transformed = {
       name: data.name || '',
       slug: data.slug || slug,
       county: data.county || '',
@@ -927,26 +1019,59 @@ export class CMSAdapter {
         heroBackground: data.heroBackgroundImageAlt || `Professional cleaning services in ${data.county || ''} County, New Jersey`,
       },
     };
+    locationBySlugCache.set(cacheKey, { data: transformed, time: Date.now() });
+    return transformed;
   }
   
   /**
-   * Get Service by Slug
+   * Get Service by Slug (cached, selective populate)
    */
   static async getServiceBySlug(slug: string, status: 'draft' | 'published' = 'published') {
     if (!slug) return null;
 
-    // try with specified status first
-    let result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
-      filters: { slug: { $eq: slug } },
-      populate: '*',
-      status: status,
-    });
-    // fallback to opposite status if not found
-    if (!result?.data || result.data.length === 0) {
+    const cacheKey = `${slug}:${status}`;
+    const cached = serviceBySlugCache.get(cacheKey);
+    if (cached && Date.now() - cached.time < CACHE_DURATION) {
+      return cached.data;
+    }
+
+    // Selective populate for fallback (custom Strapi route has its own)
+    const servicePopulate = {
+      heroBackgroundImage: true,
+      cleaningAreas: { populate: { image: true } },
+      featureSectionImage: true,
+      step1Image: true,
+      step2Image: true,
+      step3Image: true,
+      benefitsImage: true,
+      clientTestimonials: true,
+      faqs: true,
+      seo: true,
+      openGraph: { populate: { ogImage: true } },
+      schema: true,
+      scripts: true,
+      htmlBlocks: true,
+    };
+
+    // Try custom Strapi endpoint first (faster, optimized query)
+    let result: StrapiResponse<any> | StrapiResponse<any[]> | null = await fetchFromStrapi<StrapiResponse<any>>(
+      `/services/by-slug/${encodeURIComponent(slug)}`,
+      { status, revalidate: 60 }
+    );
+
+    // Fallback to standard filtered endpoint if custom route returns 404/empty
+    if (!result?.data || (Array.isArray(result.data) && result.data.length === 0)) {
+      result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
+        filters: { slug: { $eq: slug } },
+        populate: servicePopulate,
+        status: status,
+      });
+    }
+    if (!result?.data || (Array.isArray(result.data) && result.data.length === 0)) {
       const fallbackStatus = status === 'published' ? 'draft' : 'published';
       result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
         filters: { slug: { $eq: slug } },
-        populate: '*',
+        populate: servicePopulate,
         status: fallbackStatus,
       });
     }
@@ -1022,7 +1147,7 @@ export class CMSAdapter {
 
     const data = result.data[0];
 
-    return {
+    const transformed = {
       name: data.name || '',
       slug: data.slug || slug,
       serviceType: data.serviceType || '',
@@ -1037,7 +1162,7 @@ export class CMSAdapter {
       cleaningAreas: data.cleaningAreas?.map((area: any) => ({
         title: area.title || '',
         description: area.description || '',
-        image: getImageUrl(area.image) || '',
+        image: getImageUrl(area.image) || area.imageUrl || '',
         imageAlt: area.imageAlt || area.title || '',
         features: area.features || [],
       })) || [],
@@ -1135,28 +1260,32 @@ export class CMSAdapter {
         order: block.order || 0,
         isActive: block.isActive !== false,
       })).filter((block: any) => block.isActive && block.htmlContent),
+      customData: data.customData || null,
     };
+    serviceBySlugCache.set(cacheKey, { data: transformed, time: Date.now() });
+    return transformed;
   }
   
   /**
-   * Get All Services (for listing)
+   * Get All Services (for listing) - cached, minimal populate
    */
   static async getAllServices(options?: { revalidate?: number }) {
+    if (allServicesCache && Date.now() - allServicesCacheTime < CACHE_DURATION) {
+      return allServicesCache;
+    }
+
     const fetchOptions = options?.revalidate !== undefined ? { revalidate: options.revalidate } : {};
+    const listPopulate = { heroBackgroundImage: true };
     // First, try published
     let result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
-      populate: {
-        heroBackgroundImage: { populate: '*' },
-      },
+      populate: listPopulate,
       status: 'published',
       ...fetchOptions,
     });
     // If none published, fallback to draft
     if (!result?.data || result.data.length === 0) {
       result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
-        populate: {
-          heroBackgroundImage: { populate: '*' },
-        },
+        populate: listPopulate,
         status: 'draft',
         ...fetchOptions,
       });
@@ -1164,7 +1293,7 @@ export class CMSAdapter {
     
     if (!result?.data) return [];
     
-    return result.data.map((service: any) => ({
+    const services = result.data.map((service: any) => ({
       name: service.name || '',
       slug: service.slug || '',
       serviceType: service.serviceType || '',
@@ -1172,35 +1301,37 @@ export class CMSAdapter {
       heroSubheading: service.heroSubheading || '',
       heroBackgroundImage: getImageUrl(service.heroBackgroundImage) || service.heroBackgroundImageUrl || '',
     }));
+    allServicesCache = services;
+    allServicesCacheTime = Date.now();
+    return services;
   }
   
   /**
-   * Get All Locations (for listing)
+   * Get All Locations (for listing) - cached, minimal populate
    */
   static async getAllLocations(options?: { revalidate?: number }) {
+    if (allLocationsCache && Date.now() - allLocationsCacheTime < CACHE_DURATION) {
+      return allLocationsCache;
+    }
+
     const fetchOptions = options?.revalidate !== undefined ? { revalidate: options.revalidate } : {};
-    // First, try published
+    const listPopulate = { heroBackgroundImage: true };
     let result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
-      populate: {
-        heroBackgroundImage: { populate: '*' },
-      },
+      populate: listPopulate,
       status: 'published',
       ...fetchOptions,
     });
-    // If none published, fallback to draft
     if (!result?.data || result.data.length === 0) {
       result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
-        populate: {
-          heroBackgroundImage: { populate: '*' },
-        },
+        populate: listPopulate,
         status: 'draft',
         ...fetchOptions,
       });
     }
-    
+
     if (!result?.data) return [];
-    
-    return result.data.map((location: any) => ({
+
+    const locations = result.data.map((location: any) => ({
       name: location.name || '',
       slug: location.slug || '',
       county: location.county || '',
@@ -1209,6 +1340,9 @@ export class CMSAdapter {
       heroSubtitle: location.heroSubtitle || '',
       heroBackgroundImage: getImageUrl(location.heroBackgroundImage) || location.heroBackgroundImageUrl || '',
     }));
+    allLocationsCache = locations;
+    allLocationsCacheTime = Date.now();
+    return locations;
   }
 
   // ============================================

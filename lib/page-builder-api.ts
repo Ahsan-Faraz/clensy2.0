@@ -3,9 +3,15 @@
  * Handles communication with Strapi Page Builder plugin
  */
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL = (process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337').replace(/\/+$/, '');
+const STRAPI_API_PREFIX = (process.env.STRAPI_API_PREFIX || '/admin/api').replace(/^\/+|\/+$/g, '') || 'api';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || '';
 const PAGE_BUILDER_API_KEY = process.env.STRAPI_PAGE_BUILDER_API_KEY || '';
+
+function strapiUrl(path: string, query?: string): string {
+  const p = path.startsWith('/') ? path.slice(1) : path;
+  return query ? `${STRAPI_URL}/${STRAPI_API_PREFIX}/${p}?${query}` : `${STRAPI_URL}/${STRAPI_API_PREFIX}/${p}`;
+}
 
 interface StrapiResponse<T> {
   data: T;
@@ -17,7 +23,7 @@ interface StrapiResponse<T> {
  */
 export async function fetchTemplate(templateId: number | string) {
   try {
-    const url = `${STRAPI_URL}/api/page-builder/templates/${templateId}?populate=*`;
+    const url = strapiUrl('page-builder/templates/' + templateId, 'populate=*');
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -43,7 +49,7 @@ export async function fetchTemplate(templateId: number | string) {
  */
 export async function fetchTemplates() {
   try {
-    const url = `${STRAPI_URL}/api/page-builder/templates?populate=*`;
+    const url = strapiUrl('page-builder/templates', 'populate=*');
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -69,7 +75,7 @@ export async function fetchTemplates() {
  */
 export async function fetchLandingPage() {
   try {
-    const url = `${STRAPI_URL}/api/landing-page?populate[Landing_Page][populate]=*`;
+    const url = strapiUrl('landing-page', 'populate[Landing_Page][populate]=*');
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -107,7 +113,7 @@ export async function savePageBuilderData(
 
     if (contentType === 'landing-page') {
       // For single type, use PUT to update
-      url = `${STRAPI_URL}/api/landing-page`;
+      url = strapiUrl('landing-page');
       method = 'PUT';
       body = {
         data: {
@@ -119,10 +125,10 @@ export async function savePageBuilderData(
     } else {
       // For collection types, update the specific entry
       if (contentId) {
-        url = `${STRAPI_URL}/api/${contentType}/${contentId}`;
+        url = strapiUrl(`${contentType}/${contentId}`);
         method = 'PUT';
       } else {
-        url = `${STRAPI_URL}/api/${contentType}`;
+        url = strapiUrl(contentType);
         method = 'POST';
       }
       body = {
@@ -152,6 +158,49 @@ export async function savePageBuilderData(
   } catch (error) {
     console.error('Error saving page builder data:', error);
     throw error;
+  }
+}
+
+/**
+ * Fetch raw Service content with Page Builder template (for server-side rendering)
+ * Returns { data, templateField } or null if not found / no template
+ */
+export async function fetchServicePageBuilderContent(slug: string): Promise<{
+  data: any;
+  templateField: string;
+  template: { json: any } | null;
+} | null> {
+  try {
+    const url = strapiUrl('services', `filters[slug][$eq]=${encodeURIComponent(slug)}&populate[Service_Page][populate]=*`);
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
+      },
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) return null;
+
+    const result = await response.json();
+    const services = result.data || [];
+    const service = services[0];
+    if (!service) return null;
+
+    const templateField = 'Service_Page';
+    const template = service[templateField];
+    if (!template?.json?.content || template.json.content.length === 0) {
+      return null;
+    }
+
+    return {
+      data: service,
+      templateField,
+      template: template.json,
+    };
+  } catch (error) {
+    console.warn('[fetchServicePageBuilderContent]', error);
+    return null;
   }
 }
 

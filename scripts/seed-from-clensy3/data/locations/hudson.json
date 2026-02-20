@@ -1,0 +1,41 @@
+{
+  "data": {
+    "name": "Hudson County",
+    "slug": "hudson",
+    "county": "Hudson",
+    "state": "NJ",
+    "heroTitle": "Hudson County",
+    "heroSubtitle": "Professional Cleaning Services in Hudson County, NJ",
+    "heroBackgroundImageUrl": "https://pyxis.nymag.com/v1/imgs/c31/3a5/c01b3f0cb3f32f34ac1670ff10991d9e47-hoboken-lede.2x.rsocial.w600.jpg",
+    "ctaButton1Text": "SCHEDULE SERVICE",
+    "ctaButton2Text": "CALL US NOW",
+    "contactPhone": "201-555-7890",
+    "contactEmail": "hudson@clensy.com",
+    "contactAddress": "123 Hudson Ave, Hudson County, NJ 07000",
+    "operatingHours": [
+      { "day": "Monday", "hours": "8:00 am - 6:00 pm" },
+      { "day": "Tuesday", "hours": "8:00 am - 6:00 pm" },
+      { "day": "Wednesday", "hours": "8:00 am - 6:00 pm" },
+      { "day": "Thursday", "hours": "8:00 am - 6:00 pm" },
+      { "day": "Friday", "hours": "8:00 am - 6:00 pm" },
+      { "day": "Saturday", "hours": "9:00 am - 3:00 pm" },
+      { "day": "Sunday", "hours": "Closed" }
+    ],
+    "serviceAreas": [
+      { "name": "Bayonne", "slug": "bayonne" },
+      { "name": "East Newark", "slug": "east-newark" },
+      { "name": "Guttenberg", "slug": "guttenberg" },
+      { "name": "Harrison", "slug": "harrison" },
+      { "name": "Hoboken", "slug": "hoboken" },
+      { "name": "Jersey City", "slug": "jersey-city" },
+      { "name": "Kearny", "slug": "kearny" },
+      { "name": "North Bergen", "slug": "north-bergen" },
+      { "name": "Secaucus", "slug": "secaucus" },
+      { "name": "Union City", "slug": "union-city" },
+      { "name": "Weehawken", "slug": "weehawken" },
+      { "name": "West New York", "slug": "west-new-york" }
+    ],
+    "aboutTitle": "About Our Hudson County Services",
+    "aboutDescription": "Serving Hudson County with top-quality cleaning services for both residential and commercial properties. Our team of professional cleaners is dedicated to providing exceptional service with attention to detail."
+  }
+}

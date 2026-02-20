@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Clock, CheckCircle, Star } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, CheckCircle, Star, Calendar } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { formatText } from "@/lib/utils/formatText";
@@ -191,6 +191,21 @@ export default function ContactPageClient({ schemaJsonLd, headScripts, bodyEndSc
             </div>
           </div>
         </section>
+
+        {/* CTA Section */}
+        {contactData.consultationSection?.heading && (
+          <section className="py-24 bg-gradient-to-r from-blue-600 to-blue-700">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="max-w-3xl mx-auto text-center">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">{formatText(contactData.consultationSection.heading)}</h2>
+                <p className="text-lg text-blue-100 mb-8">{formatText(contactData.consultationSection.description)}</p>
+                <Link href="/booking" className="inline-flex items-center bg-white text-blue-600 px-8 py-4 rounded-xl text-lg font-medium hover:bg-blue-50 transition-colors shadow-lg">
+                  <Calendar className="h-5 w-5 mr-2" />{contactData.consultationSection.buttonText}
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
 
         <Footer />
         <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />

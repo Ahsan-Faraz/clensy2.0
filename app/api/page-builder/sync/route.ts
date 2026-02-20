@@ -2,8 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { clearLandingPageCache, clearAboutPageCache, clearContactPageCache, clearChecklistPageCache, clearFAQPageCache } from '@/lib/cms-adapter';
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL = (process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337').replace(/\/+$/, '');
+const STRAPI_API_PREFIX = (process.env.STRAPI_API_PREFIX || '/admin/api').replace(/^\/+|\/+$/g, '') || 'api';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || '';
+
+function strapiUrl(path: string, query?: string): string {
+  const p = path.startsWith('/') ? path.slice(1) : path;
+  return query ? `${STRAPI_URL}/${STRAPI_API_PREFIX}/${p}?${query}` : `${STRAPI_URL}/${STRAPI_API_PREFIX}/${p}`;
+}
 
 // Content type configuration
 // isSingleType: true = single type, false = collection type (needs contentId)
@@ -15,7 +21,7 @@ const contentTypeConfig: Record<string, {
   isSingleType: boolean;
 }> = {
   'landing-page': {
-    endpoint: '/api/landing-page',
+    endpoint: 'landing-page',
     templateRelation: 'Landing_Page',
     fieldMapping: {
       'ctaLeftTitle': 'ctaLeftCardTitle',
@@ -28,32 +34,32 @@ const contentTypeConfig: Record<string, {
     isSingleType: true,
   },
   'about': {
-    endpoint: '/api/about',
+    endpoint: 'about',
     templateRelation: 'About_Page',
     fieldMapping: {},
     isSingleType: true,
   },
   'contact': {
-    endpoint: '/api/contact',
+    endpoint: 'contact',
     templateRelation: 'Contact_Page',
     fieldMapping: {},
     isSingleType: true,
   },
   'checklist-page': {
-    endpoint: '/api/checklist-page',
+    endpoint: 'checklist-page',
     templateRelation: 'Checklist_Page',
     fieldMapping: {},
     isSingleType: true,
   },
   'faq-page': {
-    endpoint: '/api/faq-page',
+    endpoint: 'faq-page',
     templateRelation: 'FAQ_Page',
     fieldMapping: {},
     isSingleType: true,
   },
   // Collection types - require contentId
   'service': {
-    endpoint: '/api/services', // plural for collection types
+    endpoint: 'services', // plural for collection types
     templateRelation: 'Service_Page',
     // Map Page Builder field names to Strapi schema field names
     // null = skip this field (doesn't exist in Strapi)
@@ -133,8 +139,8 @@ export async function POST(request: NextRequest) {
     // Fetch current content to preserve existing fields
     // For collection types, we need to fetch a specific entry
     const contentUrl = config.isSingleType 
-      ? `${STRAPI_URL}${config.endpoint}?populate=*`
-      : `${STRAPI_URL}${config.endpoint}/${contentId}?populate=*`;
+      ? strapiUrl(config.endpoint, 'populate=*')
+      : strapiUrl(`${config.endpoint}/${contentId}`, 'populate=*');
       
     const contentResponse = await fetch(contentUrl, {
       headers: {
@@ -191,7 +197,7 @@ async function syncFromTemplate(
   contentId?: string // For collection types
 ) {
   // Fetch all templates and find the one we need
-  const templatesUrl = `${STRAPI_URL}/api/page-builder/templates`;
+  const templatesUrl = strapiUrl('page-builder/templates');
   const templatesResponse = await fetch(templatesUrl, {
     headers: {
       'Content-Type': 'application/json',
@@ -405,8 +411,8 @@ async function syncFromTemplate(
   // Save to content type
   // For collection types, we need to update a specific entry
   const updateUrl = config.isSingleType 
-    ? `${STRAPI_URL}${config.endpoint}`
-    : `${STRAPI_URL}${config.endpoint}/${contentId}`;
+    ? strapiUrl(config.endpoint)
+    : strapiUrl(`${config.endpoint}/${contentId}`);
     
   const updateResponse = await fetch(updateUrl, {
     method: 'PUT',

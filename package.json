@@ -6,6 +6,7 @@
     "dev": "next dev --webpack",
     "dev:turbo": "next dev --turbopack",
     "build": "next build --webpack",
+    "seed:strapi": "node scripts/seed-from-clensy3/import.mjs",
     "start": "next start",
     "lint": "next lint"
   },

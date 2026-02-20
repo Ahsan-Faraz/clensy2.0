@@ -28,7 +28,12 @@ export async function GET(
     // Try Strapi first - pass draft status if in preview mode
     const strapiData = await CMSAdapter.getServiceBySlug(slug, isDraftMode ? 'draft' : 'published');
     if (strapiData) {
-      return NextResponse.json({ success: true, data: strapiData, source: 'strapi' });
+      const response = NextResponse.json({ success: true, data: strapiData, source: 'strapi' });
+      // Cache at edge for 60s, serve stale for 5 min
+      if (!isDraftMode) {
+        response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+      }
+      return response;
     }
     
     // If no data found

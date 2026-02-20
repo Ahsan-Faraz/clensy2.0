@@ -92,6 +92,21 @@ export default function Footer({ services: propServices, locations: propLocation
   const iconColor = "text-gray-400";
   const hoverColor = "text-[#007BFF]";
 
+  // Same order as Navbar: Residential first, then Commercial (Other Commercial last)
+  const SERVICE_DISPLAY_ORDER = [
+    'routine', 'deep', 'moving', 'post-construction', 'airbnb', 'extras',
+    'office', 'medical', 'gym', 'school', 'retail', 'property', 'other-commercial',
+  ];
+  const sortedServices = [...services].sort(
+    (a, b) => SERVICE_DISPLAY_ORDER.indexOf(a.serviceType) - SERVICE_DISPLAY_ORDER.indexOf(b.serviceType)
+  );
+
+  // Locations order: Bergen → Hudson → Essex → Passaic → Union → Morris
+  const LOCATION_ORDER = ['bergen', 'hudson', 'essex', 'passaic', 'union', 'morris'];
+  const sortedLocations = [...locations].sort(
+    (a, b) => LOCATION_ORDER.indexOf(a.slug) - LOCATION_ORDER.indexOf(b.slug)
+  );
+
   return (
     <footer className={`py-16 ${bgColor} relative overflow-hidden`}>
       {/* Animated wavy line at the top */}
@@ -173,8 +188,8 @@ export default function Footer({ services: propServices, locations: propLocation
               Services
             </h3>
             <ul className="space-y-2">
-              {services.length > 0 ? (
-                services.map((service) => (
+              {sortedServices.length > 0 ? (
+                sortedServices.map((service) => (
                   <li key={service.slug}>
                     <Link
                       href={`/services/${service.slug}`}
@@ -256,8 +271,8 @@ export default function Footer({ services: propServices, locations: propLocation
               Locations
             </h3>
             <ul className="space-y-2">
-              {locations.length > 0 ? (
-                locations.map((location) => (
+              {sortedLocations.length > 0 ? (
+                sortedLocations.map((location) => (
                   <li key={location.slug}>
                     <Link
                       href={`/locations/${location.slug}`}

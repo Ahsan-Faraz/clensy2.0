@@ -1,0 +1,67 @@
+{
+  "data": {
+    "name": "Extras",
+    "slug": "extras",
+    "serviceType": "extras",
+    "heroTopLabel": "Premium Add-On Services",
+    "heroHeading": "Extra Cleaning Services On Demand",
+    "heroSubheading": "Enhance your regular cleaning experience with our specialized add-on services. From window cleaning to oven scrubbing, customize your cleaning package to address your specific needs.",
+    "heroBackgroundImageUrl": "https://static.vecteezy.com/system/resources/previews/037/280/967/non_2x/ai-generated-minimalist-vivid-advertisment-spring-cleaning-background-with-copy-space-free-photo.jpeg",
+    "heroServiceDuration": "Customizable Services",
+    "heroServiceGuarantee": "100% Satisfaction",
+    "includedSectionHeading": "Our Premium Extra Services",
+    "includedSectionSubheading": "Customize your cleaning experience with these specialized add-on services, designed to address specific cleaning needs beyond our standard service packages.",
+    "cleaningAreas": [
+      {
+        "title": "Window Cleaning",
+        "description": "Crystal clear windows inside and out",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845184/image74_pnropc.png",
+        "features": ["Interior and exterior window cleaning", "Screen cleaning and frame wiping", "Streak-free finish", "Sill and track cleaning"]
+      },
+      {
+        "title": "Refrigerator Cleaning",
+        "description": "Thorough cleaning and sanitizing of refrigerators",
+        "imageUrl": "https://www.tasteofhome.com/wp-content/uploads/2023/01/GettyImages-484299846.jpg",
+        "features": ["Empty and clean all shelves and drawers", "Sanitize interior surfaces", "Clean exterior and handles", "Clean under and behind refrigerator when accessible"]
+      },
+      {
+        "title": "Oven Cleaning",
+        "description": "Deep cleaning for ovens and ranges",
+        "imageUrl": "https://cdn.prod.website-files.com/6397d1f7c4e0e51d3bd5a80f/650a589d1e631adc7e916b04_Regular%20cleanings.webp",
+        "features": ["Removal of built-up grease and carbon", "Cleaning of racks, trays, and knobs", "Hood and filter cleaning", "Full sanitization of interior and exterior"]
+      }
+    ],
+    "howItWorksHeading": "How To Add Extra Services",
+    "howItWorksSubheading": "Adding extra services to your cleaning package is simple and flexible.",
+    "step1Title": "Browse Available Extras",
+    "step1Description": "Open our app or website and browse through our selection of premium add-on services that can be added to any cleaning appointment.",
+    "step2Title": "Select Your Extras",
+    "step2Description": "Simply tap to add the services you want. You can add multiple extras to customize your cleaning experience exactly to your needs.",
+    "step3Title": "Confirm and Schedule",
+    "step3Description": "Review your selections, proceed to schedule your appointment, and our specialized team will take care of everything during your service.",
+    "faqs": [
+      { "question": "Can I add extra services to my regular cleaning?", "answer": "Absolutely! Extra services are designed to complement your regular cleaning. You can add any combination of our extra services when booking your appointment or even request them during a scheduled cleaning." },
+      { "question": "How much extra time do these services add?", "answer": "Extra services typically add 30 minutes to 2 hours depending on what you select. Window cleaning and organization services tend to take longer, while simpler additions like washing dishes or cleaning the fridge are quicker." },
+      { "question": "Do you bring all the supplies for extra services?", "answer": "Yes, we bring all professional-grade supplies and equipment needed for our extra services. This includes specialized window cleaning solutions, organization containers, and commercial-grade cleaning products." },
+      { "question": "Can I request extra services on short notice?", "answer": "While we recommend booking extra services in advance for the best scheduling, we can often accommodate same-day requests depending on availability and the complexity of the service requested." }
+    ],
+    "customData": {
+      "trustIndicators": [
+        { "number": "8+", "text": "Extra Services" },
+        { "number": "100%", "text": "Customizable" },
+        { "number": "5.0", "text": "Satisfaction Rating" },
+        { "number": "1000+", "text": "Extra Services Completed" }
+      ],
+      "premiumExtraServices": [
+        { "id": "windows", "name": "Window Cleaning", "description": "Crystal clear windows inside and out", "price": "$5", "priceUnit": "per window" },
+        { "id": "fridge", "name": "Refrigerator Cleaning", "description": "Thorough cleaning and sanitizing", "price": "$35", "priceUnit": "per service" },
+        { "id": "oven", "name": "Oven Cleaning", "description": "Deep cleaning for ovens and ranges", "price": "$35", "priceUnit": "per service" },
+        { "id": "cabinets", "name": "Cabinet Cleaning", "description": "Interior and exterior cabinet cleaning", "price": "$60", "priceUnit": "per service" },
+        { "id": "organization", "name": "Organization Service", "description": "Professional organization of your spaces", "price": "$60", "priceUnit": "per service" },
+        { "id": "laundry", "name": "Laundry Service", "description": "Complete laundry washing and folding", "price": "$20", "priceUnit": "per service" },
+        { "id": "wet-wipe-blinds", "name": "Wet Wipe Blinds", "description": "Deep cleaning of blinds", "price": "$5", "priceUnit": "per blind" },
+        { "id": "wash-dishes", "name": "Wash Dishes", "description": "Complete dish washing and kitchen cleanup", "price": "$20", "priceUnit": "per service" }
+      ]
+    }
+  }
+}

@@ -1,9 +1,7 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { draftMode } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import {
   MapPin,
   Phone,
@@ -11,145 +9,32 @@ import {
   ChevronRight,
   Clock,
   Mail,
-  Loader2,
 } from "lucide-react";
+import CMSAdapter from "@/lib/cms-adapter";
 import SEOScripts from "@/components/seo-scripts";
-import Navbar from "@/components/navbar";
-// Footer is provided by parent layout (app/locations/layout.tsx)
 
-interface LocationData {
-  name?: string;
-  slug?: string;
-  county?: string;
-  heroSection: {
-    title: string;
-    subtitle: string;
-    backgroundImage: string;
-    ctaButton1: string;
-    ctaButton2: string;
-  };
-  contactSection: {
-    title: string;
-    phone: string;
-    email: string;
-    address: string;
-    hours: Array<{
-      day: string;
-      hours: string;
-    }>;
-  };
-  serviceAreas: string[];
-  aboutSection: {
-    title: string;
-    description: string;
-  };
-  seo?: {
-    metaTitle: string;
-    metaDescription: string;
-    keywords: string[];
-    canonicalUrl: string;
-    robots: string;
-    h1: string;
-    h2: string;
-    h3: string;
-    openGraph: {
-      title: string;
-      description: string;
-      image: string;
-      type: string;
-    };
-    twitter: {
-      card: string;
-      title: string;
-      description: string;
-    };
-    schemaJsonLd: any;
-    schemaType: string;
-    headScripts: string;
-    bodyStartScripts: string;
-    bodyEndScripts: string;
-    customCss: string;
-  };
-  localSeo?: {
-    city: string;
-    county: string;
-    state: string;
-    zipCode: string;
-    serviceType: string;
-  };
-  imageAlt?: {
-    heroBackground: string;
-  };
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const locations = await CMSAdapter.getAllLocations();
+  return locations.map((l) => ({ slug: l.slug }));
 }
 
-export default function DynamicLocationPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<LocationData | null>(null);
-  const [error, setError] = useState<string | null>(null);
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch location data from CMS
-        const response = await fetch(`/api/cms/locations/${slug}`);
-        const result = await response.json();
-        
-        if (result.success && result.data) {
-          setData(result.data);
-        } else {
-          setError(result.error || 'Failed to load location data');
-        }
-        
-      } catch (err) {
-        console.error('Error fetching location data:', err);
-        setError('An error occurred while loading location data');
-      } finally {
-        setIsLoading(false);
-        setIsLoaded(true);
-      }
-    };
+export default async function DynamicLocationPage({ params }: PageProps) {
+  const { slug } = await params;
+  const { isEnabled: isDraftMode } = await draftMode();
 
-    if (slug) {
-      fetchData();
-    }
-  }, [slug]);
+  const data = await CMSAdapter.getLocationBySlug(slug, isDraftMode ? "draft" : "published");
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
-      </div>
-    );
+  if (!data) {
+    notFound();
   }
 
-  if (error || !data) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-        <div className="text-center p-8 max-w-2xl">
-          <h2 className="text-2xl font-bold mb-4">Location Not Found</h2>
-          <p className="mb-6">{error || 'The requested location could not be found.'}</p>
-          <Link 
-            href="/locations" 
-            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-          >
-            Back to Locations
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  const { 
-    heroSection, 
-    contactSection, 
-    serviceAreas, 
-    aboutSection 
-  } = data;
-
+  const { heroSection, contactSection, serviceAreas, aboutSection } = data;
   const locationName = data.name || data.county || slug.charAt(0).toUpperCase() + slug.slice(1);
 
   return (
@@ -158,13 +43,13 @@ export default function DynamicLocationPage() {
       <section className="relative min-h-[60vh] bg-black pt-16">
         <div className="absolute inset-0 z-0">
           <Image
-            src={heroSection.backgroundImage || 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1920'}
+            src={heroSection.backgroundImage || "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1920"}
             alt={data.imageAlt?.heroBackground || `${locationName} Skyline`}
             fill
             className="object-cover brightness-90"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -182,13 +67,13 @@ export default function DynamicLocationPage() {
                   href="/booking"
                   className="flex px-8 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors items-center"
                 >
-                  <Calendar className="mr-2 h-5 w-5" /> {heroSection.ctaButton1 || 'Get a Quote'}
+                  <Calendar className="mr-2 h-5 w-5" /> {heroSection.ctaButton1 || "Get a Quote"}
                 </Link>
                 <Link
-                  href={`tel:${contactSection.phone?.replace(/[^0-9+]/g, '') || ''}`}
+                  href={`tel:${contactSection.phone?.replace(/[^0-9+]/g, "") || ""}`}
                   className="inline-flex items-center px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-md font-medium hover:bg-white/20 transition-colors"
                 >
-                  <Phone className="mr-2 h-5 w-5" /> {heroSection.ctaButton2 || 'Contact Us'}
+                  <Phone className="mr-2 h-5 w-5" /> {heroSection.ctaButton2 || "Contact Us"}
                 </Link>
               </div>
             </div>
@@ -200,10 +85,7 @@ export default function DynamicLocationPage() {
       <div className="bg-gradient-to-r from-gray-900 to-black py-4 border-y border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center text-sm text-gray-400">
-            <Link
-              href="/locations"
-              className="hover:text-blue-400 transition-colors"
-            >
+            <Link href="/locations" className="hover:text-blue-400 transition-colors">
               All Locations
             </Link>
             <ChevronRight className="h-4 w-4 mx-2" />
@@ -220,9 +102,7 @@ export default function DynamicLocationPage() {
             {/* Contact Information Card */}
             <div className="bg-gradient-to-br from-blue-900/80 to-gray-900 rounded-xl shadow-xl overflow-hidden backdrop-blur-sm border border-blue-900/30">
               <div className="p-6 border-b border-gray-700">
-                <h2 className="text-xl font-bold text-white">
-                  Contact Information
-                </h2>
+                <h2 className="text-xl font-bold text-white">Contact Information</h2>
               </div>
               <div className="p-6 space-y-6">
                 {contactSection.phone && (
@@ -231,7 +111,7 @@ export default function DynamicLocationPage() {
                     <div>
                       <h3 className="text-gray-300 font-medium mb-1">Phone</h3>
                       <a
-                        href={`tel:${contactSection.phone.replace(/[^0-9+]/g, '')}`}
+                        href={`tel:${contactSection.phone.replace(/[^0-9+]/g, "")}`}
                         className="text-white hover:text-blue-400 transition-colors"
                       >
                         {contactSection.phone}
@@ -284,7 +164,7 @@ export default function DynamicLocationPage() {
                           <span className="text-white">{dayHours.hours}</span>
                         </div>
                         {index < contactSection.hours.length - 1 && (
-                          <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent my-2"></div>
+                          <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent my-2" />
                         )}
                       </div>
                     ))}
@@ -308,9 +188,7 @@ export default function DynamicLocationPage() {
                       <MapPin className="h-8 w-8 text-white" />
                     </div>
                     <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 translate-y-full bg-white px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
-                      <span className="font-semibold text-gray-800">
-                        {locationName} County
-                      </span>
+                      <span className="font-semibold text-gray-800">{locationName} County</span>
                     </div>
                   </div>
                 </div>
@@ -337,11 +215,13 @@ export default function DynamicLocationPage() {
                 </div>
                 <div className="p-6">
                   <div className="prose prose-invert max-w-none">
-                    {aboutSection.description?.split('\n\n').map((paragraph, index) => (
-                      <p key={index} className="text-gray-300 mb-4 leading-relaxed">
-                        {paragraph}
-                      </p>
-                    ))}
+                    {aboutSection.description
+                      ?.split("\n\n")
+                      .map((paragraph, index) => (
+                        <p key={index} className="text-gray-300 mb-4 leading-relaxed">
+                          {paragraph}
+                        </p>
+                      ))}
                   </div>
                   <div className="mt-6">
                     <Link
@@ -373,7 +253,7 @@ export default function DynamicLocationPage() {
                       key={area}
                       className="flex items-center py-3 px-4 bg-gray-700/50 border border-gray-700 rounded-lg hover:bg-blue-900/20 hover:border-blue-500/50 transition-all"
                     >
-                      <div className="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
+                      <div className="w-2 h-2 bg-blue-400 rounded-full mr-3" />
                       <span className="text-white">{area}</span>
                     </div>
                   ))}
@@ -383,7 +263,7 @@ export default function DynamicLocationPage() {
           </div>
         )}
       </div>
-      
+
       {/* SEO Scripts and Schema */}
       {data.seo && (
         <SEOScripts

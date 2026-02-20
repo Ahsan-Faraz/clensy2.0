@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 import { Check, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -104,10 +102,7 @@ export default function ServicesPage() {
   };
 
   return (
-    <div className="min-h-screen overflow-hidden">
-      {/* Navbar */}
-      <Navbar />
-
+    <>
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-black relative z-10">
         <div className="absolute inset-0 z-0">
@@ -275,9 +270,6 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <Footer />
-    </div>
+    </>
   );
 }

@@ -40,8 +40,9 @@ function getNonMetaHtml(html: string): string {
 async function getGlobalScripts(): Promise<{ globalHeadScripts: string; globalBodyEndScripts: string }> {
   try {
     const params = new URLSearchParams({ populate: '*' });
+    const prefix = (process.env.STRAPI_API_PREFIX || '/admin/api').replace(/^\/+|\/+$/g, '') || 'api';
     const base = STRAPI_URL.replace(/\/+$/, '');
-    const url = `${base}/api/global-setting?${params.toString()}`;
+    const url = `${base}/${prefix}/global-setting?${params.toString()}`;
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
       ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),

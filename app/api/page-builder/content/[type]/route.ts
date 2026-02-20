@@ -1,18 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL = (process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337').replace(/\/+$/, '');
+const STRAPI_API_PREFIX = (process.env.STRAPI_API_PREFIX || '/admin/api').replace(/^\/+|\/+$/g, '') || 'api';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || '';
+
+function strapiUrl(path: string, query?: string): string {
+  const p = path.startsWith('/') ? path.slice(1) : path;
+  return query ? `${STRAPI_URL}/${STRAPI_API_PREFIX}/${p}?${query}` : `${STRAPI_URL}/${STRAPI_API_PREFIX}/${p}`;
+}
 
 // Content type configuration
 // isSingleType: true = single type (e.g., landing-page), false = collection type (e.g., services)
 const contentTypeConfig: Record<string, { endpoint: string; templateField: string; isSingleType: boolean }> = {
-  'landing-page': { endpoint: '/api/landing-page', templateField: 'Landing_Page', isSingleType: true },
-  'about': { endpoint: '/api/about', templateField: 'About_Page', isSingleType: true },
-  'contact': { endpoint: '/api/contact', templateField: 'Contact_Page', isSingleType: true },
-  'checklist-page': { endpoint: '/api/checklist-page', templateField: 'Checklist_Page', isSingleType: true },
-  'faq-page': { endpoint: '/api/faq-page', templateField: 'FAQ_Page', isSingleType: true },
-  // Collection types - require contentId
-  'service': { endpoint: '/api/services', templateField: 'Service_Page', isSingleType: false },
+  'landing-page': { endpoint: 'landing-page', templateField: 'Landing_Page', isSingleType: true },
+  'about': { endpoint: 'about', templateField: 'About_Page', isSingleType: true },
+  'contact': { endpoint: 'contact', templateField: 'Contact_Page', isSingleType: true },
+  'checklist-page': { endpoint: 'checklist-page', templateField: 'Checklist_Page', isSingleType: true },
+  'faq-page': { endpoint: 'faq-page', templateField: 'FAQ_Page', isSingleType: true },
+  'service': { endpoint: 'services', templateField: 'Service_Page', isSingleType: false },
 };
 
 /**
@@ -49,13 +54,11 @@ export async function GET(
     let fetchedContentId = contentId;
     
     if (isSingleType) {
-      url = `${STRAPI_URL}${endpoint}?populate=*`;
+      url = strapiUrl(endpoint, 'populate=*');
     } else if (contentId) {
-      // Fetch by documentId
-      url = `${STRAPI_URL}${endpoint}/${contentId}?populate=*`;
+      url = strapiUrl(`${endpoint}/${contentId}`, 'populate=*');
     } else if (slug) {
-      // Fetch by slug using filters
-      url = `${STRAPI_URL}${endpoint}?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`;
+      url = strapiUrl(endpoint, `filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`);
     } else {
       return NextResponse.json(
         { success: false, error: `Content ID or slug required for collection type "${type}". Pass ?contentId=xxx or ?slug=xxx` },
@@ -106,11 +109,11 @@ export async function GET(
       // Try deep populate to get template.json
       let deepUrl: string;
       if (isSingleType) {
-        deepUrl = `${STRAPI_URL}${endpoint}?populate[${templateField}][populate]=*`;
+        deepUrl = strapiUrl(endpoint, `populate[${templateField}][populate]=*`);
       } else if (fetchedContentId) {
-        deepUrl = `${STRAPI_URL}${endpoint}/${fetchedContentId}?populate[${templateField}][populate]=*`;
+        deepUrl = strapiUrl(`${endpoint}/${fetchedContentId}`, `populate[${templateField}][populate]=*`);
       } else if (slug) {
-        deepUrl = `${STRAPI_URL}${endpoint}?filters[slug][$eq]=${encodeURIComponent(slug)}&populate[${templateField}][populate]=*`;
+        deepUrl = strapiUrl(endpoint, `filters[slug][$eq]=${encodeURIComponent(slug)}&populate[${templateField}][populate]=*`);
       } else {
         // Fallback - skip deep populate
         deepUrl = '';

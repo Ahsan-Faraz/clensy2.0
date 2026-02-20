@@ -1,0 +1,52 @@
+{
+  "data": {
+    "name": "Retail Cleaning",
+    "slug": "retail-cleaning",
+    "serviceType": "retail",
+    "heroTopLabel": "Premium Retail Services",
+    "heroHeading": "Retail Store & Shop Cleaning",
+    "heroSubheading": "Create an impeccable shopping environment that enhances customer experience and protects your merchandise with our specialized retail cleaning services.",
+    "heroBackgroundImageUrl": "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?q=80&w=2070&auto=format&fit=crop",
+    "heroServiceDuration": "Retail Specialists",
+    "heroServiceGuarantee": "100% Satisfaction",
+    "includedSectionHeading": "Our Retail Cleaning Services",
+    "includedSectionSubheading": "We provide comprehensive cleaning solutions tailored to meet the unique needs of retail environments and shopping spaces.",
+    "cleaningAreas": [
+      {
+        "title": "Entrances & Display Areas",
+        "description": "First impressions matter. We ensure your store entrance and display areas shine to create a welcoming environment that attracts customers.",
+        "imageUrl": "https://www.thimble.com/wp-content/uploads/2021/10/Retail-Store-Layout-Guide.jpg",
+        "features": ["Glass door and window cleaning for crystal clear visibility", "Dusting and cleaning of display shelves and fixtures", "Floor cleaning and polishing for high-traffic entryways", "Sanitizing of doorknobs, handles, and railings"]
+      },
+      {
+        "title": "Sales Floor & Merchandise Areas",
+        "description": "Create an inviting shopping environment with meticulously cleaned sales floors that showcase your merchandise in the best light.",
+        "imageUrl": "https://cdn.prod.website-files.com/642b7859216b0f5b519de88a/642c66600054c7783cbff234_commercial.jpg",
+        "features": ["Thorough floor care tailored to your flooring type", "Gentle dusting of merchandise shelves and product displays", "Sanitizing of high-touch surfaces throughout your store", "Cleaning and polishing of display cases and counters"]
+      },
+      {
+        "title": "Fitting Rooms & Customer Areas",
+        "description": "Keep your fitting rooms and customer service areas pristine to enhance the shopping experience and encourage purchases.",
+        "imageUrl": "https://www.idcleaning.uk/img/pages/page_7/shutterstock_227609965.jpg",
+        "features": ["Disinfection of fitting room surfaces and seating", "Mirror cleaning for smudge-free reflections", "Sanitization of customer service counters and points of sale", "Regular emptying and cleaning of fitting room waste receptacles"]
+      }
+    ],
+    "featureSectionHeading": "Why Choose Clensy for Your Retail Cleaning",
+    "featureSectionSubheading": "We understand the unique cleaning requirements of retail environments and deliver reliable, consistent service.",
+    "featureSectionPoints": ["Flexible Scheduling: After-hours, early morning cleaning to avoid disrupting business", "Retail Experience: Understanding how to clean merchandise displays and fitting rooms with care", "Safe, Gentle Products: Retail-friendly products that clean without damaging merchandise"],
+    "faqs": [
+      { "question": "Can you clean outside of retail business hours?", "answer": "Yes, we offer flexible scheduling and can clean before opening or after closing to minimize disruption to your business and customers." },
+      { "question": "Do you use safe cleaning products for retail environments?", "answer": "We use only high-quality, eco-friendly cleaning products that are safe for both staff and customers. If you have specific preferences, let us know." },
+      { "question": "Can you handle large or multi-location retail spaces?", "answer": "Yes, our team is equipped to clean retail spaces of all sizes, including multi-location businesses. We can create a custom cleaning plan for your needs." },
+      { "question": "What if I am not satisfied with the cleaning?", "answer": "If you are not completely satisfied, contact us within 24 hours and we will return to address any concerns at no additional cost." }
+    ],
+    "customData": {
+      "trustIndicators": [
+        { "number": "400+", "text": "Retail Clients" },
+        { "number": "24/7", "text": "Business Support" },
+        { "number": "4.9", "text": "Customer Rating" },
+        { "number": "100%", "text": "Satisfaction Guarantee" }
+      ]
+    }
+  }
+}

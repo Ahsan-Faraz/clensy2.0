@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const STRAPI_URL = (process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337').replace(/\/+$/, '');
+const STRAPI_API_PREFIX = (process.env.STRAPI_API_PREFIX || '/admin/api').replace(/^\/+|\/+$/g, '') || 'api';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || '';
 
 export async function POST(request: NextRequest) {
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     // First, update the template with the page builder structure (blocks/order)
     // The template's json field stores the page structure
-    const templateUpdateUrl = `${STRAPI_URL}/api/page-builder/templates/${templateId}`;
+    const templateUpdateUrl = `${STRAPI_URL}/${STRAPI_API_PREFIX}/page-builder/templates/${templateId}`;
     const templateUpdateResponse = await fetch(templateUpdateUrl, {
       method: 'PUT',
       headers: {
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
     // Update the landing page content fields with edited values
     if (contentType === 'landing-page' && Object.keys(contentUpdates).length > 0) {
       // Fetch current landing page data first to preserve other fields
-      const currentPageResponse = await fetch(`${STRAPI_URL}/api/landing-page`, {
+      const currentPageResponse = await fetch(`${STRAPI_URL}/${STRAPI_API_PREFIX}/landing-page`, {
         headers: {
           'Content-Type': 'application/json',
           ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
         Landing_Page: Number(templateId), // Maintain template relation
       };
 
-      const landingPageUpdateResponse = await fetch(`${STRAPI_URL}/api/landing-page`, {
+      const landingPageUpdateResponse = await fetch(`${STRAPI_URL}/${STRAPI_API_PREFIX}/landing-page`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

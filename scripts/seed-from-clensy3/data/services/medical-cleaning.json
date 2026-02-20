@@ -1,0 +1,52 @@
+{
+  "data": {
+    "name": "Medical Cleaning",
+    "slug": "medical-cleaning",
+    "serviceType": "medical",
+    "heroTopLabel": "Premium Healthcare Services",
+    "heroHeading": "Medical & Healthcare Facility Cleaning",
+    "heroSubheading": "Specialized cleaning and sanitization services designed to meet the stringent requirements of healthcare environments, ensuring safety for patients and staff.",
+    "heroBackgroundImageUrl": "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1974&auto=format&fit=crop",
+    "heroServiceDuration": "Healthcare Compliant",
+    "heroServiceGuarantee": "100% Satisfaction",
+    "includedSectionHeading": "Our Healthcare Cleaning Services",
+    "includedSectionSubheading": "Specialized cleaning solutions tailored to the unique demands and strict requirements of healthcare environments.",
+    "cleaningAreas": [
+      {
+        "title": "Reception & Waiting Areas",
+        "description": "Create a reassuring first impression for patients with meticulously cleaned reception and waiting areas that inspire confidence.",
+        "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop",
+        "features": ["Thorough disinfection of all seating and surfaces", "Sanitization of high-touch areas like check-in kiosks", "Specialized cleaning of magazine racks and displays", "HEPA-filtered vacuuming of all floors and upholstery"]
+      },
+      {
+        "title": "Examination & Treatment Rooms",
+        "description": "Our specialized cleaning protocols ensure examination and treatment rooms meet the highest standards of hygiene and infection control.",
+        "imageUrl": "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2070&auto=format&fit=crop",
+        "features": ["Terminal cleaning between patient visits", "Disinfection of examination tables and equipment", "Proper disposal of medical waste", "Application of hospital-grade disinfectants"]
+      },
+      {
+        "title": "Restrooms & Common Areas",
+        "description": "Enhanced cleaning and disinfection protocols for healthcare facility restrooms and common areas to minimize cross-contamination.",
+        "imageUrl": "https://media.istockphoto.com/id/1298375809/photo/empty-luxury-modern-hospital-room.jpg",
+        "features": ["Rigorous sanitization of all fixtures and surfaces", "Use of EPA-approved disinfectants effective against pathogens", "Regular replenishment of soap, sanitizer, and paper products", "Cleaning log maintenance for compliance verification"]
+      }
+    ],
+    "featureSectionHeading": "Why Choose Clensy for Healthcare Cleaning",
+    "featureSectionSubheading": "Our specialized expertise and commitment to healthcare-specific protocols set us apart in medical facility cleaning.",
+    "featureSectionPoints": ["Healthcare Compliance: CDC guidelines, OSHA requirements, Joint Commission standards", "Specialized Training: Infection control, bloodborne pathogens, medical waste handling", "Advanced Technology: Electrostatic sprayers, UV-C disinfection, microfiber systems"],
+    "faqs": [
+      { "question": "Do you follow healthcare cleaning regulations?", "answer": "Yes, we strictly adhere to all healthcare cleaning regulations including CDC guidelines, OSHA requirements, and Joint Commission standards. Our team is trained in infection control protocols specific to medical environments." },
+      { "question": "How often should medical facilities be cleaned?", "answer": "Medical facilities require daily cleaning with deep cleaning performed weekly or bi-weekly depending on the type of facility. High-traffic areas and patient rooms need more frequent attention than administrative areas." },
+      { "question": "What cleaning products do you use in healthcare settings?", "answer": "We use EPA-approved, hospital-grade disinfectants that are effective against healthcare-associated pathogens. All products are safe for use in patient care areas and meet stringent healthcare facility requirements." },
+      { "question": "Can you accommodate after-hours cleaning schedules?", "answer": "Absolutely! We understand that medical facilities operate around the clock. We offer flexible scheduling including after-hours, weekend, and holiday cleaning to minimize disruption to patient care and staff operations." }
+    ],
+    "customData": {
+      "trustIndicators": [
+        { "number": "350+", "text": "Healthcare Clients" },
+        { "number": "24/7", "text": "Healthcare Support" },
+        { "number": "4.9", "text": "Industry Rating" },
+        { "number": "100%", "text": "Compliance Guarantee" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "data": {
+    "name": "Other Commercial Cleaning",
+    "slug": "other-commercial-cleaning",
+    "serviceType": "other-commercial",
+    "heroTopLabel": "Premium Commercial Services",
+    "heroHeading": "Specialized Commercial Cleaning Services",
+    "heroSubheading": "From bustling restaurants to sacred worship spaces, every specialized venue deserves exceptional care. Our customized cleaning solutions are crafted specifically for your unique commercial environment.",
+    "heroBackgroundImageUrl": "https://5.imimg.com/data5/SELLER/Default/2021/1/GS/UV/BZ/207102/commercial-cleaning-services.jpg",
+    "heroServiceDuration": "Industry Specialists",
+    "heroServiceGuarantee": "100% Satisfaction",
+    "includedSectionHeading": "Our Specialized Commercial Cleaning Services",
+    "includedSectionSubheading": "We provide comprehensive cleaning solutions tailored to meet the unique demands of various commercial environments.",
+    "cleaningAreas": [
+      {
+        "title": "Restaurants & Food Service",
+        "description": "Maintain the highest standards of cleanliness and hygiene in food service environments with our specialized restaurant cleaning services.",
+        "imageUrl": "https://www.vip-cleaning-london.com/wp-content/uploads/2024/05/restaurant-cleaning-services-london.jpg",
+        "features": ["Kitchen deep cleaning and sanitization", "Dining area and front-of-house cleaning", "Restroom sanitation and maintenance", "Compliance with food safety regulations"]
+      },
+      {
+        "title": "Warehouses & Industrial Spaces",
+        "description": "Keep your industrial facilities clean, safe, and efficient with our specialized warehouse and industrial cleaning services.",
+        "imageUrl": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop",
+        "features": ["Large-area floor cleaning with industrial equipment", "Dust control and air quality maintenance", "Cleaning of machinery areas and equipment exteriors", "Staff facilities and break room maintenance"]
+      },
+      {
+        "title": "Places of Worship",
+        "description": "Provide a clean, welcoming environment for worship with our respectful, thorough church and religious facility cleaning services.",
+        "imageUrl": "https://cm.cleanmaster.ie/wp-content/uploads/2023/07/20220103-quiapo-church-aa.webp",
+        "features": ["Sanctuary and worship area cleaning", "Community rooms and fellowship halls", "Offices and administrative areas", "Event cleanup and special service preparation"]
+      }
+    ],
+    "featureSectionHeading": "Why Choose Clensy for Your Specialized Space",
+    "featureSectionSubheading": "We understand the unique cleaning requirements of different commercial environments and deliver tailored solutions that meet industry-specific needs.",
+    "featureSectionPoints": ["Industry Expertise: Specialized training for different commercial environments", "Custom Scheduling: Cleaning at times that minimize disruption to your activities", "Value-Focused Solutions: Highest cleanliness standards while respecting your budget"],
+    "faqs": [
+      { "question": "What types of commercial spaces do you clean?", "answer": "We provide specialized cleaning for a wide variety of commercial environments including restaurants and food service facilities, warehouses and industrial spaces, places of worship, automotive dealerships, manufacturing facilities, banks, law offices, and other unique commercial venues. Each space receives customized cleaning protocols suited to its specific needs." },
+      { "question": "Do you follow industry-specific cleaning standards?", "answer": "Absolutely! We tailor our cleaning procedures to meet the specific regulatory requirements of each industry. For restaurants, we follow food safety protocols; for industrial spaces, we adhere to safety standards; and for places of worship, we use respectful, gentle cleaning methods appropriate for sacred spaces." },
+      { "question": "Can you work around our business hours?", "answer": "Yes, we understand that every business has unique operational schedules. We offer flexible scheduling including after-hours, weekend, and holiday cleaning to ensure minimal disruption to your business operations. We'll work with you to find the perfect cleaning schedule." },
+      { "question": "How do you handle specialized equipment or delicate items?", "answer": "Our team is trained to work around and carefully clean specialized equipment, delicate items, and valuable assets. We use appropriate cleaning methods and products for different surfaces and materials, and we can coordinate with your team for specific handling requirements or restricted areas." }
+    ],
+    "customData": {
+      "trustIndicators": [
+        { "number": "600+", "text": "Commercial Clients" },
+        { "number": "24/7", "text": "Business Support" },
+        { "number": "4.9", "text": "Business Rating" },
+        { "number": "100%", "text": "Quality Guarantee" }
+      ]
+    }
+  }
+}
