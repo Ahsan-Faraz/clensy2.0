@@ -5,10 +5,16 @@
  * MongoDB is only used for booking functionality (separate from this adapter).
  */
 
-// Default to the deployed Strapi if NEXT_PUBLIC_STRAPI_URL is not provided
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://72.60.27.190';
+// Server-side prefer STRAPI_URL (no NEXT_PUBLIC) so production can override without client exposure.
+// Fallback: NEXT_PUBLIC_STRAPI_URL (build-time) or default.
+const STRAPI_URL =
+  (typeof window === 'undefined' ? process.env.STRAPI_URL : null) ||
+  process.env.NEXT_PUBLIC_STRAPI_URL ||
+  'http://localhost:1337';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
-// Strapi rest.prefix: '/admin/api' in config/api.ts — Content API is at /admin/api, not /api
+// Strapi rest.prefix: '/admin/api' in config/api.ts
+// Production (Strapi at clensy.com/admin): use base https://clensy.com, prefix admin/api → https://clensy.com/admin/api
+// If Strapi is proxied at /admin, then base https://clensy.com/admin + prefix admin/api → https://clensy.com/admin/admin/api
 const STRAPI_API_PREFIX = process.env.STRAPI_API_PREFIX || '/admin/api';
 
 // Cache for page data
@@ -172,6 +178,7 @@ async function fetchFromStrapi<T>(
   try {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
+      Accept: 'application/json',
       ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
     };
 
@@ -208,7 +215,14 @@ async function fetchFromStrapi<T>(
     // Strapi may return HTML (404/login page) instead of JSON - don't parse as JSON
     const contentType = response.headers.get('content-type') || '';
     if (!contentType.includes('application/json')) {
-      console.error(`Strapi fetch returned non-JSON (${contentType}) for ${endpoint}`);
+      const preview = (await response.clone().text().catch(() => '')).slice(0, 100);
+      console.error(
+        `Strapi fetch returned non-JSON (${contentType}) for ${endpoint}. ` +
+          `URL: ${url} | Status: ${response.status} | Body preview: ${preview}`
+      );
+      if (process.env.DEBUG_STRAPI_URL === '1') {
+        console.error('STRAPI_URL:', STRAPI_URL, '| STRAPI_API_PREFIX:', STRAPI_API_PREFIX, '| hasToken:', !!STRAPI_API_TOKEN);
+      }
       return null;
     }
 
