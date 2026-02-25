@@ -102,18 +102,18 @@ interface AboutPageClientProps {
   headScripts?: string;
   bodyEndScripts?: string;
   customCss?: string;
+  initialAboutData?: AboutData | null;
 }
 
-
-export default function AboutPageClient({ schemaJsonLd, headScripts, bodyEndScripts, customCss }: AboutPageClientProps) {
+export default function AboutPageClient({ schemaJsonLd, headScripts, bodyEndScripts, customCss, initialAboutData }: AboutPageClientProps) {
   const controls = useAnimation();
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-  const [aboutData, setAboutData] = useState<AboutData>(defaultData);
-  const [isLoading, setIsLoading] = useState(true);
+  const [aboutData, setAboutData] = useState<AboutData>(initialAboutData ? { ...defaultData, ...initialAboutData } : defaultData);
 
   useEffect(() => { if (inView) controls.start("visible"); }, [controls, inView]);
 
   useEffect(() => {
+    if (initialAboutData) return;
     const fetchAboutData = async () => {
       try {
         const response = await fetch("/api/cms/about");
@@ -121,12 +121,10 @@ export default function AboutPageClient({ schemaJsonLd, headScripts, bodyEndScri
         if (result.success && result.data) setAboutData(result.data);
       } catch (error) {
         console.error("Error fetching about data:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
     fetchAboutData();
-  }, []);
+  }, [initialAboutData]);
 
   const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.2 } } };
   const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } };

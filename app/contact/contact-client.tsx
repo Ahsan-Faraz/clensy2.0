@@ -26,14 +26,23 @@ const defaultContactData = {
   consultationSection: { heading: "Need a Personalized Cleaning Solution?", description: "Schedule a consultation with our cleaning experts.", buttonText: "Schedule a Consultation" },
 };
 
-interface ContactPageClientProps { schemaJsonLd?: object | null; headScripts?: string; bodyEndScripts?: string; customCss?: string; }
+interface ContactPageClientProps {
+  schemaJsonLd?: object | null;
+  headScripts?: string;
+  bodyEndScripts?: string;
+  customCss?: string;
+  initialContactData?: any;
+}
 
-export default function ContactPageClient({ schemaJsonLd, headScripts, bodyEndScripts, customCss }: ContactPageClientProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [contactData, setContactData] = useState(defaultContactData);
+export default function ContactPageClient({ schemaJsonLd, headScripts, bodyEndScripts, customCss, initialContactData }: ContactPageClientProps) {
+  const [isLoaded, setIsLoaded] = useState(Boolean(initialContactData));
+  const [contactData, setContactData] = useState(() =>
+    initialContactData ? { ...defaultContactData, ...initialContactData } : defaultContactData
+  );
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   useEffect(() => {
+    if (initialContactData) return;
     const fetchContactData = async () => {
       try {
         const response = await fetch("/api/cms/contact");
@@ -46,7 +55,7 @@ export default function ContactPageClient({ schemaJsonLd, headScripts, bodyEndSc
       }
     };
     fetchContactData();
-  }, []);
+  }, [initialContactData]);
 
   const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } };
   const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } };

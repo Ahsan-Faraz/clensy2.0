@@ -80,6 +80,8 @@ interface DynamicChecklistPageProps {
   headScripts?: string;
   bodyEndScripts?: string;
   customCss?: string;
+  initialCmsData?: CMSChecklistData | null;
+  initialPageBuilderData?: { templateJson: any; content: any } | null;
 }
 
 // Default fallback data
@@ -119,11 +121,14 @@ export default function DynamicChecklistPage({
   headScripts,
   bodyEndScripts,
   customCss,
+  initialCmsData,
+  initialPageBuilderData,
 }: DynamicChecklistPageProps) {
-  const [templateData, setTemplateData] = useState<{ templateJson: any; content: any } | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [usePageBuilder, setUsePageBuilder] = useState(false);
-  const [cmsData, setCmsData] = useState<CMSChecklistData | null>(null);
+  const hasInitialData = initialCmsData !== undefined || initialPageBuilderData !== undefined;
+  const [templateData, setTemplateData] = useState<{ templateJson: any; content: any } | null>(initialPageBuilderData ?? null);
+  const [isLoading, setIsLoading] = useState(!hasInitialData);
+  const [usePageBuilder, setUsePageBuilder] = useState(Boolean(initialPageBuilderData));
+  const [cmsData, setCmsData] = useState<CMSChecklistData | null>(initialCmsData ?? null);
   
   // Modal and interaction state
   const [activeRoom, setActiveRoom] = useState<RoomType | null>(null);
@@ -138,29 +143,24 @@ export default function DynamicChecklistPage({
   const [activeCleaningType, setActiveCleaningType] = useState<CleaningType>("routine");
 
   useEffect(() => {
+    if (hasInitialData) return;
     const fetchData = async () => {
       try {
-        // Fetch CMS data for checklist
-        const cmsResponse = await fetch("/api/cms/checklist");
+        const [cmsResponse, pbResponse] = await Promise.all([
+          fetch("/api/cms/checklist"),
+          fetch("/api/page-builder/content/checklist-page"),
+        ]);
         const cmsResult = await cmsResponse.json();
+        const pbResult = await pbResponse.json();
+
         if (cmsResult.success && cmsResult.data) {
           setCmsData(cmsResult.data);
         }
-        
-        // Fetch Page Builder template data
-        const pbResponse = await fetch(`/api/page-builder/content/checklist-page`);
-        const pbResult = await pbResponse.json();
-
         if (pbResult.success && pbResult.data) {
           const content = pbResult.data;
-          const templateField = pbResult.templateField || 'Checklist_Page';
-          const template = content[templateField];
-          
+          const template = content.Checklist_Page || content[pbResult.templateField];
           if (template?.json?.content && template.json.content.length > 0) {
-            setTemplateData({
-              templateJson: template.json,
-              content,
-            });
+            setTemplateData({ templateJson: template.json, content });
             setUsePageBuilder(true);
           }
         }
@@ -172,7 +172,7 @@ export default function DynamicChecklistPage({
     };
 
     fetchData();
-  }, []);
+  }, [hasInitialData]);
 
   // Effect to handle body scroll locking when modal is open
   useEffect(() => {
@@ -351,8 +351,6 @@ export default function DynamicChecklistPage({
     );
   }
 
-  // ==================== FALLBACK: Original Client Component ====================
-  // Dynamically import and use the original component if no Page Builder template
   const ChecklistPageClient = require('@/app/company/checklist/checklist-client').default;
   return (
     <ChecklistPageClient
@@ -360,6 +358,7 @@ export default function DynamicChecklistPage({
       headScripts={headScripts}
       bodyEndScripts={bodyEndScripts}
       customCss={customCss}
+      initialCmsData={initialCmsData ?? cmsData}
     />
   );
 }

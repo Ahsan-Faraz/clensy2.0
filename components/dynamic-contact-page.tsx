@@ -21,6 +21,8 @@ interface DynamicContactPageProps {
   headScripts?: string;
   bodyEndScripts?: string;
   customCss?: string;
+  initialContactData?: any;
+  initialPageBuilderData?: { templateJson: any; content: any } | null;
 }
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
@@ -30,12 +32,16 @@ export default function DynamicContactPage({
   headScripts,
   bodyEndScripts,
   customCss,
+  initialContactData,
+  initialPageBuilderData,
 }: DynamicContactPageProps) {
-  const [templateData, setTemplateData] = useState<{ templateJson: any; content: any } | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [usePageBuilder, setUsePageBuilder] = useState(false);
+  const hasInitialData = Boolean(initialPageBuilderData || initialContactData);
+  const [templateData, setTemplateData] = useState<{ templateJson: any; content: any } | null>(initialPageBuilderData ?? null);
+  const [isLoading, setIsLoading] = useState(!hasInitialData);
+  const [usePageBuilder, setUsePageBuilder] = useState(Boolean(initialPageBuilderData));
 
   useEffect(() => {
+    if (hasInitialData) return;
     const fetchTemplateData = async () => {
       try {
         const response = await fetch('/api/page-builder/content/contact');
@@ -62,7 +68,7 @@ export default function DynamicContactPage({
     };
 
     fetchTemplateData();
-  }, []);
+  }, [hasInitialData]);
 
   if (isLoading) {
     return (
@@ -108,6 +114,7 @@ export default function DynamicContactPage({
       headScripts={headScripts}
       bodyEndScripts={bodyEndScripts}
       customCss={customCss}
+      initialContactData={initialContactData}
     />
   );
 }

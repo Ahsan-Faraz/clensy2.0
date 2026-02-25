@@ -205,6 +205,90 @@ export async function fetchServicePageBuilderContent(slug: string): Promise<{
 }
 
 /**
+ * Fetch Contact page with Page Builder template (for server-side rendering)
+ */
+export async function fetchContactPageBuilderContent(): Promise<{
+  templateJson: any;
+  content: any;
+} | null> {
+  try {
+    const url = strapiUrl('contact', 'populate[Contact_Page][populate]=*');
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
+      },
+      next: { revalidate: 60 },
+    });
+    if (!response.ok) return null;
+    const result = await response.json();
+    const content = result.data || {};
+    const template = content.Contact_Page;
+    if (!template?.json?.content || template.json.content.length === 0) return null;
+    return { templateJson: template.json, content };
+  } catch (err) {
+    console.warn('[fetchContactPageBuilderContent]', err);
+    return null;
+  }
+}
+
+/**
+ * Fetch About page with Page Builder template (for server-side rendering)
+ */
+export async function fetchAboutPageBuilderContent(): Promise<{
+  templateJson: any;
+  content: any;
+} | null> {
+  try {
+    const url = strapiUrl('about', 'populate[About_Page][populate]=*');
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
+      },
+      next: { revalidate: 60 },
+    });
+    if (!response.ok) return null;
+    const result = await response.json();
+    const content = result.data || {};
+    const template = content.About_Page;
+    if (!template?.json?.content || template.json.content.length === 0) return null;
+    return { templateJson: template.json, content };
+  } catch (err) {
+    console.warn('[fetchAboutPageBuilderContent]', err);
+    return null;
+  }
+}
+
+/**
+ * Fetch Checklist page with Page Builder template (for server-side rendering)
+ */
+export async function fetchChecklistPageBuilderContent(): Promise<{
+  templateJson: any;
+  content: any;
+} | null> {
+  try {
+    const url = strapiUrl('checklist-page', 'populate[Checklist_Page][populate]=*');
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
+      },
+      next: { revalidate: 60 },
+    });
+    if (!response.ok) return null;
+    const result = await response.json();
+    const content = result.data || {};
+    const template = content.Checklist_Page;
+    if (!template?.json?.content || template.json.content.length === 0) return null;
+    return { templateJson: template.json, content };
+  } catch (err) {
+    console.warn('[fetchChecklistPageBuilderContent]', err);
+    return null;
+  }
+}
+
+/**
  * Get Page Builder configuration
  */
 export function getPageBuilderConfig() {

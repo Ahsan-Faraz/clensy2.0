@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { CMSAdapter } from "@/lib/cms-adapter";
+import { fetchChecklistPageBuilderContent } from "@/lib/page-builder-api";
 import DynamicChecklistPage from "@/components/dynamic-checklist-page";
 
 export const revalidate = 60;
@@ -60,13 +61,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ChecklistPage() {
   let seo = defaultSEO;
-  
-  try {
-    const fetchedSeo = await CMSAdapter.getChecklistPageSEO();
-    if (fetchedSeo) seo = { ...defaultSEO, ...fetchedSeo };
-  } catch (error) {
-    console.error("Failed to fetch Checklist page SEO:", error);
-  }
+  const [fetchedSeo, checklistData, pageBuilderData] = await Promise.all([
+    CMSAdapter.getChecklistPageSEO().catch(() => null),
+    CMSAdapter.getChecklistPage().catch(() => null),
+    fetchChecklistPageBuilderContent().catch(() => null),
+  ]);
+  if (fetchedSeo) seo = { ...defaultSEO, ...fetchedSeo };
 
   return (
     <DynamicChecklistPage
@@ -74,6 +74,8 @@ export default async function ChecklistPage() {
       headScripts={seo.scripts.head}
       bodyEndScripts={seo.scripts.bodyEnd}
       customCss={seo.customCss}
+      initialCmsData={checklistData}
+      initialPageBuilderData={pageBuilderData}
     />
   );
 }

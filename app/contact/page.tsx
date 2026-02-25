@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { CMSAdapter } from "@/lib/cms-adapter";
+import { fetchContactPageBuilderContent } from "@/lib/page-builder-api";
 import DynamicContactPage from "@/components/dynamic-contact-page";
 
 export const revalidate = 60;
@@ -51,12 +52,21 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ContactPage() {
   let seo = defaultSEO;
-  try {
-    const fetchedSeo = await CMSAdapter.getContactPageSEO();
-    if (fetchedSeo) seo = { ...defaultSEO, ...fetchedSeo };
-  } catch (error) {
-    console.error("Failed to fetch Contact page SEO:", error);
-  }
+  const [fetchedSeo, contactData, pageBuilderData] = await Promise.all([
+    CMSAdapter.getContactPageSEO().catch(() => null),
+    CMSAdapter.getContactPage().catch(() => null),
+    fetchContactPageBuilderContent().catch(() => null),
+  ]);
+  if (fetchedSeo) seo = { ...defaultSEO, ...fetchedSeo };
 
-  return <DynamicContactPage schemaJsonLd={seo.schemaJsonLd} headScripts={seo.scripts.head} bodyEndScripts={seo.scripts.bodyEnd} customCss={seo.customCss} />;
+  return (
+    <DynamicContactPage
+      schemaJsonLd={seo.schemaJsonLd}
+      headScripts={seo.scripts.head}
+      bodyEndScripts={seo.scripts.bodyEnd}
+      customCss={seo.customCss}
+      initialContactData={contactData}
+      initialPageBuilderData={pageBuilderData}
+    />
+  );
 }

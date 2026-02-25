@@ -67,6 +67,7 @@ interface ChecklistPageClientProps {
   headScripts?: string;
   bodyEndScripts?: string;
   customCss?: string;
+  initialCmsData?: CMSChecklistData | null;
 }
 
 // Default fallback data
@@ -101,7 +102,7 @@ const defaultChecklistData: ChecklistData = {
   },
 };
 
-export default function ChecklistPageClient({ schemaJsonLd, headScripts, bodyEndScripts, customCss }: ChecklistPageClientProps) {
+export default function ChecklistPageClient({ schemaJsonLd, headScripts, bodyEndScripts, customCss, initialCmsData }: ChecklistPageClientProps) {
   const [activeRoom, setActiveRoom] = useState<RoomType | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState<ModalData>({
@@ -112,26 +113,21 @@ export default function ChecklistPageClient({ schemaJsonLd, headScripts, bodyEnd
     image: "",
   });
   const [activeCleaningType, setActiveCleaningType] = useState<CleaningType>("routine");
-  const [cmsData, setCmsData] = useState<CMSChecklistData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [cmsData, setCmsData] = useState<CMSChecklistData | null>(initialCmsData ?? null);
 
-  // Fetch CMS data on mount
   useEffect(() => {
+    if (initialCmsData !== undefined) return;
     const fetchChecklistData = async () => {
       try {
         const response = await fetch("/api/cms/checklist");
         const result = await response.json();
-        if (result.success && result.data) {
-          setCmsData(result.data);
-        }
+        if (result.success && result.data) setCmsData(result.data);
       } catch (error) {
         console.error("Error fetching Checklist data:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
     fetchChecklistData();
-  }, []);
+  }, [initialCmsData]);
 
   // Effect to handle body scroll locking when modal is open
   useEffect(() => {

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { CMSAdapter } from "@/lib/cms-adapter";
+import { fetchAboutPageBuilderContent } from "@/lib/page-builder-api";
 import DynamicAboutPage from "@/components/dynamic-about-page";
 
 export const revalidate = 60;
@@ -62,13 +63,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AboutPage() {
   let seo = defaultSEO;
-  
-  try {
-    const fetchedSeo = await CMSAdapter.getAboutPageSEO();
-    if (fetchedSeo) seo = { ...defaultSEO, ...fetchedSeo };
-  } catch (error) {
-    console.error("Failed to fetch About page SEO:", error);
-  }
+  const [fetchedSeo, aboutData, pageBuilderData] = await Promise.all([
+    CMSAdapter.getAboutPageSEO().catch(() => null),
+    CMSAdapter.getAboutPage().catch(() => null),
+    fetchAboutPageBuilderContent().catch(() => null),
+  ]);
+  if (fetchedSeo) seo = { ...defaultSEO, ...fetchedSeo };
 
   return (
     <DynamicAboutPage
@@ -76,6 +76,8 @@ export default async function AboutPage() {
       headScripts={seo.scripts.head}
       bodyEndScripts={seo.scripts.bodyEnd}
       customCss={seo.customCss}
+      initialAboutData={aboutData}
+      initialPageBuilderData={pageBuilderData}
     />
   );
 }
