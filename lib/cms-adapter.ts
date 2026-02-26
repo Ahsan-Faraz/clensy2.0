@@ -825,8 +825,8 @@ export class CMSAdapter {
       },
       companyInfo: {
         websiteUrl: data.websiteUrl || '',
-        email: data.email || '',
-        phone: data.phone || '',
+        email: data.companyEmail || data.email || '',
+        phone: data.companyPhone || data.phone || '',
       },
       sections: data.sections || [],
       smsConsent: {
@@ -854,8 +854,8 @@ export class CMSAdapter {
       },
       companyInfo: {
         websiteUrl: data.websiteUrl || '',
-        email: data.email || '',
-        phone: data.phone || '',
+        email: data.companyEmail || data.email || '',
+        phone: data.companyPhone || data.phone || '',
       },
       sections: data.sections || [],
       agreementSection: {
