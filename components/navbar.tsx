@@ -190,8 +190,8 @@ export default function Navbar({ services: propServices, locations: propLocation
                     maxHeight: '100%',
                     filter: logoFilter,
                     transition: 'all 0.3s ease',
-                    width: '90px',
-                    height: '38px',
+                    width: '100px',
+                    height: '42px',
                   }}
                   className="transition-all duration-300 h-full w-auto max-w-32 sm:max-w-128"
                 />
