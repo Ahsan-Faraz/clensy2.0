@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import SEOHead from "@/components/seo-head";
@@ -17,7 +16,6 @@ interface PrivacyPolicyData {
 interface PrivacyPolicyClientProps { schemaJsonLd?: object | null; headScripts?: string; bodyEndScripts?: string; customCss?: string; }
 
 export default function PrivacyPolicyClient({ schemaJsonLd, headScripts, bodyEndScripts, customCss }: PrivacyPolicyClientProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
   const [data, setData] = useState<PrivacyPolicyData | null>(null);
 
   useEffect(() => {
@@ -31,57 +29,49 @@ export default function PrivacyPolicyClient({ schemaJsonLd, headScripts, bodyEnd
       }
     };
     fetchData();
-    setIsLoaded(true);
   }, []);
+
+  const heading = data?.heroSection.heading || "Privacy Policy";
+  const description = data?.heroSection.description || "Your privacy is important to us. Learn how we collect, use, and protect your information.";
+  const policyTitle = data?.companyInfo.websiteUrl ? `${data.companyInfo.websiteUrl} Privacy Policy` : "Clensy Cleaning Privacy Policy";
+  const sortedSections = data?.sections?.sort((a, b) => a.order - b.order) ?? [];
 
   return (
     <>
       <SEOHead schemaJsonLd={schemaJsonLd} headScripts={headScripts} bodyEndScripts={bodyEndScripts} customCss={customCss} />
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-white">
         <Navbar />
 
-        {/* Hero Section */}
-        <section className="relative py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 overflow-hidden">
-          <div className="absolute inset-0 bg-black/20"></div>
-          <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-6">{data?.heroSection.heading || "Privacy Policy"}</h1>
-              <motion.p initial={{ opacity: 0, y: 20 }} animate={isLoaded ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.8, delay: 0.2 }} className="text-lg text-white/80 mb-8">
-                {data?.heroSection.description || "Your privacy is important to us. Learn how we collect, use, and protect your information."}
-              </motion.p>
+        {/* Hero - matches clensy-3 style: Privacy Information label, H1, description */}
+        <section className="pt-28 pb-12 md:pt-32 md:pb-16 bg-white border-b border-gray-100">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl">
+              <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Privacy Information</p>
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{heading}</h1>
+              <p className="text-base text-gray-600 leading-relaxed">{description}</p>
             </div>
           </div>
         </section>
 
-        {/* Privacy Policy Content */}
-        <section className="py-16 bg-white">
+        {/* Content - Clensy Cleaning Privacy Policy + sections */}
+        <section className="py-12 md:py-16 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-              <div className="prose prose-lg max-w-none">
-                <div className="mb-12">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">{data?.companyInfo.websiteUrl ? `${data.companyInfo.websiteUrl} Privacy Policy` : "Clensy Cleaning Privacy Policy"}</h2>
-                </div>
-                <div className="space-y-8">
-                  {data?.sections?.sort((a, b) => a.order - b.order).map((section, index) => (
-                    <div key={index}>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3">{section.title}</h3>
-                      <div className="text-gray-700 whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: section.content }} />
-                    </div>
-                  ))}
+            <div className="max-w-3xl">
+              <h2 className="text-xl font-semibold text-gray-900 mb-8">{policyTitle}</h2>
+              <div className="space-y-10">
+                {sortedSections.map((section, index) => (
+                  <div key={index}>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">{section.title}</h3>
+                    <div className="text-gray-700 text-[15px] leading-relaxed whitespace-pre-wrap [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-3 [&_a]:text-blue-600 [&_a]:hover:text-blue-800" dangerouslySetInnerHTML={{ __html: section.content }} />
+                  </div>
+                ))}
+                {!sortedSections.some((s) => s.title.toLowerCase().includes('sms')) && data?.smsConsent && (
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3">SMS Consent</h3>
-                    <p className="text-gray-700 mb-4">{data?.smsConsent.description}</p>
-                    <p className="text-gray-700">{data?.smsConsent.optOutInstructions}</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">SMS Consent and Third-Party Sharing</h3>
+                    <p className="text-gray-700 text-[15px] leading-relaxed mb-2">{data.smsConsent.description}</p>
+                    <p className="text-gray-700 text-[15px] leading-relaxed">{data.smsConsent.optOutInstructions}</p>
                   </div>
-                  <div className="bg-blue-50 p-6 rounded-lg mt-8">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Questions about our Privacy Policy?</h3>
-                    <p className="text-gray-700 mb-4">If you have any questions about this Privacy Policy, please contact us:</p>
-                    <div className="space-y-2 text-gray-700">
-                      <p>Email: <a href={`mailto:${data?.companyInfo.email}`} className="text-blue-600 hover:text-blue-800">{data?.companyInfo.email}</a></p>
-                      <p>Phone: <a href={`tel:${data?.companyInfo.phone}`} className="text-blue-600 hover:text-blue-800">{data?.companyInfo.phone}</a></p>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

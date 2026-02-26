@@ -111,7 +111,7 @@ export default function Navbar({ services: propServices, locations: propLocation
 
   const isWhiteBackgroundPage = () => {
     if (typeof window === 'undefined') return false;
-    const whiteBackgroundPages = ['/booking', '/contact', '/about', '/faq'];
+    const whiteBackgroundPages = ['/booking', '/contact', '/about', '/faq', '/privacy-policy', '/terms-of-service'];
     return whiteBackgroundPages.includes(window.location.pathname);
   };
 
@@ -190,8 +190,8 @@ export default function Navbar({ services: propServices, locations: propLocation
                     maxHeight: '100%',
                     filter: logoFilter,
                     transition: 'all 0.3s ease',
-                    width: '110px',
-                    height: '45px',
+                    width: '90px',
+                    height: '38px',
                   }}
                   className="transition-all duration-300 h-full w-auto max-w-32 sm:max-w-128"
                 />
