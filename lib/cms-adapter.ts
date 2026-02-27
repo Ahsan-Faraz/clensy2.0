@@ -1726,6 +1726,20 @@ export class CMSAdapter {
   }
 
   /**
+   * Get Careers Page SEO
+   */
+  static async getCareersPageSEO() {
+    const result = await fetchFromStrapi<StrapiResponse<any>>('/careers-page', { populate: '*' });
+    if (!result?.data) return null;
+
+    return this.extractSEOFromData(result.data, {
+      title: 'Careers | Join The Clensy Team | Clensy Professional Cleaning',
+      description: 'Build a rewarding career with Clensy. We offer competitive pay, great benefits, and growth opportunities in New Jersey.',
+      canonicalUrl: 'https://clensy.com/careers',
+    });
+  }
+
+  /**
    * Get Privacy Policy SEO
    */
   static async getPrivacyPolicySEO() {
