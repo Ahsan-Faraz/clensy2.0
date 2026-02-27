@@ -777,6 +777,7 @@ export class CMSAdapter {
         primaryButtonText: data.heroPrimaryButtonText || '',
         secondaryButtonText: data.heroSecondaryButtonText || '',
         teamMembersCount: data.heroTeamMembersCount || '',
+        heroImage: getImageUrl(data.heroImage) || data.heroImageUrl || '',
       },
       benefitsSection: {
         heading: data.benefitsHeading || '',
