@@ -42,9 +42,9 @@ function getDefaultFAQData() {
     },
     contactSection: {
       heading: "Can't Find Your Answer?",
-      description: "Our customer service team is ready to help with any questions.",
-      emailSection: { email: "info@clensy.com" },
-      callSection: { phone: "(551) 305-4081" },
+      description: "Our customer service team is ready to help with any questions not addressed in our FAQ section. Contact us for personalized assistance.",
+      emailSection: { heading: "Email Us", description: "Send us a message and we'll respond within 24 hours.", email: "info@clensy.com" },
+      callSection: { heading: "Call Us", description: "Speak with our customer service team directly.", phone: "(551) 305-4081" },
       contactButtonText: "Contact Us",
     },
     trustIndicatorsSection: {

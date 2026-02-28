@@ -427,9 +427,13 @@ export class CMSAdapter {
         heading: data.contactSectionHeading || '',
         description: data.contactSectionDescription || '',
         emailSection: {
+          heading: data.contactEmailHeading || 'Email Us',
+          description: data.contactEmailDescription || "Send us a message and we'll respond within 24 hours.",
           email: data.contactEmail || '',
         },
         callSection: {
+          heading: data.contactPhoneHeading || 'Call Us',
+          description: data.contactPhoneDescription || 'Speak with our customer service team directly.',
           phone: data.contactPhone || '',
         },
         contactButtonText: data.contactButtonText || '',

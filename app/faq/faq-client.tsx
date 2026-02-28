@@ -48,8 +48,8 @@ interface FAQData {
   contactSection: {
     heading: string;
     description: string;
-    emailSection: { email: string };
-    callSection: { phone: string };
+    emailSection: { heading?: string; description?: string; email: string };
+    callSection: { heading?: string; description?: string; phone: string };
     contactButtonText: string;
   };
   trustIndicatorsSection: {
@@ -349,31 +349,62 @@ export default function FAQPageClient({ schemaJsonLd, headScripts, bodyEndScript
           </div>
         </section>
 
-        {/* Contact Section */}
+        {/* Contact Section - Can't Find Your Answer? (Clensy-3-data design) */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">{formatText(faqData.contactSection.heading)}</h2>
-              <p className="text-lg text-gray-600 mb-8">{formatText(faqData.contactSection.description)}</p>
-              <div className="grid md:grid-cols-2 gap-8 mb-8">
-                <div className="bg-gray-50 p-6 rounded-xl">
-                  <h3 className="font-bold mb-2">Email Us</h3>
-                  <p className="text-gray-600 mb-2">Send us a message and we'll respond within 24 hours.</p>
-                  <a href={`mailto:${faqData.contactSection.emailSection.email}`} className="text-blue-600 font-medium">
-                    {faqData.contactSection.emailSection.email}
-                  </a>
+            <div className="max-w-4xl mx-auto bg-gray-900 rounded-2xl overflow-hidden shadow-xl">
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                <div className="p-8 md:p-12 bg-gray-900 text-white">
+                  <h2 className="text-2xl md:text-3xl font-bold mb-6">{formatText(faqData.contactSection.heading)}</h2>
+                  <p className="text-white/80 mb-8">{formatText(faqData.contactSection.description)}</p>
+                  <div className="space-y-6">
+                    <div className="flex items-start">
+                      <div className="bg-blue-600/20 p-3 rounded-lg mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold mb-1">{formatText(faqData.contactSection.emailSection?.heading ?? "Email Us")}</h3>
+                        <p className="text-white/70">{formatText(faqData.contactSection.emailSection?.description ?? "Send us a message and we'll respond within 24 hours.")}</p>
+                        <a href={`mailto:${faqData.contactSection.emailSection.email}`} className="text-blue-400 hover:text-blue-300 transition-colors mt-1 inline-block">
+                          {faqData.contactSection.emailSection.email}
+                        </a>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="bg-blue-600/20 p-3 rounded-lg mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold mb-1">{formatText(faqData.contactSection.callSection?.heading ?? "Call Us")}</h3>
+                        <p className="text-white/70">{formatText(faqData.contactSection.callSection?.description ?? "Speak with our customer service team directly.")}</p>
+                        <a href={`tel:${(faqData.contactSection.callSection.phone || "").replace(/[^\d]/g, "")}`} className="text-blue-400 hover:text-blue-300 transition-colors mt-1 inline-block">
+                          {faqData.contactSection.callSection.phone}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-10">
+                    <Link href="/contact" className="bg-blue-600 text-white hover:bg-blue-500 px-8 py-3 rounded-lg text-sm font-medium inline-flex items-center transition-all duration-300">
+                      {faqData.contactSection.contactButtonText}
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </Link>
+                  </div>
                 </div>
-                <div className="bg-gray-50 p-6 rounded-xl">
-                  <h3 className="font-bold mb-2">Call Us</h3>
-                  <p className="text-gray-600 mb-2">Speak with our customer service team directly.</p>
-                  <a href={`tel:${faqData.contactSection.callSection.phone}`} className="text-blue-600 font-medium">
-                    {faqData.contactSection.callSection.phone}
-                  </a>
+                <div className="hidden md:block relative h-64 md:h-auto min-h-[300px]">
+                  <Image
+                    src="https://images.unsplash.com/photo-1579389083078-4e7018379f7e?q=80&w=870&auto=format&fit=crop"
+                    alt="Customer service representative"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
               </div>
-              <Link href="/contact" className="inline-flex items-center justify-center bg-blue-600 text-white hover:bg-blue-700 px-8 py-3 rounded-full font-medium transition-all duration-300">
-                {faqData.contactSection.contactButtonText}
-              </Link>
             </div>
           </div>
         </section>
