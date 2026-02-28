@@ -7,6 +7,8 @@
     "dev:turbo": "next dev --turbopack",
     "build": "next build --webpack",
     "seed:strapi": "node scripts/seed-from-clensy3/import.mjs",
+    "compare:single-pages": "node scripts/compare-sync-single-pages.mjs",
+    "export:landing-page": "node scripts/export-landing-page-from-mongo.mjs",
     "start": "next start",
     "lint": "next lint"
   },

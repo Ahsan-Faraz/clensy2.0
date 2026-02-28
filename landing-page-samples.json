@@ -1,0 +1,105 @@
+{
+  "heros": {
+    "createdAt": "2025-12-09T14:47:11.185Z",
+    "updatedAt": "2025-12-09T16:14:06.838Z",
+    "topLabel": "Professional Cleaning Services",
+    "heading": "Professional cleaning for your home",
+    "subheading": "We make it easy to get your home cleaned. Professional cleaning services tailored to your needs.",
+    "buttonText": "See my price",
+    "feature1": "30-second pricing",
+    "feature2": "100% Satisfaction guaranteed",
+    "seo": { "metaRobots": "index,follow" },
+    "status": "draft"
+  },
+  "herosections": {
+    "topLabel": "Professional Cleaning Services",
+    "heading": "Professional cleaning for your home",
+    "subheading": "We make it easy to get your home cleaned. Professional cleaning services tailored to your needs.",
+    "buttonText": "See my price",
+    "feature1": "30-second pricing",
+    "feature2": "100% Satisfaction guaranteed",
+    "backgroundImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1751356490/shutterstock_2392393465__3_.jpg-0LMVCo8sUiQDVXDeUykdUtzKRTrvHa_qkbjiu.jpg",
+    "updatedAt": "2025-07-01T07:55:32.788Z"
+  },
+  "howitworks": {
+    "step1": {
+      "title": "Order online",
+      "description": "Our easy online pricing lets you set up a cleaning plan right now. See your price and get scheduled today.",
+      "featureText": "Takes less than 30 seconds"
+    },
+    "step2": {
+      "title": "We clean your home",
+      "description": "Our professional team arrives on time and cleans your home according to our 50-point checklist.",
+      "featureText": "Trained and background-checked professionals"
+    },
+    "step3": {
+      "title": "Enjoy your clean home",
+      "description": "Relax in your freshly cleaned space. We'll be back on your schedule - weekly, weekly, or monthly.",
+      "featureText": "Flexible scheduling to fit your lifestyle"
+    },
+    "buttonText": "Book Now",
+    "updatedAt": "2025-06-13T10:23:50.124Z"
+  },
+  "comparisons": {
+    "heading": "The Clensy <blue>Difference</blue>",
+    "description": "We're leading the cleaning industry in customer satisfaction and service quality. Try Clensy and see why cleaning is a big deal to us.",
+    "features": [
+      { "name": "Locally Owned and Operated", "clensy": true, "others": true, "icon": "users" },
+      { "name": "Customized Cleaning Packages", "clensy": true, "others": true, "icon": "settings" },
+      { "name": "Fully Bonded and Insured", "clensy": true, "others": false, "icon": "shield-check" },
+      { "name": "Background Checked Cleaners", "clensy": true, "others": false, "icon": "user-check" },
+      { "name": "Over The Phone Estimates", "clensy": true, "others": false, "icon": "phone" },
+      { "name": "Easy Online Booking and Rescheduling", "clensy": true, "others": false, "icon": "calendar" },
+      { "name": "Supplies & Equipment Always Provided", "clensy": true, "others": false, "icon": "leaf" }
+    ],
+    "buttonText": "Experience the Clensy Difference",
+    "updatedAt": "2025-12-22T13:29:42.025Z",
+    "status": "published"
+  },
+  "ctas": {
+    "heading": "Home cleaning you can trust",
+    "description": "Book our professional cleaning services today and experience the difference.",
+    "leftCard": {
+      "title": "Order online",
+      "description": "Our easy online pricing lets you set up a cleaning plan right now.",
+      "buttonText": "See my price"
+    },
+    "rightCard": {
+      "title": "Call us now",
+      "description": "Need more information? Prefer a friendly voice over the phone?",
+      "buttonText": "(551) 305-4081"
+    },
+    "updatedAt": "2025-06-28T01:59:29.214Z"
+  },
+  "checklists": {
+    "heading": "Our Interactive Clensy Checklist",
+    "description": "We don't miss a spot. Here's our comprehensive clensy checklist for every room in your home.",
+    "checklistItems": {
+      "routine": {
+        "living": ["Sweep. Vacuum, & Mop Floors ", "Upholstered furniture vacuumed", "Dust all surfaces and decor ", "Dust electronics and TV stands ", "Fluff and straighten couch cushions & pillows ", "Clean mirrors and glass surfaces ", "Light (5 minutes) Organization of room ", "Trash emptied"],
+        "kitchen": ["Sweep, Vacuum, & Mop Floors ", "Wipe down countertops ", "Wipe down Stove Top ", "Clean exterior of appliances ", "Sinks scrubbed and disinfected (dishes upon request) ", "Wipe exterior of cabinets and handies", " Clean Stove Top ", "Trash emplied"],
+        "bathroom": ["Sweep, Vacuum, & Mop Floors ", "Towels neatly hung and folded ", "Scrub and sanitize showers and tubs", " Clean and disinfect tollets ", "Scrub and disinfect sink and countertops ", "Chrome fixtures cleaned and shined ", "Clean mirrors ", "Trash Emptied"],
+        "bedroom": ["Sweep, Vacuum, & Mop Floors ", " Beds made, linens changed (if inens are lett on bed)", " Dust bedroom shelving, night stand, & bed frame  ", "Picture frames dusted", "Mirrors Cleaned ", "Light (5 minutes) Organization of room  ", "Ensure overall room looks neat, tidy, and \"hotel-fresh\"", "Trash Emptied"]
+      },
+      "deep": {
+        "living": ["Everything in routine ", "Vacuum inside couch cushions (if removable)", "Ceiling fans and light fixtures dusted", "Remove cobwebs from corners and ceilings", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Behind/under furniture", "Window Sills"],
+        "kitchen": ["Everything in routine ", "Clean inside microwave", "Kitchen Backsplash", "Degrease Stovetop", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Tables, chairs, & behind/under furniture", "Window Sills"],
+        "bathroom": ["Everything in routine ", "Remove hard water stains (where possible)", "Scrub grout lines (moderate scrubbing)", "Ceiling fans and light fixtures dusted", "Dust vent covers and ceiling corners", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Window Sills"],
+        "bedroom": ["Everything in routine", "Ceiling fans and light fixtures dusted", "Remove cobwebs from corners and ceilings", "Wipe baseboards and molding", "Doors, door frames, & light switches", "Behind/under furniture", "Window Sills", "Wipe down decor items (vases, candle holders, etc.)"]
+      },
+      "moving": {
+        "living": ["Sweep, Vacuum and mop floors thoroughly", "Dust and wipe all baseboards and molding", "Clean interior window glass and wipe window sills", "Remove cobwebs from ceilings and corners", "Clean doors, handles, and light switches", "Dust and wipe ceiling fans and light fixtures", "Clean inside closets and shelving (if any)", "Trash Emptied"],
+        "kitchen": ["Sweep, Vacuum and mop floors thoroughly", "Clean and disinfect inside and outside of all cabinets and drawers", "Clean all cabinet interiors thoroughly", "Clean inside and outside of oven", "Scrub and disinfect sink and faucet", "Wipe all countertops and backsplash", "Clean exterior and interior of microwave and other appliances", "Wipe down baseboards, door frames, and light switches"],
+        "bathroom": ["Sweep, Vacuum and mop floors thoroughly", "Scrub and disinfect toilet (inside, outside, and behind)", "Deep clean shower/tub (remove soap scum, mildew, grout scrubbing)", "Clean inside and outside of all drawers, cabinets, and vanities", "Scrub and polish sink, faucet, and countertops", "Clean mirrors and any glass shower doors", "Wipe baseboards and door trim", "Dust and clean vents, fan covers, and corners"],
+        "bedroom": ["Sweep, Vacuum and mop floors thoroughly", "Clean inside closets, including shelving and floor", "Wipe baseboards and door trim", "Clean interior window glass and wipe window sills", "Dust and wipe ceiling fans and light fixtures", "Clean light switches, doors, and outlet covers", "Remove cobwebs and dust from ceiling corners", "Trash Emptied"]
+      }
+    },
+    "buttonText": "View Full Cleaning Checklist",
+    "updatedAt": "2025-08-30T17:25:46.536Z"
+  },
+  "reviews": {
+    "heading": "What People Are <blue>Saying About Us</blue>",
+    "buttonText": "Load More",
+    "updatedAt": "2025-06-13T10:23:49.803Z"
+  }
+}

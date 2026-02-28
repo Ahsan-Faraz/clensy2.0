@@ -4,8 +4,9 @@ import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ChevronDown, ChevronUp, Search, Clock } from "lucide-react";
+import { ChevronDown, ChevronUp, Search, Clock, Star } from "lucide-react";
 import Navbar from "@/components/navbar";
+import CTASection from "@/components/cta-section";
 import Footer from "@/components/footer";
 import { formatText } from "@/lib/utils/formatText";
 import SEOHead from "@/components/seo-head";
@@ -322,12 +323,25 @@ export default function FAQPageClient({ schemaJsonLd, headScripts, bodyEndScript
               {faqData.stillHaveQuestionsSection.cards.map((card, index) => (
                 <div key={index} className="bg-white p-8 rounded-2xl shadow-sm text-center">
                   <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Clock className="h-8 w-8 text-blue-600" />
+                    {card.icon === "clock" && <Clock className="h-8 w-8 text-blue-600" />}
+                    {card.icon === "credit-card" && (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                      </svg>
+                    )}
+                    {card.icon === "calendar" && (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    )}
                   </div>
                   <h3 className="text-xl font-bold mb-3">{formatText(card.title)}</h3>
                   <p className="text-gray-600 mb-4">{formatText(card.description)}</p>
-                  <Link href={card.buttonLink} className="text-blue-600 font-medium hover:text-blue-700 transition-colors">
-                    {card.buttonText} →
+                  <Link href={card.buttonLink} className="text-blue-600 font-medium hover:text-blue-700 transition-colors inline-flex items-center">
+                    {card.buttonText}
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </Link>
                 </div>
               ))}
@@ -363,6 +377,34 @@ export default function FAQPageClient({ schemaJsonLd, headScripts, bodyEndScript
             </div>
           </div>
         </section>
+
+        {/* Trust Indicators Section - 110+ Questions Answered, etc. */}
+        {faqData.trustIndicatorsSection?.indicators?.length > 0 && (
+          <section className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                {faqData.trustIndicatorsSection.indicators.map((indicator, index) => (
+                  <div key={index} className="flex flex-col items-center">
+                    <div className="text-4xl font-bold text-black mb-2">{indicator.number}</div>
+                    {index === 2 && (
+                      <div className="flex items-center mb-2">
+                        <Star className="h-4 w-4 fill-current text-yellow-500" />
+                        <Star className="h-4 w-4 fill-current text-yellow-500" />
+                        <Star className="h-4 w-4 fill-current text-yellow-500" />
+                        <Star className="h-4 w-4 fill-current text-yellow-500" />
+                        <Star className="h-4 w-4 fill-current text-yellow-500" />
+                      </div>
+                    )}
+                    <p className="text-gray-600">{indicator.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Call to Action */}
+        <CTASection />
 
         <Footer />
       </main>

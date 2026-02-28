@@ -1,0 +1,1515 @@
+{
+    abouts: {
+      _id: ObjectId('684bfe20821d62bf875673ad'),
+      heroSection: {
+        heading: 'About Clensy',
+        tagline: 'Raising the Standard, One Clean at a Time.'
+      },
+      ourStorySection: {
+        heading: 'Our Story',
+        paragraph1: "Clensy was built to solve a problem — the frustrating experience of unreliable cleaners who are late, don't communicate, and leave you wondering if the job will ever be done right.",
+        paragraph2: 'We set out to create something better. A company that not only delivers amazing results — but makes the entire experience seamless from start to finish.',
+        paragraph3: "Whether you're managing a busy home, multiple Airbnb properties, or a commercial space that needs to stay spotless and presentable, Clensy is your go-to team.",
+        image: 'https://res.cloudinary.com/dgjmm3usy/image/upload/v1750847413/shutterstock_2138293517_1_nqcmei.jpg'
+      },
+      whyWeStartedSection: {
+        heading: 'Why We Started',
+        subtitle: "Let's be honest: the cleaning industry is broken.",
+        quoteText: "My cleaner didn't show up. No one responded. The job was half-done.",
+        paragraph1: "We were tired of the low standards across the industry – Whether it's flaky independent cleaners or cookie-cutter franchises with zero customer service — it's hard to find a company that actually cares and does the job right.",
+        paragraph2: 'We listened. And then we built Clensy — a cleaning company that actually shows up, delivers exceptional results, and treats every client like a priority.',
+        paragraph3: 'We know that when you book a cleaning, you want peace of mind — not more headaches.'
+      },
+      whatMakesUsDifferentSection: {
+        residentialCommercial: {
+          title: 'Residential & Commercial Cleaning',
+          paragraph1: "From homes and apartments to offices, retail spaces, gyms, medical facilities, and even construction sites — if it's indoors and needs to be cleaned, we've got it covered.",
+          paragraph2: "Not sure if we handle your specific needs? Chances are, we do. If you're looking for something custom, head over to our Contact Us page or give us a call. We're happy to create a tailored plan that fits exactly what you're looking for."
+        },
+        eliteTeam: {
+          title: 'Elite Team',
+          paragraph1: 'Out of every 100 applicants, we only hire 1 cleaner. Seriously. Our hiring process is extensive, and only the best make it through.',
+          paragraph2: "We're fully licensed, bonded, and insured, so you can feel confident knowing your home, business, or property is in trusted, professional hands.",
+          image: 'https://res.cloudinary.com/dgjmm3usy/image/upload/v1750847481/shutterstock_2200915291_vewsyn.jpg'
+        },
+        heading: 'What Makes Us Different?'
+      },
+      whoWeServeSection: {
+        heading: 'Who We Serve',
+        subtitle: 'Clensy is made for people and businesses who expect more from a cleaning company.',
+        customerTypes: [
+          {
+            title: 'Busy parents',
+            description: 'Who need a safe, clean home without the stress',
+            _id: ObjectId('684bfe20821d62bf875673ae')
+          },
+          {
+            title: 'Professionals and entrepreneurs',
+            description: 'Focused on growing, not cleaning',
+            _id: ObjectId('684bfe20821d62bf875673af')
+          },
+          {
+            title: 'Property managers and business owners',
+            description: 'Who need reliable commercial upkeep',
+            _id: ObjectId('684bfe20821d62bf875673b0')
+          },
+          {
+            title: 'Airbnb hosts',
+            description: 'Who demand fast, spotless turnovers',
+            _id: ObjectId('684bfe20821d62bf875673b1')
+          },
+          {
+            title: 'Contractors or developers',
+            description: 'Who need sharp post-construction cleanup',
+            _id: ObjectId('684bfe20821d62bf875673b2')
+          },
+          {
+            title: 'Anyone who values quality',
+            description: 'And needs a trustworthy cleaning service',
+            _id: ObjectId('684bfe20821d62bf875673b3')
+          }
+        ]
+      },
+      ourMissionSection: {
+        heading: 'Our Mission',
+        paragraph1: "We're obsessed with making the cleaning process feel effortless for our clients. You book. We show up. We do the job right — the first time.",
+        paragraph2: 'No rescheduling nightmares. No communication breakdowns. No wondering if your space was actually cleaned.',
+        paragraph3: "With Clensy, you get a team that's committed to your satisfaction — from the first message to the final wipe-down.",
+        paragraph4: "If you're looking for a company that understands the value of your time, respects your space, and consistently delivers results — welcome to Clensy.",
+        closingLine: "We're here to raise the standard."
+      },
+      ctaSection: {
+        heading: 'Ready to Experience the Clensy Difference?',
+        description: "Join thousands of satisfied customers who've discovered what a truly exceptional cleaning service feels like.",
+        bookButtonText: 'Book Your Cleaning',
+        contactButtonText: 'Contact Us'
+      },
+      updatedAt: 2025-07-01T09:47:21.702Z,
+      __v: 0,
+      clientFocusedTech: {
+        heading: 'Client-Focused Tech',
+        features: [
+          'Customer portal to manage your bookings',
+          'Text/email reminders before every job',
+          'Real-time ETA when your cleaner is en route',
+          'Secure online payments for convenience'
+        ]
+      }
+    },
+    careers: {
+      _id: ObjectId('68502987a4a1e9ecbd72fca9'),
+      heroSection: {
+        heroImage: 'https://res.cloudinary.com/dj0dfij87/image/upload/v1758487013/5354591c-daba-417f-a1dc-8f37187b268e_qstefi.png',
+        topLabel: 'Now Hiring - Multiple Positions',
+        heading: 'Join The Clensy Team',
+        description: "Build a rewarding career with New Jersey's premier cleaning service. We offer competitive pay, great benefits, and opportunities for growth in a supportive environment.",
+        primaryButtonText: 'View Open Positions',
+        secondaryButtonText: 'Apply Now',
+        teamMembersCount: '50+'
+      },
+      benefitsSection: {
+        heading: 'Why Work With Us?',
+        description: 'We believe in taking care of our team members because happy employees provide the best service to our customers.',
+        benefits: [
+          {
+            title: 'Competitive Pay',
+            description: 'Above-market wages with performance bonuses and regular raises',
+            icon: 'DollarSign',
+            _id: ObjectId('68502987a4a1e9ecbd72fcaa')
+          },
+          {
+            title: 'Performance Rewards',
+            description: 'Gift cards, surprise bonuses, and perks for going above and beyond',
+            icon: 'Shield',
+            _id: ObjectId('68502987a4a1e9ecbd72fcab')
+          },
+          {
+            title: 'Flexible Schedule',
+            description: 'Work-life balance with flexible hours and part-time options',
+            icon: 'Clock',
+            _id: ObjectId('68502987a4a1e9ecbd72fcac')
+          },
+          {
+            title: 'Career Growth',
+            description: 'Training programs and advancement opportunities within the company',
+            icon: 'TrendingUp',
+            _id: ObjectId('68502987a4a1e9ecbd72fcad')
+          },
+          {
+            title: 'Team Environment',
+            description: 'Supportive team culture with collaborative work environment',
+            icon: 'Users',
+            _id: ObjectId('68502987a4a1e9ecbd72fcae')
+          },
+          {
+            title: 'Recognition Program',
+            description: 'Employee of the month awards and performance recognition',
+            icon: 'Award',
+            _id: ObjectId('68502987a4a1e9ecbd72fcaf')
+          }
+        ]
+      },
+      positionsSection: {
+        heading: 'Open Positions',
+        description: 'Find the perfect role that matches your skills and career goals.',
+        positions: [
+          {
+            title: 'Residential Cleaner',
+            type: 'Full-time / Part-time',
+            location: 'Multiple NJ Counties',
+            description: 'Join our residential cleaning team and help families maintain beautiful, clean homes.',
+            requirements: [
+              'Previous cleaning experience preferred but not required',
+              'Reliable transportation',
+              'Attention to detail',
+              'Physical ability to perform cleaning tasks',
+              'Background check required'
+            ],
+            salary: 'High Earning Potential',
+            link: 'https://jobs.gusto.com/postings/clensy-cleaning-residential-cleaner-3c7fb08b-f3fa-4a1a-b198-b2490e6ff648',
+            _id: ObjectId('68502987a4a1e9ecbd72fcb0')
+          }
+        ]
+      },
+      testimonialsSection: {
+        heading: 'What Our Team Says',
+        description: 'Hear from our employees about their experience working at Clensy.',
+        testimonials: [
+          {
+            name: 'Sarah M.',
+            position: 'Residential Cleaner',
+            content: 'I love working at Clensy! The team is supportive, the pay is great, and I have the flexibility I need for my family.',
+            rating: 5,
+            _id: ObjectId('68502987a4a1e9ecbd72fcb4')
+          },
+          {
+            name: 'Isabella Rodriguez',
+            position: 'Team Leader',
+            content: "Started as a cleaner and worked my way up to team leader. Clensy really invests in their employees' growth.",
+            rating: 5,
+            _id: ObjectId('68502987a4a1e9ecbd72fcb5')
+          },
+          {
+            name: 'Lisa Chen',
+            position: 'Commercial Cleaner',
+            content: "Best cleaning company I've worked for. They provide all the equipment and training you need to succeed.",
+            rating: 5,
+            _id: ObjectId('68502987a4a1e9ecbd72fcb6')
+          }
+        ]
+      },
+      applicationSection: {
+        heading: 'Ready to Join Our Team?',
+        description: "Fill out the application below and we'll get back to you within 24 hours.",
+        submitButtonText: 'Submit Application'
+      },
+      contactSection: {
+        heading: 'Have Questions About Working With Us?',
+        description: 'Contact our HR team for more information about career opportunities.',
+        phoneText: 'Call Us: (551) 305-3031',
+        emailText: 'Email: info@clensy.com'
+      },
+      updatedAt: 2025-09-21T20:38:42.910Z,
+      __v: 0
+    },
+    checklistpages: {
+      _id: ObjectId('68502bc0a4a1e9ecbd72fd1d'),
+      heroSection: {
+        heading: 'Our Interactive Cleaning Checklist',
+        description: 'Discover how we ensure your home receives a thorough clean, every time',
+        buttonText: 'Book Your Cleaning'
+      },
+      interactiveGuideSection: {
+        heading: 'Interactive Clensy Cleaning Checklist',
+        description: 'Click on any room to see our detailed cleaning checklist'
+      },
+      mainChecklistSection: {
+        roomTitles: {
+          kitchen: 'Kitchen',
+          bathroom: 'Bathrooms',
+          bedroom: 'Bedrooms',
+          living: 'Other Living Areas'
+        },
+        heading: 'Our Interactive Cleaning Checklist includes:',
+        description: "We've developed a comprehensive cleaning system that ensures nothing is overlooked",
+        routineButtonText: 'Routine Cleaning',
+        deepButtonText: 'Deep Cleaning',
+        movingButtonText: 'Move In/Out Cleaning',
+        cleaningItems: {
+          routine: {
+            kitchen: [
+              'Appliance exteriors cleaned (interiors upon request)',
+              'Microwave exterior/interior cleaned',
+              'Tables and chairs cleaned',
+              'Countertops and backsplash disinfected (all items removed and replaced)',
+              'Cabinet fronts cleaned',
+              'Sinks scrubbed and disinfected (dishes upon request)',
+              'Floor vacuumed and/or washed',
+              'Baseboards dusted',
+              'Fingerprints removed from all woodwork, doorframes and switch plates',
+              'Trash emptied',
+              'Windowsills cleaned (blinds dusted upon request)'
+            ],
+            bathroom: [
+              'Tub and shower tiles scrubbed, disinfected and rinsed',
+              'Toilets disinfected inside and out',
+              'Chrome fixtures cleaned and shined',
+              'Towels neatly hung and folded',
+              'Countertops disinfected (all items removed and replaced)',
+              'Cabinet front cleaned',
+              'Sinks scrubbed and disinfected',
+              'Mirrors cleaned',
+              'Floors vacuumed and/or washed',
+              'Baseboards dusted',
+              'Trash emptied',
+              'Fingerprints removed from all woodwork, doorframes and switch plates'
+            ],
+            bedroom: [
+              'Beds made (linens changed upon request)',
+              'Lamps cleaned and lampshades dusted',
+              'Picture frames dusted',
+              'Furniture dusted - top, front and underneath',
+              'Floors vacuumed and/or washed (under bed if accessible)',
+              'Windowsills cleaned (blinds dusted upon request)',
+              'Baseboards dusted',
+              'Fingerprints removed from all woodwork, doorframes and switch plates',
+              'Trash emptied',
+              'Mirrors cleaned'
+            ],
+            living: [
+              'Upholstered furniture vacuumed',
+              'Cushions and pillows fluffed and straightened',
+              'Ceiling fans dusted (height restrictions apply)',
+              'Lamps cleaned and lampshades dusted',
+              'Picture frames dusted',
+              'Furniture dusted - on top, on front and underneath',
+              'Floors vacuumed and/or washed',
+              'Baseboards dusted',
+              'Windowsills cleaned (blinds dusted upon request)',
+              'Fingerprints removed from all woodwork, doorframes and switch plates',
+              'Trash emptied',
+              'Mirrors cleaned'
+            ],
+            _id: ObjectId('68502bc0a4a1e9ecbd72fd22')
+          },
+          deep: {
+            kitchen: [
+              'All routine cleaning items',
+              'Inside of refrigerator cleaned and sanitized',
+              'Inside of oven cleaned',
+              'Inside of dishwasher cleaned',
+              'Inside of cabinets and drawers cleaned',
+              'Light fixtures removed and cleaned',
+              'Walls spot cleaned',
+              'Backsplash deep cleaned with degreaser',
+              'All small appliances moved and cleaned beneath',
+              'Hood range and filter deep cleaned',
+              'Pantry reorganized and cleaned'
+            ],
+            bathroom: [
+              'All routine cleaning items',
+              'Deep cleaning of shower and tub (soap scum, hard water stains removed)',
+              'Tile and grout deep cleaned',
+              'Inside of vanity cabinets cleaned',
+              'Exhaust fan cleaned',
+              'Light fixtures cleaned',
+              'All drawers cleaned inside',
+              'Walls spot cleaned',
+              'All toiletry items organized',
+              'Inside of medicine cabinet cleaned',
+              'Shower curtain washed or replaced (if provided)'
+            ],
+            bedroom: [
+              'All routine cleaning items',
+              'Mattress vacuumed',
+              'Under bed thoroughly cleaned',
+              'Inside of nightstands cleaned',
+              'Inside of dresser drawers cleaned upon request',
+              'Closet floors vacuumed',
+              'Light fixtures cleaned',
+              'Walls spot cleaned',
+              'Window tracks cleaned',
+              'Ceiling fans deep cleaned',
+              'Curtains/drapes vacuumed'
+            ],
+            living: [
+              'All routine cleaning items',
+              'Furniture moved and cleaned beneath',
+              'Bookshelves thoroughly dusted',
+              'Entertainment centers cleaned inside and out',
+              'Light fixtures cleaned thoroughly',
+              'Ceiling fans deep cleaned',
+              'Wall decor dusted and cleaned',
+              'Walls spot cleaned',
+              'Window tracks cleaned',
+              'Blinds deep cleaned',
+              'Upholstery spot cleaned as needed'
+            ],
+            _id: ObjectId('68502bc0a4a1e9ecbd72fd23')
+          },
+          moving: {
+            kitchen: [
+              'All deep cleaning items',
+              'Cabinet shelves thoroughly cleaned',
+              'All appliances thoroughly cleaned inside and out',
+              'Removal of all food items upon request',
+              'Thorough cleaning inside all cabinets and drawers',
+              'Walls completely washed top to bottom',
+              'Door frames and doors fully washed',
+              'Deep cleaning of light fixtures and exhaust fans',
+              'Moldings and trim cleaned',
+              'Areas behind refrigerator and oven cleaned'
+            ],
+            bathroom: [
+              'All deep cleaning items',
+              'Complete wall washing',
+              'Deep clean of toilet bowl, tank, and base',
+              'Descaling of all fixtures',
+              'Deep cleaning behind toilet',
+              'Complete cleaning of all drawers and cabinets',
+              'Door frames and doors fully washed',
+              'Moldings and trim cleaned',
+              'Bathtub deep cleaned (including jets if applicable)',
+              'Shower door tracks thoroughly cleaned'
+            ],
+            bedroom: [
+              'All deep cleaning items',
+              'Complete wall washing',
+              'Thorough cleaning inside all furniture to be left behind',
+              'Complete baseboards cleaning',
+              'Complete closet cleaning (shelves, racks, floors)',
+              'Door frames and doors fully washed',
+              'Window frames cleaned',
+              'Light switch plates cleaned and sanitized',
+              'Moldings and trim cleaned',
+              'HVAC vents cleaned'
+            ],
+            living: [
+              'All deep cleaning items',
+              'Complete wall washing',
+              'All cabinets and shelves thoroughly cleaned (inside and out)',
+              'Light fixtures completely cleaned',
+              'Door frames and doors fully washed',
+              'Complete window cleaning including frames',
+              'Deep cleaning of all vents and returns',
+              'Thorough cleaning in all corners',
+              'Moldings and trim cleaned',
+              'Fireplace cleaned (if applicable)'
+            ],
+            _id: ObjectId('68502bc0a4a1e9ecbd72fd24')
+          },
+          _id: ObjectId('68502bc0a4a1e9ecbd72fd21')
+        }
+      },
+      ctaSection: {
+        heading: 'Ready for the Clensy Difference?',
+        description: 'Experience our Interactive Cleaning Checklist in action. Book your cleaning today and see the difference a thorough clean makes.',
+        buttonText: 'Book Your Cleaning Today'
+      },
+      updatedAt: 2025-08-30T17:23:15.335Z,
+      __v: 0
+    },
+    contacts: {
+      _id: ObjectId('684c27e614feb1548009b67c'),
+      heroSection: {
+        topLabel: "We'd Love To Hear From You",
+        heading: "Let's Start A <blue>Conversation</blue>",
+        description: 'Have questions or need a personalized cleaning solution? Our team is ready to provide the support you need for all your requirements.',
+        sendMessageButtonText: 'Send a Message',
+        supportText: '24/7 Support',
+        responseText: 'Quick Response',
+        image: 'https://res.cloudinary.com/dgjmm3usy/image/upload/v1750847694/shutterstock_2478230727_bt7fos.jpg'
+      },
+      trustSection: {
+        mainText: 'Trusted by 5,000+ Customers',
+        subtitle: 'Professional cleaning for every need',
+        serviceTags: [
+          { name: 'Residential', _id: ObjectId('684c280014feb1548009b689') },
+          { name: 'Commercial', _id: ObjectId('684c280014feb1548009b68a') },
+          { name: 'Specialized', _id: ObjectId('684c280014feb1548009b68b') }
+        ]
+      },
+      statsSection: {
+        indicators: [
+          {
+            number: '24/7',
+            description: 'Customer Support',
+            _id: ObjectId('684c280014feb1548009b68c')
+          },
+          {
+            number: '1h',
+            description: 'Response Time',
+            _id: ObjectId('684c280014feb1548009b68d')
+          },
+          {
+            number: '4.9',
+            description: 'Customer Rating',
+            _id: ObjectId('684c280014feb1548009b68e')
+          },
+          {
+            number: '100%',
+            description: 'Satisfaction Guarantee',
+            _id: ObjectId('684c280014feb1548009b68f')
+          }
+        ]
+      },
+      contactInformation: {
+        phone: {
+          title: 'Phone',
+          description: 'Speak directly with our customer service team',
+          phoneNumber: '(551) 305-4081'
+        },
+        email: {
+          title: 'Email',
+          description: 'Get a response within 24 hours',
+          emailAddress: 'info@clensy.com'
+        },
+        officeLocation: {
+          title: 'Office Location',
+          description: 'Our headquarters',
+          addressLine1: '124 Little Falls Rd',
+          addressLine2: 'Suite C-1',
+          cityStateZip: 'Fairfield, NJ 07004'
+        },
+        businessHours: {
+          title: 'Business Hours',
+          description: 'When you can reach us',
+          hours: [
+            {
+              day: 'Monday - Friday',
+              hours: '8:00 AM - 8:00 PM',
+              _id: ObjectId('684c280014feb1548009b690')
+            },
+            {
+              day: 'Saturday',
+              hours: '9:00 AM - 4:00 PM',
+              _id: ObjectId('684c280014feb1548009b691')
+            },
+            {
+              day: 'Sunday',
+              hours: 'Closed',
+              _id: ObjectId('684c280014feb1548009b692')
+            }
+          ]
+        },
+        immediateAssistance: {
+          title: 'Need Immediate Assistance?',
+          description: 'Our customer support team is available during business hours to help you with any questions.',
+          buttonText: 'Call Us Now'
+        },
+        sectionTitle: 'Contact Information'
+      },
+      consultationSection: {
+        heading: 'Need a Personalized Cleaning Solution?',
+        description: 'Schedule a consultation with our cleaning experts to discuss your unique requirements and get a customized cleaning plan tailored to your specific needs.',
+        buttonText: 'Schedule a Consultation'
+      },
+      updatedAt: 2025-07-01T10:13:48.705Z,
+      __v: 0
+    },
+    faqs: {
+      _id: ObjectId('684c7eb900856a9cefcbbf0e'),
+      heroSection: {
+        topLabel: 'Answers to your questions',
+        heading: 'Frequently Asked <blue>Questions</blue>',
+        description: "Find answers to common questions about our cleaning services, booking process, and pricing. Can't find what you're looking for? Contact us directly for personalized assistance."
+      },
+      faqCategories: {
+        general: {
+          name: 'General Questions',
+          questions: [
+            {
+              question: 'What areas do you serve?',
+              answer: 'We provide cleaning services throughout Northern New Jersey, including Bergen, Essex, Hudson, Passaic, and Union counties. We serve all major cities and towns within these counties.',
+              _id: ObjectId('684c7eb900856a9cefcbbf0f')
+            },
+            {
+              question: 'Are your cleaners background checked?',
+              answer: 'Yes, all of our cleaning professionals undergo thorough background checks before joining our team. We prioritize your safety and security, and only employ trustworthy individuals with verified credentials.',
+              _id: ObjectId('684c7eb900856a9cefcbbf10')
+            },
+            {
+              question: 'Are you insured and bonded?',
+              answer: 'Yes, we are fully insured and bonded. This provides protection for both our clients and our team in the rare event of an accident or damage during service.',
+              _id: ObjectId('684c7eb900856a9cefcbbf11')
+            },
+            {
+              question: 'What cleaning products do you use?',
+              answer: "We use a combination of industry-grade professional cleaning products and eco-friendly options. If you have specific preferences or concerns about allergies, we're happy to accommodate your needs with alternative products.",
+              _id: ObjectId('684c7eb900856a9cefcbbf12')
+            },
+            {
+              question: 'Do I need to be home during the cleaning?',
+              answer: "No, you don't need to be home during the cleaning service. Many of our clients provide a key or access instructions. We ensure secure handling of all property access methods and can arrange for secure key return or storage.",
+              _id: ObjectId('684c7eb900856a9cefcbbf13')
+            }
+          ]
+        },
+        residential: {
+          name: 'Residential Cleaning',
+          questions: [
+            {
+              question: "What's included in a standard residential cleaning?",
+              answer: 'Our standard residential cleaning includes dusting all accessible surfaces, vacuuming carpets and floors, mopping hard floors, cleaning kitchen surfaces, appliance exteriors, bathroom fixtures, sanitizing toilets, sinks, tubs/showers, emptying trash, and general tidying. Check our 50-point checklist for a complete breakdown.',
+              _id: ObjectId('684c7eb900856a9cefcbbf14')
+            },
+            {
+              question: 'How does deep cleaning differ from routine cleaning?',
+              answer: "Deep cleaning is more thorough and includes areas not covered in routine cleaning. It involves cleaning behind and under furniture, inside appliances, detailed bathroom scrubbing, baseboards, vents, window sills, and removing scale, soap scum, and hard water stains. It's ideal for first-time cleanings or periodic refreshing.",
+              _id: ObjectId('684c7eb900856a9cefcbbf15')
+            },
+            {
+              question: 'Do you clean inside refrigerators and ovens?',
+              answer: 'Interior appliance cleaning is not included in our standard services but can be added as an extra service. We offer specialized cleaning for refrigerators, ovens, and other appliances at an additional cost.',
+              _id: ObjectId('684c7eb900856a9cefcbbf16')
+            },
+            {
+              question: 'How often should I schedule residential cleaning?',
+              answer: 'The frequency depends on your specific needs. Most clients choose weekly, bi-weekly, or monthly services. Homes with children, pets, or multiple residents often benefit from more frequent cleanings, while smaller households with fewer occupants might only need monthly maintenance.',
+              _id: ObjectId('684c7eb900856a9cefcbbf17')
+            },
+            {
+              question: 'Do you clean windows?',
+              answer: 'Our standard services include cleaning the interior glass of windows that can be reached without a ladder. Exterior window cleaning or windows requiring special equipment can be arranged as an add-on service.',
+              _id: ObjectId('684c7eb900856a9cefcbbf18')
+            }
+          ]
+        },
+        commercial: {
+          name: 'Commercial Cleaning',
+          questions: [
+            {
+              question: 'What types of commercial properties do you service?',
+              answer: 'We service a wide range of commercial properties including offices, retail spaces, medical facilities, gyms, schools, churches, and common areas in multi-unit buildings. Each industry has unique cleaning requirements, and we tailor our services accordingly.',
+              _id: ObjectId('684c7eb900856a9cefcbbf19')
+            },
+            {
+              question: 'Can you clean outside of business hours?',
+              answer: 'Yes, we offer flexible scheduling for commercial clients and can arrange cleaning services during evenings, weekends, or early mornings to minimize disruption to your business operations.',
+              _id: ObjectId('684c7eb900856a9cefcbbf1a')
+            },
+            {
+              question: 'Do you provide cleaning supplies or should we provide them?',
+              answer: 'We bring all necessary cleaning supplies and equipment for our commercial services. However, if your facility requires specific products due to regulations or preferences, we can discuss using your supplied products.',
+              _id: ObjectId('684c7eb900856a9cefcbbf1b')
+            },
+            {
+              question: 'Can you accommodate special requests for our office?',
+              answer: "Yes, we understand that each business has unique needs. We're happy to accommodate special requests and can develop a customized cleaning plan that addresses your specific requirements.",
+              _id: ObjectId('684c7eb900856a9cefcbbf1c')
+            },
+            {
+              question: 'Do you offer daily cleaning services for businesses?',
+              answer: 'Yes, we offer daily cleaning services for commercial clients who require consistent maintenance. We can create a schedule that ensures your business always appears professional and clean for your clients and employees.',
+              _id: ObjectId('684c7eb900856a9cefcbbf1d')
+            }
+          ]
+        },
+        specialized: {
+          name: 'Specialized Services',
+          questions: [
+            {
+              question: 'What does move-in/move-out cleaning include?',
+              answer: 'Our move-in/move-out cleaning is a comprehensive deep clean designed to prepare a property for new occupants or help you leave your current property in excellent condition. It includes detailed cleaning of all surfaces, appliances (inside and out), cabinets, drawers, closets, fixtures, baseboards, and more.',
+              _id: ObjectId('684c7eb900856a9cefcbbf1e')
+            },
+            {
+              question: 'What is post-construction cleaning?',
+              answer: 'Post-construction cleaning addresses the unique challenges after renovation or construction. It includes removing dust from all surfaces, cleaning fixtures and windows, removing adhesive residues, paint splatters, and construction debris, and preparing the space for immediate use.',
+              _id: ObjectId('684c7eb900856a9cefcbbf1f')
+            },
+            {
+              question: 'Do you offer carpet cleaning services?',
+              answer: 'Yes, we offer professional carpet cleaning services using hot water extraction methods to deep clean and refresh your carpets. This service is available for both residential and commercial clients.',
+              _id: ObjectId('684c7eb900856a9cefcbbf20')
+            },
+            {
+              question: "What's included in AirBNB or vacation rental cleaning?",
+              answer: 'Our AirBNB cleaning service includes thorough cleaning of all living spaces, bathrooms, and kitchens, fresh linens and towels (if provided), restocking essential supplies, sanitizing high-touch surfaces, and ensuring the property is guest-ready with attention to detail that maintains your positive reviews.',
+              _id: ObjectId('684c7eb900856a9cefcbbf21')
+            },
+            {
+              question: 'Can you handle biohazard or specialized cleaning needs?',
+              answer: "For certain specialized cleaning needs, we may partner with certified biohazard cleaning companies. Please contact us directly to discuss your specific requirements, and we'll determine the appropriate service solution.",
+              _id: ObjectId('684c7eb900856a9cefcbbf22')
+            }
+          ]
+        },
+        booking: {
+          name: 'Booking & Scheduling',
+          questions: [
+            {
+              question: 'How do I schedule a cleaning service?',
+              answer: "You can schedule a cleaning service through our website booking system, by calling our customer service team, or by emailing us. We'll collect details about your property and cleaning needs, then provide a quote and available time slots.",
+              _id: ObjectId('684c7eb900856a9cefcbbf23')
+            },
+            {
+              question: 'Do I need to sign a contract for recurring services?',
+              answer: "We offer flexible scheduling without requiring long-term contracts. You can set up recurring services and modify or cancel them with appropriate notice. Some commercial clients prefer contracts for consistent service guarantees, which we're happy to accommodate.",
+              _id: ObjectId('684c7eb900856a9cefcbbf24')
+            },
+            {
+              question: 'How far in advance should I book?',
+              answer: "For regular service, we recommend booking 1-2 weeks in advance to secure your preferred time slot. For special events or one-time deep cleanings, 2-3 weeks' notice is ideal, especially during busy seasons. Last-minute appointments may be available depending on our schedule.",
+              _id: ObjectId('684c7eb900856a9cefcbbf25')
+            },
+            {
+              question: 'What if I need to reschedule my cleaning?',
+              answer: "We understand that schedules change. Please provide at least 48 hours' notice for rescheduling to avoid any fees. Last-minute changes may incur a rescheduling fee, but we do our best to accommodate our clients' needs.",
+              _id: ObjectId('684c7eb900856a9cefcbbf26')
+            },
+            {
+              question: 'Do you have a satisfaction guarantee?',
+              answer: "Yes, we stand behind our work with a 100% satisfaction guarantee. If you're not completely satisfied with any aspect of our service, contact us within 24 hours and we'll return to address any overlooked areas at no additional cost.",
+              _id: ObjectId('684c7eb900856a9cefcbbf27')
+            }
+          ]
+        },
+        pricing: {
+          name: 'Pricing & Payment',
+          questions: [
+            {
+              question: 'How do you determine pricing for cleaning services?',
+              answer: 'Our pricing is based on several factors including the size of your property, type of service requested (standard, deep, or specialized), frequency of service, and specific requirements. We provide transparent, accurate quotes after understanding your unique needs.',
+              _id: ObjectId('684c7eb900856a9cefcbbf28')
+            },
+            {
+              question: 'Do you offer discounts for regular cleaning schedules?',
+              answer: 'Yes, we offer discounted rates for recurring service schedules. The more frequently you schedule cleanings, the more you save per visit. Weekly services receive the highest discount, followed by bi-weekly and monthly options.',
+              _id: ObjectId('684c7eb900856a9cefcbbf29')
+            },
+            {
+              question: 'Is there an extra charge for special cleaning requests?',
+              answer: "Additional services beyond our standard cleaning are available at an extra charge. These include interior refrigerator/oven cleaning, carpet cleaning, window washing, and other specialized tasks. We'll clearly outline any additional costs before service begins.",
+              _id: ObjectId('684c7eb900856a9cefcbbf2a')
+            },
+            {
+              question: 'What payment methods do you accept?',
+              answer: 'We accept all major credit cards, electronic bank transfers, and digital payment services. Payment is typically processed after service completion for one-time bookings, while recurring services may be set up with automatic payments for convenience.',
+              _id: ObjectId('684c7eb900856a9cefcbbf2b')
+            },
+            {
+              question: 'Do I need to tip your cleaning professionals?',
+              answer: "Tipping is not required but is always appreciated by our cleaning professionals. If you're particularly pleased with the service, you're welcome to show your appreciation, but we never expect or solicit tips.",
+              _id: ObjectId('684c7eb900856a9cefcbbf2c')
+            }
+          ]
+        }
+      },
+      stillHaveQuestionsSection: {
+        heading: 'Still Have Questions?',
+        description: 'Here are some other topics our customers frequently ask about.',
+        cards: [
+          {
+            title: 'First-Time Customers',
+            description: 'Learn what to expect during your first cleaning appointment and how to prepare your space.',
+            buttonText: 'Get More Information',
+            buttonLink: '/contact',
+            icon: 'clock',
+            _id: ObjectId('684c7eb900856a9cefcbbf2d')
+          },
+          {
+            title: 'Pricing & Estimates',
+            description: 'Learn more about our transparent pricing structure and how to get an accurate estimate for your property.',
+            buttonText: 'View Pricing',
+            buttonLink: '/pricing',
+            icon: 'credit-card',
+            _id: ObjectId('684c7eb900856a9cefcbbf2e')
+          },
+          {
+            title: 'Service Areas',
+            description: 'Find out if we service your area and learn about our coverage throughout Northern New Jersey.',
+            buttonText: 'Check Service Areas',
+            buttonLink: '/locations/bergen',
+            icon: 'calendar',
+            _id: ObjectId('684c7eb900856a9cefcbbf2f')
+          }
+        ]
+      },
+      contactSection: {
+        emailSection: {
+          heading: 'Email Us',
+          description: "Send us a message and we'll respond within 24 hours.",
+          email: 'info@clensy.com'
+        },
+        callSection: {
+          heading: 'Call Us',
+          description: 'Speak with our customer service team directly.',
+          phone: '(973) 555-7890'
+        },
+        heading: "Can't Find Your Answer?",
+        description: 'Our customer service team is ready to help with any questions not addressed in our FAQ section. Contact us for personalized assistance.',
+        contactButtonText: 'Contact Us'
+      },
+      trustIndicatorsSection: {
+        indicators: [
+          {
+            number: '1000+',
+            description: 'Questions Answered',
+            _id: ObjectId('684c7eb900856a9cefcbbf30')
+          },
+          {
+            number: '24/7',
+            description: 'Online Support',
+            _id: ObjectId('684c7eb900856a9cefcbbf31')
+          },
+          {
+            number: '5.0',
+            description: 'Customer Satisfaction',
+            _id: ObjectId('684c7eb900856a9cefcbbf32')
+          },
+          {
+            number: '15+',
+            description: 'Years of Experience',
+            _id: ObjectId('684c7eb900856a9cefcbbf33')
+          }
+        ]
+      },
+      updatedAt: 2025-06-16T14:52:10.744Z,
+      __v: 0
+    },
+    privacypolicies: {
+      _id: ObjectId('68cbf8cc5dd1369665dc2579'),
+      heroSection: {
+        heading: 'Clensy Cleaning Privacy Policy',
+        description: 'Your privacy is important to us. Learn how we collect, use, and protect your information.'
+      },
+      companyInfo: { websiteUrl: '', email: 'Info@clensy.com', phone: '551-305-4081' },
+      sections: [
+        {
+          title: 'Who We Are',
+          content: 'At https://clensycleaning.com, we are committed to maintaining the trust and confidence of all visitors to our website. We value your privacy, and we want you to know that https://clensycleaning.com is not in the business of selling, renting, or trading email lists with other companies or businesses for marketing purposes.\n' +
+            '\n' +
+            'In this Privacy Policy, we provide detailed information on when and why we collect personal information, how we use it, the limited conditions under which we may disclose it to others, and how we keep it secure. We take your privacy seriously and implement measures to ensure a safe and secure environment for all visitors and users of https://clensycleaning.com.',
+          order: 1,
+          _id: ObjectId('68cbf8cc5dd1369665dc257a')
+        },
+        {
+          title: 'Information We Collect',
+          content: 'We collect personal information that you voluntarily provide when you use our services, interact with our website, or communicate with us. This may include, but is not limited to:\n' +
+            '\n' +
+            'Name\n' +
+            'Email address\n' +
+            'Phone number\n' +
+            'Mailing address\n' +
+            'Payment information (for transactions)\n' +
+            'Usage data (cookies, IP address, browser details)',
+          order: 2,
+          _id: ObjectId('68cbf8cc5dd1369665dc257b')
+        },
+        {
+          title: 'How We Use Your Information',
+          content: 'Your personal information is used for the following purposes:\n' +
+            '\n' +
+            'To process and manage your cleaning service appointments\n' +
+            'To communicate with you regarding services, promotions, and updates\n' +
+            'To send appointment reminders, payment reminders, and post-service feedback requests\n' +
+            'To improve our website functionality and user experience\n' +
+            'To comply with legal obligations',
+          order: 3,
+          _id: ObjectId('68cbf8cc5dd1369665dc257c')
+        },
+        {
+          title: 'Sharing Your Information',
+          content: 'We do not sell, rent, or trade your personal information to third parties for marketing purposes. However, we may share your personal data with the following:\n' +
+            '\n' +
+            'Service providers or third-party vendors who assist in delivering our services (e.g., payment processors, email service providers, or customer support systems)\n' +
+            'Law enforcement or government authorities when required by law',
+          order: 4,
+          _id: ObjectId('68cbf8cc5dd1369665dc257d')
+        },
+        {
+          title: 'SMS Consent and Third-Party Sharing',
+          content: "By providing your phone number to Clensy Cleaning, you are consenting to receive SMS messages related to the services you've requested, such as appointment reminders, service confirmations, and promotions. Your SMS consent will not be shared with third parties for marketing purposes.\n" +
+            '\n' +
+            'We will use SMS messaging only for the services you have opted into, and you can opt-out at any time by replying "STOP" to any SMS message.',
+          order: 5,
+          _id: ObjectId('68cbf8cc5dd1369665dc257e')
+        },
+        {
+          title: 'Cookies',
+          content: 'We may use cookies to provide services and enhance your experience on our website. Cookies allow us to track user activity and improve our content. You can clear cookies at any time by adjusting your browser settings.',
+          order: 6,
+          _id: ObjectId('68cbfb515dd1369665dc25dc')
+        },
+        {
+          title: 'Google Analytics',
+          content: 'We use Google Analytics to analyze website traffic and user behavior. This helps us understand how our website is used and identify areas for improvement. Google Analytics collects data in an anonymous manner, and we do not attempt to identify individuals.',
+          order: 7,
+          _id: ObjectId('68cbfb515dd1369665dc25dd')
+        },
+        {
+          title: 'Website Comments',
+          content: 'If you leave comments on our website, we collect the details you provide (such as name, email address, and website) to display your comment. These details are stored for display purposes and are not verified by us.',
+          order: 6,
+          _id: ObjectId('68cbfb515dd1369665dc25de')
+        },
+        {
+          title: 'Access to Your Personal Information',
+          content: 'You have the right to view, amend, or delete any personal information we hold about you. To request access or make changes, please contact our data protection officer at Info@clensycleaning.com, and we will assist you in removing or correcting your information.',
+          order: 8,
+          _id: ObjectId('68cbfb515dd1369665dc25df')
+        },
+        {
+          title: 'Changes to Our Privacy Policy',
+          content: 'We may update this Privacy Policy from time to time. When changes are made, we will update this page with the revised version. If we make significant changes, we will notify you via email or through the website. By continuing to use our services, you agree to the terms of the updated policy.',
+          order: 9,
+          _id: ObjectId('68cbfb515dd1369665dc25e0')
+        },
+        {
+          title: 'Contact Us',
+          content: 'If you have any questions or concerns about our privacy practices, please reach out to us at Info@clensycleaning.com.',
+          order: 10,
+          _id: ObjectId('68cbfb515dd1369665dc25e1')
+        }
+      ],
+      smsConsent: {
+        description: 'To comply with carrier requirements, your privacy policy must be easily accessible. Ensure you include a prominent link to this Privacy Policy near consent language on your website or in forms where users opt-in for SMS messaging, such as:',
+        optOutInstructions: '"By opting in for SMS messages, you agree to receive SMS updates and reminders related to Clensy Cleaning. We respect your privacy. For more information, please see our Privacy Policy."'
+      },
+      updatedAt: 2025-12-17T05:26:45.964Z,
+      __v: 0
+    },
+    termsofservices: {
+      _id: ObjectId('68cc00f35dd1369665dc25fb'),
+      heroSection: {
+        heading: 'Terms of Service',
+        description: 'By booking any service with Clensy LLC ("Clensy Cleaning"), either through our website, over the phone, or by email/text, you agree to comply with these Terms & Conditions. If you do not agree with any part of these terms, do not proceed with booking a service.'
+      },
+      companyInfo: { websiteUrl: '', email: 'info@clensy.com', phone: '551-305-4081' },
+      sections: [
+        {
+          title: '1. Booking Confirmation',
+          content: 'Booking a service online does not guarantee the requested date/time. Appointments are not confirmed until you receive written or verbal confirmation from a Clensy representative. We reserve the right to reschedule any appointment due to staffing, emergencies, or logistical limitations.',
+          order: 1,
+          _id: ObjectId('68cc00f35dd1369665dc25fc')
+        },
+        {
+          title: '2. Cleaning Providers',
+          content: 'All service providers are thoroughly vetted prior to onboarding and are expected to uphold integrity and accountability throughout their engagement with us. While we strive for consistent service, we do not guarantee the same provider for every visit. Clensy reserves the right to change cleaning personnel at any time without notice.\n' +
+            '\n',
+          order: 2,
+          _id: ObjectId('68cc00f35dd1369665dc25fd')
+        },
+        {
+          title: '3. Right to Refuse Service',
+          content: 'Clensy Cleaning reserves the right, at its sole discretion, to refuse, pause, suspend, or terminate service at any time due to safety concerns, unsanitary or hazardous conditions, inappropriate or hostile behavior, weapons on the premises, severe clutter, disconnected or non-functional utilities (including electricity, water, or heat in cold temperatures), or conditions that are materially different from what was disclosed at the time of booking.\n' +
+            '\n' +
+            'Clensy Cleaning providers are authorized to leave immediately if they determine that a service location presents a safety, health, or security risk, or if conditions prevent the service from being performed as scheduled.\n' +
+            '\n' +
+            'In addition, Clensy Cleaning may suspend or terminate ongoing or future services, with or without notice, due to nonpayment, repeated cancellations or reschedules, abusive or inappropriate behavior, unreasonable expectations, or violation of these Terms of Service.\n' +
+            '\n' +
+            'If service is refused, paused, or terminated under this section, the visit may be treated as a late cancellation or completed visit for billing purposes, and applicable cancellation fees, minimum service charges, or full service charges may apply. Termination of service does not waive the client’s obligation to pay for services already rendered or fees incurred.',
+          order: 3,
+          _id: ObjectId('68cc00f35dd1369665dc25fe')
+        },
+        {
+          title: '4. Cleaning Day Preparation',
+          content: 'Clients must ensure the home is accessible and reasonably tidy prior to the scheduled arrival. Reasonable preparation includes, but is not limited to, clearing toys, laundry, dishes, and personal items from surfaces to be cleaned. Cleaners are not responsible for excessive decluttering, organizing, or handling large amounts of personal belongings unless such services are scheduled in advance as add-ons.\n' +
+            '\n' +
+            'If the home is inaccessible, insufficiently prepared, or the condition of the home materially exceeds the scope disclosed at booking, Clensy Cleaning reserves the right to refuse, pause, or terminate service. In such cases, the visit may be treated as a late cancellation, and the full service fee or applicable minimum charge may apply.',
+          order: 4,
+          _id: ObjectId('68cc00f35dd1369665dc25ff')
+        },
+        {
+          title: '5. Add-On Services',
+          content: 'The following services are available for an additional charge and must be requested in advance, subject to availability and scheduling capacity: deep cleaning, organization, laundry, interior refrigerator cleaning, interior oven cleaning, interior cabinet cleaning, interior window cleaning, dishes, pet hair removal, and wet wiping or detailing of blinds.\n' +
+            '\n' +
+            'Pricing for add-on services is not included in standard cleaning rates and may vary based on the condition of the home, level of buildup, and time required to complete the service. Same-day add-on requests are not guaranteed and may be declined if they impact the scheduled scope or timing of the service.\n',
+          order: 5,
+          _id: ObjectId('68cc00f35dd1369665dc2600')
+        },
+        {
+          title: '6. Pets',
+          content: 'We are happy to work around household pets; however, for safety and efficiency, clients are asked to limit indoor pet activity during the cleaning. Clients are responsible for ensuring that pets are properly secured, supervised, or removed from active work areas as needed.\n' +
+            '\n' +
+            'If a pet becomes anxious, aggressive, or otherwise presents a safety concern, Clensy Cleaning reserves the right, at its sole discretion, to pause or terminate the service and remove its providers from the home. Our providers are instructed not to enter or continue service in any environment where they believe an animal poses a potential risk, as pets may behave unpredictably when their owner is not present.\n' +
+            '\n' +
+            'If service is paused or terminated due to pet-related safety concerns, the cancellation or early-termination policy shall apply, and Clensy Cleaning shall not be held liable for incomplete service or any resulting inconvenience.',
+          order: 6,
+          _id: ObjectId('68cc03185dd1369665dc26f7')
+        },
+        {
+          title: '7. Service Fees',
+          content: 'All quotes provided by Clensy Cleaning are fixed-rate estimates based on the information supplied at the time of booking, our years of professional experience, and the projected number of labor hours required to complete the service under average conditions. Each quoted price includes a maximum amount of cleaning time allocated for that visit, whether or not the specific time allocation is discussed, and reflects the scope of work agreed upon during the booking process.\n' +
+            '\n' +
+            'While pricing is fixed for the quoted scope, cleaning time is not unlimited. Actual cleaning time may vary depending on the condition of the home, level of buildup, size, layout, and client expectations. If, during the service, it becomes apparent that the condition of the home or scope of work will require additional time beyond the hours included in the original quote, Clensy Cleaning will notify the client before the quoted time is exceeded.\n' +
+            '\n' +
+            'At that point, the client will be presented with one of two options only:\n' +
+            '\n' +
+            'Extend the service for the additional time required at the applicable hourly or fixed extension rate, based on the estimated additional hours needed; or\n' +
+            '\n' +
+            'Conclude the service at the end of the originally quoted time, with cleaning completed up to that point based on either the client’s stated priorities or Clensy Cleaning’s professional judgment.\n' +
+            '\n' +
+            'Clensy Cleaning will make reasonable efforts to provide advance notice—typically at least one hour before the quoted service time concludes—so the client may decide how to proceed or advise which areas should be prioritized during the remaining time.\n' +
+            '\n' +
+            'If Clensy Cleaning completes the service within the quoted scope and time allocation, the full quoted service amount will be charged. If the client declines additional time once notified, no discount, refund, or rate adjustment will apply for work not completed beyond the quoted hours.\n' +
+            '\n' +
+            'Approval to extend service may be provided verbally, electronically, or by continued access to the home. Pricing disputes must be raised prior to or during the service. Completion of the agreed-upon scope within the quoted time constitutes acceptance of the service and applicable charges.\n' +
+            '\n' +
+            'Clensy Cleaning reserves the right to reevaluate and adjust future service quotes, time allocations, or pricing based on changes in home condition, service frequency, historical cleaning time requirements, or client expectations.',
+          order: 7,
+          _id: ObjectId('68cc03185dd1369665dc26f8')
+        },
+        {
+          title: '8. Payment Terms',
+          content: 'A valid credit card must be provided at the time of booking in order to confirm the appointment. You will not be charged at the time of booking, cards are only pre-authorized 24 hours before your appointment and are not processed or charged until after the service has been completed. If a payment fails, future services may be paused until the issue is resolved.\n' +
+            '\n' +
+            'Clients agree not to initiate chargebacks or payment disputes for services rendered without first providing Clensy Cleaning an opportunity to investigate and resolve the concern. Initiating a chargeback in violation of this policy may result in permanent service termination.\n',
+          order: 8,
+          _id: ObjectId('68cc03185dd1369665dc26f9')
+        },
+        {
+          title: '9. Refund Policy',
+          content: 'Clensy Cleaning does not offer refunds for services rendered. If a client is not satisfied with the service, notice must be provided within 24 hours of completion. At our discretion, we may offer one complimentary re-clean for missed or overlooked areas within the original scope of service.\n' +
+            '\n' +
+            'Re-cleans will not be performed after the 24-hour notice window, if the space has been altered, used, or cleaned by the client or a third party before inspection, or if the concern relates to conditions outside the original scope. Acceptance of a re-clean constitutes the sole remedy for service-related concerns.\n' +
+            '\n' +
+            'Clensy Cleaning does not guarantee specific results, outcomes, or perfection. Cleaning effectiveness may vary based on surface condition, material type, age, prior treatments, buildup level, and environmental factors. By booking service, the client acknowledges that professional cleaning involves reasonable care and effort, but does not guarantee the removal of all stains, buildup, or cosmetic imperfections.',
+          order: 9,
+          _id: ObjectId('68cc03185dd1369665dc26fa')
+        },
+        {
+          title: '10. Recurring Services, Billing & Discounts',
+          content: 'Clients enrolled in Clensy services authorize Clensy Cleaning to automatically charge the payment method on file for each scheduled service in accordance with the selected service frequency. Recurring services automatically renew unless canceled in accordance with Clensy Cleaning’s cancellation policy.\n' +
+            '\n' +
+            'Clients are responsible for maintaining valid payment information and notifying Clensy Cleaning of any billing changes. Failure to cancel services in accordance with these Terms does not relieve the client of payment obligations for scheduled services.\n' +
+            '\n' +
+            'Recurring service discounts apply only after the first paid cleaning and are contingent upon maintaining the agreed-upon service frequency (weekly, biweekly, or monthly).\n' +
+            '\n' +
+            'Skipping, canceling, rescheduling, or changing service frequency without proper notice may void the discounted rate. If a discount is voided, pricing will be adjusted to reflect the current standard rate associated with the new service frequency or converted to a one-time service rate, at Clensy Cleaning’s discretion.',
+          order: 10,
+          _id: ObjectId('68cc03185dd1369665dc26fb')
+        },
+        {
+          title: '11. Rate Increases',
+          content: 'Clensy Cleaning reserves the right to adjust service rates at any time due to changes in service frequency, scope of work, or the condition or characteristics of the home. This includes, but is not limited to, remodels, changes of address, additional occupants, pets, significant increases in furniture or belongings, or other factors that materially affect cleaning time or effort.\n' +
+            '\n' +
+            'In addition, service rates may be adjusted annually to reflect changes in labor costs, operating expenses, or market conditions. Annual rate increases, when applied, will not exceed 10% of the client’s current rate.',
+          order: 11,
+          _id: ObjectId('68cc03185dd1369665dc26fc')
+        },
+        {
+          title: '12. Lockouts',
+          content: 'The client is responsible for ensuring that the service location is accessible to Clensy Cleaning providers at the scheduled service time. Acceptable access includes being present at the property or providing a working key, lockbox, or entry code in advance.\n' +
+            '\n' +
+            'If the team is unable to access the home upon arrival, reasonable efforts will be made to contact the client. If access is not granted within 30 minutes of the team’s arrival, the service will be skipped and treated as a completed visit for billing purposes. The full value of the scheduled service will be charged to compensate for reserved labor time, travel, and lost scheduling opportunity.\n' +
+            '\n' +
+            'To avoid lockout charges, clients are strongly encouraged to provide reliable access instructions prior to the appointment.',
+          order: 12,
+          _id: ObjectId('68cc03185dd1369665dc26fd')
+        },
+        {
+          title: '13. Cancellations',
+          content: "Service reliability is extremely important because we reserve a time specifically for you. We request a minimum of 24 hours' advance notice if you need to cancel or reschedule for any reason to avoid incurring a $50 cancellation fee. Please note that if service is canceled with less than 24 hours' notice, or if we are unable to access the home upon arrival, or if we are turned away at the door, the full value of the service will be charged to the credit card on file. \n" +
+            '\n' +
+            'Clensy Cleaning shall not be liable for delays, cancellations, or service interruptions caused by events beyond its reasonable control, including but not limited to weather, traffic, illness, accidents, equipment failure, or acts of God.\n' +
+            '\n',
+          order: 13,
+          _id: ObjectId('68cc03185dd1369665dc26fe')
+        },
+        {
+          title: '14. Promotional Offer Cancellation Terms',
+          content: 'Promotional offers, introductory credits, or discounted services are provided subject to the specific terms of the applicable promotion. Eligibility for any promotional benefit may require maintaining a minimum service commitment or completing a specified number of visits.\n' +
+            '\n' +
+            'If a client cancels, pauses, or modifies service in a manner that violates the terms of a promotional offer, Clensy Cleaning reserves the right to void the promotion and apply any applicable cancellation charge, retroactive rate adjustment, or standard service pricing associated with that promotion.\n' +
+            '\n' +
+            'Promotional terms, including any cancellation-related charges, vary by offer and are disclosed at the time of booking or enrollment.',
+          order: 14,
+          _id: ObjectId('68cc03185dd1369665dc26ff')
+        },
+        {
+          title: '15. Alarm',
+          content: 'If the service location is equipped with a security or alarm system, the client is responsible for ensuring that the system is properly disarmed prior to the scheduled arrival or for providing accurate access codes and clear operating instructions in advance.\n' +
+            '\n' +
+            'If access is delayed, denied, or service is interrupted due to an active alarm system, incorrect codes, or incomplete instructions, the visit may be treated as a lockout or late cancellation, and applicable lockout or cancellation charges may apply.\n' +
+            '\n' +
+            'Clensy Cleaning is not responsible for alarm activations, false alarms, or any related fees, penalties, or service interruptions resulting from alarm system issues or client-provided access information.\n' +
+            '\n',
+          order: 15,
+          _id: ObjectId('68cc03185dd1369665dc2700')
+        },
+        {
+          title: '16. Client-Supplied Equipment/Products',
+          content: 'If a client requests that Clensy Cleaning use client-supplied cleaning products, tools, or equipment (including but not limited to vacuums or specialty cleaners), Clensy Cleaning assumes no liability for malfunction, inefficiency, incompatibility, or damage resulting from their use. Clients are responsible for the condition, suitability, and safety of any items they request our providers to use.\n' +
+            '\n' +
+            'In addition, if a client instructs, requests, or insists that a cleaner repeat a task, apply additional product, use stronger product concentrations, or continue cleaning an area after the cleaner has advised that further cleaning may risk damage, Clensy Cleaning shall not be held liable for any resulting damage, discoloration, surface changes, or exposure of pre-existing conditions.\n' +
+            '\n' +
+            'Cleaners are trained to exercise reasonable care and professional judgment and may communicate concerns regarding sensitive surfaces; however, compliance with client-directed instructions is performed at the client’s request and risk.',
+          order: 16,
+          _id: ObjectId('68cc03185dd1369665dc2701')
+        },
+        {
+          title: '17. Clensy Cleaning Supplies',
+          content: 'Clensy Cleaning provides standard professional-grade cleaning supplies and equipment for each appointment. Clients with specific product preferences, sensitivities, or restrictions (including but not limited to green, fragrance-free, or specialty products) must notify Clensy Cleaning in advance and supply the requested products on-site at the time of service.\n' +
+            '\n' +
+            'If alternative products are not provided or are unavailable at the time of service, Clensy Cleaning’s providers are authorized to proceed using Clensy Cleaning’s standard products and equipment. Clensy Cleaning shall not be held liable for dissatisfaction, allergic reactions, or damages arising from the use of standard products in situations where client preferences were not communicated in advance or where preferred products were not available on-site.\n' +
+            '\n' +
+            'Last-minute product preference changes or restrictions may require rescheduling and are not guaranteed to be accommodated.\n' +
+            '\n',
+          order: 17,
+          _id: ObjectId('68cc03185dd1369665dc2702')
+        },
+        {
+          title: '18. Items We Cannot Clean',
+          content: 'Certain conditions and materials require specialized training, equipment, or licensing and are outside the scope of Clensy Cleaning’s services. For health, safety, and liability reasons, Clensy Cleaning does not provide mold remediation, biohazard cleanup, or hoarding cleanup services.\n' +
+            '\n' +
+            'This includes, but is not limited to, areas containing mold, excessive mildew, bodily fluids, blood, feces, vomit, urine, cat litter boxes, bird cages, or other human or animal excretions.\n' +
+            '\n' +
+            'If such conditions are present or discovered during service, Clensy Cleaning reserves the right to refuse, pause, or terminate service immediately. In such cases, applicable cancellation or minimum service charges may apply, and Clensy Cleaning shall not be held liable for incomplete service or any related consequences.\n',
+          order: 18,
+          _id: ObjectId('68cc03185dd1369665dc2703')
+        },
+        {
+          title: '19. Unreachable Areas & Heavy Items',
+          content: 'For safety and liability reasons, Clensy Cleaning providers are not permitted to climb higher than a standard step stool, work outside the home, or access areas that cannot be reached safely without specialized equipment.\n' +
+            '\n' +
+            'Additionally, cleaners are not authorized to move furniture, appliances, or objects weighing more than 35 pounds, as doing so may pose a risk of injury or property damage.\n' +
+            '\n' +
+            'Areas that are blocked, obstructed, or located behind heavy items will not be cleaned unless those items are moved by the client prior to the appointment. Clensy Cleaning is not responsible for uncleaned areas resulting from access limitations or safety restrictions.\n',
+          order: 19,
+          _id: ObjectId('68cc03185dd1369665dc2704')
+        },
+        {
+          title: '20. Breakage/Damage & Loss Policy',
+          content: 'While occurrences are rare, the possibility of accidental breakage or damage exists during professional cleaning. Clensy Cleaning providers exercise reasonable care at all times, and providers carry insurance for damage or breakage directly caused by the provider’s clear negligence.\n' +
+            '\n' +
+            'Clensy Cleaning is not liable for damage resulting from normal wear and tear, aging materials, improper installation, manufacturing defects, prior repairs or resurfacing, or undisclosed fragile items. This includes, but is not limited to, artwork, collectibles, antiques, or family heirlooms. Clients are responsible for identifying such items prior to service and advising how they should be handled.\n' +
+            '\n' +
+            'By engaging Clensy Cleaning, the client acknowledges that professional cleaning involves inherent risks, including potential cosmetic or material changes to surfaces due to age, wear, prior treatments, material sensitivity, or pre-existing conditions. Clensy Cleaning does not act as an insurer of the client’s property and is not responsible for damage unless directly caused by clear negligence on the part of the cleaning provider.\n' +
+            '\n' +
+            'To the fullest extent permitted by law, Clensy Cleaning’s total liability for any claim, damage, loss, or dispute arising from a service shall be strictly limited to the total amount paid for the specific service giving rise to the claim.\n' +
+            '\n' +
+            'Clensy Cleaning shall not be liable for indirect, incidental, consequential, or special damages, including but not limited to loss of use, loss of income, alternative lodging, contractor costs, or third-party repairs. Opinions, estimates, or assessments provided by third parties (including contractors or service professionals) do not constitute proof of liability or causation.\n' +
+            '\n' +
+            'No repairs, replacements, or alterations may be made to any allegedly damaged item or area before Clensy Cleaning has been given a reasonable opportunity to inspect it. Failure to allow inspection voids any potential claim.\n' +
+            '\n' +
+            'All claims for damage or loss must be reported within 24 hours of service completion. While identical replacement is always attempted when applicable, it cannot be guaranteed.',
+          order: 20,
+          _id: ObjectId('68cc03185dd1369665dc2705')
+        },
+        {
+          title: '21. Personal Belongings Disclaimer',
+          content: 'We are not liable for lost or misplaced items unless it is proven beyond doubt that they were removed or damaged by our cleaner. Clients are responsible for securing jewelry, electronics, cash, and other valuables prior to each visit.\n' +
+            '\n',
+          order: 21,
+          _id: ObjectId('68cc03185dd1369665dc2706')
+        },
+        {
+          title: '22. Client Responsibilities',
+          content: 'Clients are responsible for providing accurate and complete information regarding the condition, size, layout, and occupancy of the home at the time of booking. Clients must secure all valuables and personal items and ensure that the service location has functional access to water, electricity, and appropriate climate control during the scheduled cleaning.\n' +
+            '\n' +
+            'Clients are also responsible for ensuring reasonable preparation of the home, providing safe and unobstructed access to areas to be cleaned, and disclosing any sensitive, fragile, aging, refinished, or specialty surfaces prior to service.\n' +
+            '\n' +
+            'Any dissatisfaction, damage, or concern related to the service must be reported within 24 hours of completion. Failure to meet the responsibilities outlined in this section may result in service refusal, cancellation, additional charges, denial of re-clean eligibility, or full charges for the scheduled service, as applicable.\n' +
+            '\n' +
+            'Clients agree to provide reasonable cooperation during service, including allowing providers to work without interference. Excessive interruption or interference may impact service quality and does not constitute grounds for refunds or re-cleans.',
+          order: 22,
+          _id: ObjectId('68cc03185dd1369665dc2707')
+        },
+        {
+          title: '23. Cleaners Arrival Window',
+          content: 'We schedule our cleanings in a way that minimizes drive time to help keep prices low and avoid trip fees. If you request a specific time, we will do our best to accommodate it; however, no arrival times are guaranteed. Due to the unpredictable nature of our business and potential delays such as traffic, weather, or mechanical issues, we ask for flexibility in scheduling cleanings between 8:00 AM and 5:00 PM. We typically provide a 2-hour arrival window, which is disclosed at the time of booking. If our team is running late, we will notify you by call or text.\n' +
+            '\n',
+          order: 23,
+          _id: ObjectId('68cc03185dd1369665dc2708')
+        },
+        {
+          title: '24. Holidays',
+          content: 'Clensy Cleaning does not operate on state or federally recognized holidays. In holiday weeks, service schedules may be adjusted as needed to optimize routing and staffing. Depending on availability, a scheduled visit may be rescheduled within the same week, skipped, or adjusted to an alternate service date.\n' +
+            '\n' +
+            'Clients may be contacted to confirm availability or preferences; however, scheduling adjustments during holiday weeks are not guaranteed to match the regular service day or time. Holiday-related schedule adjustments do not constitute cancellations and do not result in service credits, refunds, or fee reductions.\n',
+          order: 24,
+          _id: ObjectId('68cc03185dd1369665dc2709')
+        },
+        {
+          title: '25. House Key/Key Release',
+          content: 'If a client chooses to provide access by leaving a door unlocked, placing a key in an unsecured location (such as under a mat or planter), or sharing access codes, the client assumes all associated risk. Clensy Cleaning shall not be held liable for any loss, damage, theft, or security issues arising from unsecured or client-directed access methods.\n' +
+            '\n' +
+            'Any keys, lockbox codes, or access devices voluntarily provided to Clensy Cleaning are used solely for the purpose of performing scheduled services. Upon termination or cancellation of services, Clensy Cleaning will make reasonable efforts to return physical keys in its possession within 48 hours or by the next business day, unless otherwise arranged.\n' +
+            '\n' +
+            'Clensy Cleaning is not responsible for issues arising from changed, expired, or incorrect access instructions provided by the client.',
+          order: 25,
+          _id: ObjectId('68cc03185dd1369665dc270a')
+        },
+        {
+          title: '26. Non-Solicitation of Clensy Cleaning Providers',
+          content: 'Clients agree not to solicit, recruit, hire, or engage any Clensy Cleaning provider for private work or employment outside of Clensy Cleaning, whether directly or indirectly, during the course of service and for a period of twelve (12) months following the client’s most recent service date.\n' +
+            '\n' +
+            'Clensy Cleaning providers are thoroughly vetted, background checked, and trained prior to servicing client homes. Clensy Cleaning invests significant time, resources, and expense in recruiting, training, and retaining its providers.\n' +
+            '\n' +
+            'Any direct or indirect solicitation or employment of a Clensy Cleaning provider outside of Clensy Cleaning is strictly prohibited and constitutes a material breach of these Terms. Clensy Cleaning reserves the right to pursue appropriate remedies, including service termination and recovery of associated costs, to the fullest extent permitted by law.',
+          order: 26,
+          _id: ObjectId('68cc03185dd1369665dc270b')
+        },
+        {
+          title: '27. Governing Law',
+          content: 'Governing Law & Venue\n' +
+            'These Terms of Service and any dispute, claim, or controversy arising out of or relating to Clensy Cleaning’s services shall be governed by and construed in accordance with the laws of the State of New Jersey, without regard to its conflict of law principles.\n' +
+            '\n' +
+            'The parties agree that any legal action or proceeding arising under these Terms shall be brought exclusively in the state or federal courts located within the State of New Jersey, and the parties hereby consent to personal jurisdiction and venue therein.\n',
+          order: 27,
+          _id: ObjectId('68cc03185dd1369665dc270c')
+        },
+        {
+          title: '28. Dispute Resolution & Small Claims',
+          content: 'Prior to initiating any formal legal action, the client agrees to provide Clensy Cleaning with written notice of the dispute and allow a reasonable opportunity to resolve the matter informally. If a dispute cannot be resolved informally, the parties agree that claims within the jurisdictional limits of New Jersey small claims court shall be brought in small claims court whenever permitted by law. Nothing in this section prevents either party from seeking relief in the courts identified in the Governing Law & Venue section when applicable.',
+          order: 28,
+          _id: ObjectId('694252e756088d84f6a7731f')
+        },
+        {
+          title: '29. Electronic Records & Communications',
+          content: 'Clensy Cleaning may rely on and maintain electronic records, including but not limited to text messages, emails, call recordings, timestamps, photographs, videos, scheduling data, and internal service records, to document service details, client instructions, approvals, communications, and dispute resolution. Such electronic records may be used to verify scheduling, pricing, scope of work, access instructions, service completion, and compliance with these Terms of Service. Clients acknowledge and agree that electronic records maintained by Clensy Cleaning may be relied upon for business, billing, and dispute-resolution purposes.',
+          order: 29,
+          _id: ObjectId('694252e756088d84f6a77320')
+        },
+        {
+          title: '30. Media & Photo Usage Consent',
+          content: 'Media & Photo Usage Consent Clensy Cleaning may take photographs or videos of service areas before, during, or after cleaning for quality control, documentation, training, or dispute-resolution purposes. Unless the client provides written notice objecting in advance, the client grants Clensy Cleaning permission to use non-identifying images of cleaned areas for marketing, educational, or promotional purposes. No personally identifying information, faces, or personal details will be disclosed without explicit consent.\n',
+          order: 30,
+          _id: ObjectId('694252e756088d84f6a77321')
+        },
+        {
+          title: '31. Severability',
+          content: 'If any provision of these Terms is found to be unenforceable, the remaining provisions shall remain in full force and effect.',
+          order: 31,
+          _id: ObjectId('694252e756088d84f6a77322')
+        },
+        {
+          title: '32. No Waiver',
+          content: 'Failure by Clensy Cleaning to enforce any provision of these Terms on one occasion does not constitute a waiver of the right to enforce that provision in the future.',
+          order: 32,
+          _id: ObjectId('694252e756088d84f6a77323')
+        },
+        {
+          title: '33. Entire Agreement',
+          content: 'These Terms of Service constitute the entire agreement between the client and Clensy Cleaning regarding the services provided and supersede all prior or contemporaneous communications, discussions, representations, or agreements, whether written or oral. No statements, promises, or representations made by any cleaner, contractor, or representative of Clensy Cleaning shall modify or override these Terms unless expressly agreed to in writing by Clensy Cleaning.\n',
+          order: 33,
+          _id: ObjectId('694252e756088d84f6a77324')
+        },
+        {
+          title: '34. Changes to Terms',
+          content: 'Clensy Cleaning reserves the right to modify these terms and conditions at any time without prior notice.',
+          order: 34,
+          _id: ObjectId('694252e756088d84f6a77325')
+        },
+        {
+          title: 'SMS Terms of Service',
+          content: 'By opting into SMS from a web form or other medium, you are agreeing to receive SMS messages from Clensy Cleaning. This includes SMS messages for appointment scheduling, appointment reminders, post-visit instructions, lab notifications, and billing notifications. Message frequency varies. Message and data rates may apply. See our privacy policy. Message HELP for help. Reply STOP to any message to opt out. Visit https://clensy.com/terms-of-service for full Terms of Service.\n',
+          order: 35,
+          _id: ObjectId('694252e756088d84f6a77326')
+        }
+      ],
+      agreementSection: {
+        description: 'By using our services, you agree to these terms and conditions. If you do not agree to these terms, please do not use our services.',
+        lastUpdated: 'September 18, 2025'
+      },
+      updatedAt: 2025-12-17T06:51:19.374Z,
+      __v: 0
+    },
+    services: {
+      _id: ObjectId('684c1eabd19031f1a0a63549'),
+      serviceSlug: 'airbnb-cleaning',
+      __v: 0,
+      createdAt: 2025-06-13T12:50:50.819Z,
+      ctaSection: {
+        buttonLink: '/booking',
+        buttonText: 'Get Started',
+        description: 'Book your cleaning service today and enjoy a spotless space.',
+        heading: 'Ready to Experience Professional Cleaning?'
+      },
+      faqSection: {
+        description: 'Common questions about this service.',
+        faqs: [],
+        heading: 'Frequently Asked Questions'
+      },
+      heroSection: {
+        tagline: 'Professional Airbnb Cleaning',
+        heading: 'Expert Airbnb Cleaning Services',
+        description: 'Professional airbnb cleaning services designed to meet your specific needs with exceptional results.',
+        backgroundImage: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop',
+        ctaText: 'Get Free Quote',
+        ctaLink: '/contact',
+        badge1Text: 'Professional Service',
+        badge2Text: '100% Satisfaction',
+        estimatedTime: '2-4 Hours'
+      },
+      includedServices: {
+        description: 'Comprehensive cleaning services tailored to your needs.',
+        heading: "What's Included",
+        services: []
+      },
+      isActive: true,
+      pricingSection: {
+        description: 'Transparent pricing for professional cleaning services.',
+        heading: 'Service Pricing',
+        priceNote: 'Final pricing depends on property size and specific requirements.'
+      },
+      processSection: {
+        description: 'Our simple and efficient process ensures the best results.',
+        heading: 'How It Works',
+        steps: []
+      },
+      seoMeta: { keywords: [] },
+      serviceFeatures: {
+        heading: 'Why Choose Our Airbnb Cleaning',
+        description: 'Professional cleaning services designed to meet your specific needs.',
+        features: [
+          {
+            title: 'Professional Quality',
+            description: 'Trained professionals with premium equipment and eco-friendly products.',
+            icon: 'Shield',
+            _id: ObjectId('684c1eaad55bb2e824b74d6a')
+          },
+          {
+            title: 'Reliable Service',
+            description: 'Consistent, punctual service you can depend on every time.',
+            icon: 'Clock',
+            _id: ObjectId('684c1eaad55bb2e824b74d6b')
+          },
+          {
+            title: 'Customer Satisfaction',
+            description: '100% satisfaction guarantee with exceptional customer service.',
+            icon: 'Star',
+            _id: ObjectId('684c1eaad55bb2e824b74d6c')
+          }
+        ]
+      },
+      serviceName: 'Airbnb Cleaning',
+      testimonials: {
+        description: "Don't just take our word for it - hear from our satisfied customers.",
+        heading: 'What Our Clients Say',
+        reviews: []
+      },
+      trustIndicators: [
+        {
+          number: '500+',
+          label: 'Happy Clients',
+          _id: ObjectId('684c1eaad55bb2e824b74d6d')
+        },
+        {
+          number: '4.9',
+          label: 'Star Rating',
+          _id: ObjectId('684c1eaad55bb2e824b74d6e')
+        },
+        {
+          number: '100%',
+          label: 'Satisfaction',
+          _id: ObjectId('684c1eaad55bb2e824b74d6f')
+        },
+        {
+          number: '24/7',
+          label: 'Support',
+          _id: ObjectId('684c1eaad55bb2e824b74d70')
+        }
+      ],
+      updatedAt: 2025-06-13T12:50:50.819Z
+    },
+    morrislocations: {
+      _id: ObjectId('684c45bf5a46484e39b45376'),
+      heroSection: {
+        title: 'Morris County',
+        subtitle: 'Professional Cleaning Services in Morris County, NJ',
+        backgroundImage: 'https://res.cloudinary.com/dgjmm3usy/image/upload/v1751528634/GettyImages-1403661247_nfwwdl.jpg',
+        ctaButton1: 'SCHEDULE SERVICE',
+        ctaButton2: 'CALL US NOW',
+        _id: ObjectId('684c45bf5a46484e39b45377')
+      },
+      contactSection: {
+        title: 'Contact Information',
+        phone: '973-555-2468',
+        email: 'morris@clensy.com',
+        address: '123 Morris Ave, Morristown, NJ 07960',
+        hours: [
+          {
+            day: 'Monday',
+            hours: '8:00 am - 6:00 pm',
+            _id: ObjectId('684c45bf5a46484e39b45379')
+          },
+          {
+            day: 'Tuesday',
+            hours: '8:00 am - 6:00 pm',
+            _id: ObjectId('684c45bf5a46484e39b4537a')
+          },
+          {
+            day: 'Wednesday',
+            hours: '8:00 am - 6:00 pm',
+            _id: ObjectId('684c45bf5a46484e39b4537b')
+          },
+          {
+            day: 'Thursday',
+            hours: '8:00 am - 6:00 pm',
+            _id: ObjectId('684c45bf5a46484e39b4537c')
+          },
+          {
+            day: 'Friday',
+            hours: '8:00 am - 6:00 pm',
+            _id: ObjectId('684c45bf5a46484e39b4537d')
+          },
+          {
+            day: 'Saturday',
+            hours: '10:00 am - 2:00 pm',
+            _id: ObjectId('684c45bf5a46484e39b4537e')
+          },
+          {
+            day: 'Sunday',
+            hours: 'Closed',
+            _id: ObjectId('684c45bf5a46484e39b4537f')
+          }
+        ],
+        _id: ObjectId('684c45bf5a46484e39b45378')
+      },
+      serviceAreas: [
+        'Morristown',
+        'Boonton',
+        'Denville',
+        'Mountain Lakes',
+        'Lincoln Park',
+        'Pine Brook',
+        'Butler',
+        'Florham Park',
+        'Chatham',
+        'Madison',
+        'Parsippany'
+      ],
+      aboutSection: {
+        title: 'About Our Morris County Services',
+        description: 'Serving Morris County with top-quality cleaning services for both residential and commercial properties. Our team of professional cleaners is dedicated to providing exceptional service with attention to detail.',
+        content: [
+          'Our Morris County location is centrally positioned in historic Morristown, making it convenient for clients throughout the region. From this location, we provide our full range of cleaning services to homes and businesses in Morristown, Parsippany, Rockaway, and surrounding areas.',
+          'The Morris County team consists of experienced cleaning professionals who are familiar with the unique needs of local homes and businesses. Whether you live in a historic property in Morristown or a modern home in Parsippany, our team has the expertise to provide exceptional cleaning services.',
+          'We take pride in serving the Morris County community and look forward to helping you maintain a clean, healthy environment in your home or business.'
+        ],
+        _id: ObjectId('684c45bf5a46484e39b45380')
+      },
+      seo: {
+        title: 'Professional Cleaning Services in Morris County, NJ | Clensy',
+        description: 'Clensy offers professional cleaning services in Morris County, NJ. Book online for residential and commercial cleaning services with guaranteed satisfaction.',
+        keywords: [
+          'cleaning services Morris County',
+          'house cleaning Morris County',
+          'commercial cleaning Morris County',
+          'professional cleaners Morristown',
+          'maid service Morris County',
+          'office cleaning Morris'
+        ],
+        _id: ObjectId('684c45bf5a46484e39b45381')
+      },
+      createdAt: 2025-06-13T15:37:35.345Z,
+      updatedAt: 2025-07-04T16:46:22.685Z,
+      __v: 0
+    },
+    heros: {
+      _id: ObjectId('6938366f1b6e3dcc5f61d8cd'),
+      createdAt: 2025-12-09T14:47:11.185Z,
+      updatedAt: 2025-12-09T16:14:06.838Z,
+      topLabel: 'Professional Cleaning Services',
+      heading: 'Professional cleaning for your home',
+      subheading: 'We make it easy to get your home cleaned. Professional cleaning services tailored to your needs.',
+      buttonText: 'See my price',
+      feature1: '30-second pricing',
+      feature2: '100% Satisfaction guaranteed',
+      seo: { metaRobots: 'index,follow' },
+      __v: 0,
+      status: 'draft'
+    },
+    routinecleanings: {
+      _id: ObjectId('684d989a4cf68c5195c2440e'),
+      heroTopLabel: 'Residential Services',
+      heroHeading: 'Experience Pristine Routine Cleaning',
+      heroSubheading: 'Our signature routine cleaning service maintains your home in immaculate condition with expert attention to detail. Perfect for busy professionals and families seeking consistent cleanliness.',
+      heroBackgroundImage: 'https://cdn.pixabay.com/photo/2017/08/02/20/54/home-2573375_1280.png',
+      heroServiceDuration: '2-3 Hour Service',
+      heroServiceGuarantee: '100% Satisfaction',
+      includedSectionHeading: "What's Included in Our Routine Cleaning",
+      includedSectionSubheading: 'Our standard cleaning is a maintenance clean – light, consistent, and focused on the areas that matter most.',
+      kitchenTitle: 'Kitchen Excellence',
+      kitchenDescription: 'The heart of your home deserves special attention. Our routine kitchen cleaning ensures cooking spaces remain fresh and sanitized.',
+      kitchenImage: 'https://drive.google.com/file/d/1WWUeCkmunfIpaOxhW9GEGkwpXb-acw9H/view?pli=1',
+      kitchenFeatures: [
+        'Clean & disinfect sink, countertops, and stovetop',
+        'Wipe & polish appliance exteriors',
+        'Wipe cabinet exteriors',
+        'Vacuum & mop floors'
+      ],
+      bathroomTitle: 'Bathroom Refresh',
+      bathroomDescription: 'Our bathroom cleaning routines ensure these essential spaces remain hygienic and sparkling clean after every visit.',
+      bathroomImage: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1470&auto=format&fit=crop',
+      bathroomFeatures: [
+        'Clean & disinfect toilet, sink, and tub/shower (light cleaning, no heavy scrubbing)',
+        'Wipe mirrors and glass to a streak-free shine',
+        'Wipe cabinet exteriors and fixtures'
+      ],
+      livingAreasTitle: 'Bedrooms & Living Areas',
+      livingAreasDescription: 'The spaces where you relax and entertain deserve special attention to maintain comfort and cleanliness.',
+      livingAreasImage: 'https://images.unsplash.com/photo-1613545325278-f24b0cae1224?q=80&w=1470&auto=format&fit=crop',
+      livingAreasFeatures: [
+        'Light dusting of furniture, shelving, and accessible surfaces',
+        'Make beds (change linens if left out)',
+        'Light (5-minute) organization per room',
+        'Vacuum or sweep & mop all floors'
+      ],
+      featureSectionHeading: 'Cleaning Results, Every Time',
+      featureSectionSubheading: 'Our professional cleaners follow a meticulous process to ensure your home receives the highest standard of cleaning on every visit.',
+      featureSectionImage: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=1770&auto=format&fit=crop',
+      featureSectionPoints: [
+        'We bring all supplies and equipment ',
+        'Consistently thorough cleaning with attention to detail',
+        'Professionally trained and background-checked staff'
+      ],
+      howItWorksHeading: 'How Our Routine Cleaning Works',
+      howItWorksSubheading: 'Getting started with our premium routine cleaning service is seamless and convenient.',
+      step1Title: 'Book Online',
+      step1Description: 'Schedule your cleaning service online in minutes. Choose your preferred date and time that works for your schedule.',
+      step1Image: 'https://images.pexels.com/photos/5077047/pexels-photo-5077047.jpeg',
+      step1Badge: 'Instant Online Pricing',
+      step2Title: 'We Clean',
+      step2Description: 'Our professional team arrives promptly at your scheduled time and meticulously cleans your home to exceed your expectations.',
+      step2Image: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=400&auto=format&fit=crop',
+      step3Title: 'Relax & Enjoy',
+      step3Description: 'Return to a pristine, fresh home. Set up recurring cleanings to maintain your immaculate living space effortlessly.',
+      step3Image: 'https://images.pexels.com/photos/4609037/pexels-photo-4609037.jpeg',
+      benefitsHeading: 'Why Choose Our Routine Cleaning Service',
+      benefitsSubheading: 'Our premium routine cleaning service offers exceptional benefits to maintain your home in pristine condition with minimal effort.',
+      benefitsImage: 'https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839832/image84_rjmtgy.png',
+      benefit1Title: 'Consistent Excellence',
+      benefit1Description: 'Regular professional cleanings ensure your home maintains a consistently pristine appearance and feel, preventing the gradual accumulation of dirt and grime.',
+      benefit2Title: 'Reclaimed Time & Energy',
+      benefit2Description: 'Regain your valuable time and energy by entrusting your cleaning needs to our professional team, allowing you to focus on what matters most to you.',
+      benefit3Title: 'Enhanced Well-being ',
+      benefit3Description: 'Professional cleaning significantly reduces allergens, dust, and bacteria, creating a healthier living environment that promotes overall well-being for you and your family.',
+      updatedAt: 2025-09-04T16:44:57.203Z,
+      __v: 0,
+      faqs: [
+        {
+          question: 'Do I need to be home during the cleaning?',
+          answer: "No, you don't need to be home. Many of our clients provide a key or access code so we can clean while they're at work. Our cleaners are thoroughly vetted, background-checked, and fully insured for your peace of mind.",
+          _id: ObjectId('689b2eaecce8c47fdd449fa9')
+        }
+      ]
+    },
+    howitworks: {
+      _id: ObjectId('684bfc36547a62c29b46e164'),
+      step1: {
+        title: 'Order online',
+        description: 'Our easy online pricing lets you set up a cleaning plan right now. See your price and get scheduled today.',
+        featureText: 'Takes less than 30 seconds',
+        _id: ObjectId('684bfc36547a62c29b46e165')
+      },
+      step2: {
+        title: 'We clean your home',
+        description: 'Our professional team arrives on time and cleans your home according to our 50-point checklist.',
+        featureText: 'Trained and background-checked professionals',
+        _id: ObjectId('684bfc36547a62c29b46e166')
+      },
+      step3: {
+        title: 'Enjoy your clean home',
+        description: "Relax in your freshly cleaned space. We'll be back on your schedule - weekly, weekly, or monthly.",
+        featureText: 'Flexible scheduling to fit your lifestyle',
+        _id: ObjectId('684bfc36547a62c29b46e167')
+      },
+      buttonText: 'Book Now',
+      updatedAt: 2025-06-13T10:23:50.124Z,
+      __v: 0
+    }
+  }

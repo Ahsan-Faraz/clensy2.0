@@ -23,7 +23,11 @@ const defaultContactData = {
     businessHours: { title: "Business Hours", description: "When you can reach us", hours: [{ day: "Monday - Friday", hours: "8:00 AM - 6:00 PM" }, { day: "Saturday", hours: "9:00 AM - 3:00 PM" }, { day: "Sunday", hours: "Closed" }] },
     immediateAssistance: { title: "Need Immediate Assistance?", description: "Our customer support team is available during business hours.", buttonText: "Call Us Now" },
   },
-  consultationSection: { heading: "Need a Personalized Cleaning Solution?", description: "Schedule a consultation with our cleaning experts.", buttonText: "Schedule a Consultation" },
+  consultationSection: {
+    heading: "Need a Personalized Cleaning Solution?",
+    description: "Schedule a consultation with our cleaning experts to discuss your unique requirements and get a customized cleaning plan tailored to your specific needs.",
+    buttonText: "Schedule a Consultation",
+  },
 };
 
 interface ContactPageClientProps {
@@ -201,16 +205,64 @@ export default function ContactPageClient({ schemaJsonLd, headScripts, bodyEndSc
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* CTA Section - Need a Personalized Cleaning Solution? (from Clensy-3-data, blue styling) */}
         {contactData.consultationSection?.heading && (
-          <section className="py-24 bg-gradient-to-r from-blue-600 to-blue-700">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-3xl mx-auto text-center">
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">{formatText(contactData.consultationSection.heading)}</h2>
-                <p className="text-lg text-blue-100 mb-8">{formatText(contactData.consultationSection.description)}</p>
-                <Link href="/booking" className="inline-flex items-center bg-white text-blue-600 px-8 py-4 rounded-xl text-lg font-medium hover:bg-blue-50 transition-colors shadow-lg">
-                  <Calendar className="h-5 w-5 mr-2" />{contactData.consultationSection.buttonText}
-                </Link>
+          <section className="py-24 bg-gradient-to-r from-blue-600 to-blue-700 relative overflow-hidden">
+            {/* Subtle pattern overlay */}
+            <div className="absolute inset-0 opacity-5">
+              <svg width="100%" height="100%">
+                <pattern id="cta-grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M0 0 L40 0 L40 40 L0 40 Z" fill="none" stroke="white" strokeWidth="0.5" />
+                </pattern>
+                <rect width="100%" height="100%" fill="url(#cta-grid-pattern)" />
+              </svg>
+            </div>
+            {/* Glowing orb */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-white/10 filter blur-[100px]" />
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <div className="max-w-4xl mx-auto text-center">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-10 relative"
+                >
+                  <div className="absolute inset-0 rounded-full bg-white/20 blur-md" />
+                  <div className="relative bg-white/20 p-5 rounded-full">
+                    <Calendar className="h-10 w-10 text-white" />
+                  </div>
+                </motion.div>
+                <motion.h2
+                  initial={{ y: 20, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  className="text-4xl md:text-5xl font-bold text-white mb-6"
+                >
+                  {formatText(contactData.consultationSection.heading)}
+                </motion.h2>
+                <motion.p
+                  initial={{ y: 20, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 }}
+                  className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto leading-relaxed"
+                >
+                  {formatText(contactData.consultationSection.description)}
+                </motion.p>
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <Link
+                    href="#form"
+                    className="inline-flex items-center bg-white text-blue-600 hover:bg-blue-50 px-10 py-4 rounded-xl text-lg font-medium transition-all shadow-xl hover:shadow-2xl"
+                  >
+                    <Calendar className="h-5 w-5 mr-2" />
+                    {contactData.consultationSection.buttonText}
+                  </Link>
+                </motion.div>
               </div>
             </div>
           </section>
