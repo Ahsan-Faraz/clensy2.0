@@ -316,11 +316,11 @@ export default function FAQPageClient({ schemaJsonLd, headScripts, bodyEndScript
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">{formatText(faqData.stillHaveQuestionsSection.heading)}</h2>
-              <p className="text-lg text-gray-600">{formatText(faqData.stillHaveQuestionsSection.description)}</p>
+              <h2 className="text-3xl font-bold mb-4">{formatText(faqData.stillHaveQuestionsSection?.heading ?? 'Still Have Questions?')}</h2>
+              <p className="text-lg text-gray-600">{formatText(faqData.stillHaveQuestionsSection?.description ?? 'Here are some other topics our customers frequently ask about.')}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              {faqData.stillHaveQuestionsSection.cards.map((card, index) => (
+              {(faqData.stillHaveQuestionsSection?.cards || []).map((card, index) => (
                 <div key={index} className="bg-white p-8 rounded-2xl shadow-sm text-center">
                   <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                     {card.icon === "clock" && <Clock className="h-8 w-8 text-blue-600" />}

@@ -419,9 +419,15 @@ export class CMSAdapter {
       },
       comprehensiveFAQs: data.comprehensiveFAQs || [],
       stillHaveQuestionsSection: {
-        heading: data.stillHaveQuestionsHeading || '',
-        description: data.stillHaveQuestionsDescription || '',
-        cards: data.stillHaveQuestionsCards || [],
+        heading: data.stillHaveQuestionsHeading || 'Still Have Questions?',
+        description: data.stillHaveQuestionsDescription || 'Here are some other topics our customers frequently ask about.',
+        cards: (Array.isArray(data.stillHaveQuestionsCards) && data.stillHaveQuestionsCards.length > 0)
+          ? data.stillHaveQuestionsCards
+          : [
+              { title: 'First-Time Customers', description: "Learn what to expect during your first cleaning appointment and how to prepare your space.", buttonText: 'Get More Information', buttonLink: '/contact', icon: 'clock' },
+              { title: 'Pricing & Estimates', description: "Learn more about our transparent pricing structure and how to get an accurate estimate for your property.", buttonText: 'View Pricing', buttonLink: '/booking', icon: 'credit-card' },
+              { title: 'Service Areas', description: "Find out if we service your area and learn about our coverage throughout Northern New Jersey.", buttonText: 'Check Service Areas', buttonLink: '/locations', icon: 'calendar' },
+            ],
       },
       contactSection: {
         heading: data.contactSectionHeading || '',
