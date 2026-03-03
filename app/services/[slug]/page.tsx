@@ -2,7 +2,6 @@ import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import type { ComponentType } from "react";
 import CMSAdapter from "@/lib/cms-adapter";
-import { transformServiceData } from "@/lib/service-transformers";
 import {
   RoutineTemplate,
   DeepTemplate,
@@ -13,8 +12,9 @@ import {
   ExtrasTemplate,
   OtherCommercialTemplate,
 } from "@/components/service-templates";
+import { ServicePageWithSWR } from "@/components/service-page-with-swr";
 
-export const revalidate = 60;
+export const revalidate = 300; // 5 min ISR - targeted revalidateTag on publish
 
 export async function generateStaticParams() {
   const services = await CMSAdapter.getAllServices();
@@ -60,7 +60,12 @@ export default async function ServicePage({ params }: PageProps) {
     notFound();
   }
 
-  const data = transformServiceData(slug, rawData as any);
-
-  return <Template data={data} />;
+  // Client wrapper with SWR: refetches on focus so Strapi edits appear without full refresh
+  return (
+    <ServicePageWithSWR
+      slug={slug}
+      initialRawData={rawData as Record<string, unknown>}
+      Template={Template}
+    />
+  );
 }

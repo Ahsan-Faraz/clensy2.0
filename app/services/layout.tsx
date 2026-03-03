@@ -3,7 +3,7 @@ import CMSAdapter from "@/lib/cms-adapter";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export default async function ServicesLayout({
   children,
@@ -11,8 +11,8 @@ export default async function ServicesLayout({
   children: React.ReactNode;
 }) {
   const [services, locations] = await Promise.all([
-    CMSAdapter.getAllServices({ revalidate: 60 }),
-    CMSAdapter.getAllLocations({ revalidate: 60 }),
+    CMSAdapter.getAllServices({ revalidate: 300 }),
+    CMSAdapter.getAllLocations({ revalidate: 300 }),
   ]);
 
   return (

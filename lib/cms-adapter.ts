@@ -142,10 +142,11 @@ async function fetchFromStrapi<T>(
     filters?: object;
     status?: 'draft' | 'published';
     revalidate?: number;
+    tags?: string[];
     cache?: RequestCache;
   } = {}
 ): Promise<T | null> {
-  const { populate, filters, status, revalidate, cache: cacheOption } = options;
+  const { populate, filters, status, revalidate, tags, cache: cacheOption } = options;
   
   const params = new URLSearchParams();
   
@@ -189,16 +190,15 @@ async function fetchFromStrapi<T>(
       headers['strapi-encode-source-maps'] = 'true';
     }
 
-    // Determine fetch options based on cache/revalidate settings
+    // Determine fetch options based on cache/revalidate/tags (enables revalidateTag)
     const fetchOptions: RequestInit = { headers };
-    if (revalidate !== undefined) {
-      // Use Next.js revalidate for ISR
-      (fetchOptions as any).next = { revalidate };
-    } else if (cacheOption) {
+    if (cacheOption) {
       fetchOptions.cache = cacheOption;
     } else {
-      // Default: revalidate every 60s instead of no-store for better performance
-      (fetchOptions as any).next = { revalidate: 60 };
+      const nextOpts: { revalidate?: number; tags?: string[] } = {};
+      nextOpts.revalidate = revalidate !== undefined ? revalidate : 60;
+      if (tags?.length) nextOpts.tags = tags;
+      (fetchOptions as any).next = nextOpts;
     }
 
     const response = await fetch(url, fetchOptions);
@@ -901,9 +901,10 @@ export class CMSAdapter {
     };
 
     // Try custom Strapi endpoint first (faster, optimized query)
+    // Tags enable targeted revalidateTag; revalidate 300 = 5 min ISR
     let result: StrapiResponse<any> | null = await fetchFromStrapi<StrapiResponse<any>>(
       `/locations/by-slug/${encodeURIComponent(slug)}`,
-      { populate: locationPopulate, status, revalidate: 60 }
+      { populate: locationPopulate, status, revalidate: 300, tags: [`location-${slug}`] }
     );
 
     // Fallback to standard filtered endpoint if custom route returns 404/empty
@@ -912,6 +913,8 @@ export class CMSAdapter {
         filters: { slug: { $eq: slug } },
         populate: locationPopulate,
         status: status,
+        revalidate: 300,
+        tags: [`location-${slug}`],
       });
     }
     if (!result?.data || (Array.isArray(result.data) && result.data.length === 0)) {
@@ -920,6 +923,8 @@ export class CMSAdapter {
         filters: { slug: { $eq: slug } },
         populate: locationPopulate,
         status: fallbackStatus,
+        revalidate: 300,
+        tags: [`location-${slug}`],
       });
     }
     // Fallback: fetch all and filter client-side (avoids slug/filters issues)
@@ -1097,9 +1102,10 @@ export class CMSAdapter {
     };
 
     // Try custom Strapi endpoint first (faster, optimized query)
+    // Tags enable targeted revalidateTag; revalidate 300 = 5 min ISR
     let result: StrapiResponse<any> | StrapiResponse<any[]> | null = await fetchFromStrapi<StrapiResponse<any>>(
       `/services/by-slug/${encodeURIComponent(slug)}`,
-      { status, revalidate: 60 }
+      { status, revalidate: 300, tags: [`service-${slug}`] }
     );
 
     // Fallback to standard filtered endpoint if custom route returns 404/empty
@@ -1108,6 +1114,8 @@ export class CMSAdapter {
         filters: { slug: { $eq: slug } },
         populate: servicePopulate,
         status: status,
+        revalidate: 300,
+        tags: [`service-${slug}`],
       });
     }
     if (!result?.data || (Array.isArray(result.data) && result.data.length === 0)) {
@@ -1116,6 +1124,8 @@ export class CMSAdapter {
         filters: { slug: { $eq: slug } },
         populate: servicePopulate,
         status: fallbackStatus,
+        revalidate: 300,
+        tags: [`service-${slug}`],
       });
     }
     // Fallback: fetch all and filter client-side

@@ -462,9 +462,15 @@ async function syncFromTemplate(
       clearFAQPageCache();
       revalidatePath('/faq');
     } else if (contentType === 'service') {
-      // Revalidate all service pages
+      const { clearServiceCaches } = await import('@/lib/cms-adapter');
+      clearServiceCaches();
       revalidatePath('/services/[slug]', 'page');
       revalidatePath('/services');
+    } else if (contentType === 'location') {
+      const { clearLocationCaches } = await import('@/lib/cms-adapter');
+      clearLocationCaches();
+      revalidatePath('/locations/[slug]', 'page');
+      revalidatePath('/locations');
     } else {
       clearLandingPageCache();
       revalidatePath('/');

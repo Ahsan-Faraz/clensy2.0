@@ -12,8 +12,9 @@ import {
 } from "lucide-react";
 import CMSAdapter from "@/lib/cms-adapter";
 import SEOScripts from "@/components/seo-scripts";
+import { LocationPageWithSWR } from "@/components/location-page-with-swr";
 
-export const revalidate = 60;
+export const revalidate = 300; // 5 min ISR - targeted revalidateTag on publish
 
 export async function generateStaticParams() {
   const locations = await CMSAdapter.getAllLocations();
@@ -38,6 +39,7 @@ export default async function DynamicLocationPage({ params }: PageProps) {
   const locationName = data.name || data.county || slug.charAt(0).toUpperCase() + slug.slice(1);
 
   return (
+    <LocationPageWithSWR slug={slug} initialData={data as Record<string, unknown>}>
     <main className="overflow-x-hidden bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
       {/* Hero Section */}
       <section className="relative min-h-[60vh] bg-black pt-16">
@@ -275,5 +277,6 @@ export default async function DynamicLocationPage({ params }: PageProps) {
         />
       )}
     </main>
+    </LocationPageWithSWR>
   );
 }
