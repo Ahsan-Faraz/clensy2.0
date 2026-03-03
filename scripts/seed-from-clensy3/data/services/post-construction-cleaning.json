@@ -6,7 +6,7 @@
     "heroTopLabel": "Post-Construction Cleaning Experts",
     "heroHeading": "From Construction Zone to Move-In Ready",
     "heroSubheading": "Specialized cleanup services to remove construction debris, dust, and residue, making your newly constructed or renovated space pristine and ready for use.",
-    "heroBackgroundImageUrl": "https://progressivecleaningcorp.com/wp-content/uploads/2023/08/Post-Construction-Cleaning-Alexandria-VA.jpg",
+    "heroBackgroundImageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750843867/Post-Construction-Cleaning-Alexandria-VA_ohsoll.jpg",
     "heroServiceDuration": "Thorough Service",
     "heroServiceGuarantee": "100% Satisfaction",
     "includedSectionHeading": "Complete Post-Construction Cleanup Solution",
@@ -15,19 +15,19 @@
       {
         "title": "Debris Removal",
         "description": "We remove all construction debris, nails, screws, and other potentially hazardous materials that may have been left behind.",
-        "imageUrl": "https://luxurycleaningny.com/wp-content/uploads/2021/07/post-construction-cleaning-services-1080x675.jpg",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750843958/post-construction-cleaning-services-1080x675_hwvovl.jpg",
         "features": ["Complete removal of all construction waste", "Detailed cleanup of small particles and leftover materials", "Safe disposal of hazardous materials", "Thorough inspection for hidden construction debris"]
       },
       {
         "title": "Dust Elimination",
         "description": "We tackle the fine construction dust that settles everywhere, using specialized equipment and techniques to ensure a clean, breathable environment.",
-        "imageUrl": "https://s1.kaercher-media.com/media/image/selection/127074/d0/bauendreinigung-header.webp",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750844110/shutterstock_2199850967_rnhuq8.jpg",
         "features": ["HEPA filtered vacuums for fine dust particles", "Comprehensive dusting of all surfaces", "Air filter cleaning or replacement", "Air vent and duct cleaning"]
       },
       {
         "title": "Surface Finishing",
         "description": "We clean and polish all surfaces, from windows to fixtures, removing any construction residue to reveal the beauty of your new space.",
-        "imageUrl": "https://fmccompanies.com/wp-content/uploads/2021/08/floorvac-1024x637.jpeg",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750844265/shutterstock_2419275107_1_wjr0tt.jpg",
         "features": ["Removal of paint splatter and adhesives", "Streak-free window and glass cleaning", "Fixture polishing and detail work", "Final touch-ups for a perfect finish"]
       }
     ],
@@ -39,6 +39,33 @@
     "step2Description": "We use HEPA filter vacuums to remove construction dust from all surfaces, including hard-to-reach areas. Our team wipes down all surfaces to remove dust and debris.",
     "step3Title": "Floor & Surface Detailing",
     "step3Description": "We deep clean all flooring surfaces, from hardwood to carpet, removing construction residue, paint drips, and adhesives. Baseboards, trim, and door frames are carefully wiped down.",
+    "customData": {
+      "processHeading": "Our Post-Construction Cleaning Process",
+      "processSubheading": "Our systematic approach ensures no detail is overlooked.",
+      "step4Title": "Final Inspection & Quality Assurance",
+      "step4Description": "We perform a comprehensive walkthrough to ensure every surface meets our standards. Any touch-ups are completed before we consider the job done.",
+      "beforeAfter": {
+        "heading": "Before & After Post-Construction",
+        "subheading": "See the transformation from construction zone to move-in ready.",
+        "items": [
+          { "beforeImage": "https://luxurycleaningny.com/wp-content/uploads/2021/07/post-construction-cleaning-services-1080x675.jpg", "afterImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839832/image84_rjmtgy.png", "heading": "Kitchen Renovation", "caption": "From dusty construction site to sparkling kitchen ready for cooking." },
+          { "beforeImage": "https://s1.kaercher-media.com/media/image/selection/127074/d0/bauendreinigung-header.webp", "afterImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750841934/image80_lzfymb.png", "heading": "Living Room Refresh", "caption": "Construction debris and dust eliminated for a pristine living space." }
+        ]
+      },
+      "safetyHeading": "Safety Standards",
+      "safetySubheading": "Our team follows stringent safety protocols to protect both your property and our staff.",
+      "ppeTitle": "Personal Protective Equipment",
+      "ppeDescription": "All team members wear appropriate PPE including respirators, safety glasses, gloves, and protective clothing when handling construction dust and debris.",
+      "ppeFeatures": ["N95 respirators for fine dust", "Safety glasses or goggles", "Cut-resistant gloves", "Protective coveralls"],
+      "hazmatTitle": "Hazardous Material Handling",
+      "hazmatDescription": "We are trained to identify and safely handle common construction byproducts including paint residue, adhesives, and chemical cleaners.",
+      "hazmatFeatures": ["Proper ventilation during cleaning", "EPA-approved cleaning solutions", "Safe disposal of construction waste", "No harsh chemicals that could damage new finishes"],
+      "clientTestimonials": [
+        { "rating": 5, "review": "After our kitchen renovation, the construction dust was everywhere. Clensy's post-construction team transformed the space. Every surface was spotless - you'd never know construction had happened.", "clientName": "Susan M.", "clientLocation": "Homeowner", "avatarBgColor": "amber-500" },
+        { "rating": 5, "review": "We've used Clensy for multiple commercial buildouts. Their attention to detail and safety protocols are outstanding. They've become our go-to for post-construction cleaning.", "clientName": "David K.", "clientLocation": "General Contractor", "avatarBgColor": "blue-500" },
+        { "rating": 5, "review": "Scheduled Clensy 24 hours after our contractors finished. The team arrived with proper equipment, worked efficiently, and left our new bathroom renovation gleaming. Highly recommend!", "clientName": "Jennifer L.", "clientLocation": "Property Owner", "avatarBgColor": "teal-500" }
+      ]
+    },
     "faqs": [
       { "question": "When is the best time to schedule post-construction cleaning?", "answer": "The ideal time is after all construction work is complete, including painting, fixture installation, and any final inspections. We recommend waiting 24-48 hours after the last worker leaves to allow dust to settle before our team arrives." },
       { "question": "How long does post-construction cleaning take?", "answer": "The duration depends on the size and condition of the space. Typically, a residential project takes 6-12 hours, while commercial spaces may require 1-3 days. We'll provide a detailed time estimate after assessing your specific project." },

@@ -177,10 +177,10 @@ export default function Navbar({ services: propServices, locations: propLocation
           boxShadow: shouldShowBorder ? `0 2px 15px rgba(0, 0, 0, ${shadowOpacity})` : 'none',
         }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+        <div className="max-w-7xl mx-auto pl-10 pr-4 sm:pl-14 sm:pr-6 lg:pl-24 lg:pr-8">
+          <div className="flex justify-between items-center h-20">
             {/* Logo */}
-            <div className="flex-shrink-0 flex items-center h-full py-2">
+            <div className="flex-shrink-0 flex items-center h-full py-2.5">
               <a href="/" className="flex items-center h-full">
                 <img
                   src="https://res.cloudinary.com/dgjmm3usy/image/upload/v1754578702/x50aedpsjrpfubhn0d8b_-_Edited_cvx0kj.png"
@@ -190,10 +190,10 @@ export default function Navbar({ services: propServices, locations: propLocation
                     maxHeight: '100%',
                     filter: logoFilter,
                     transition: 'all 0.3s ease',
-                    width: '110px',
-                    height: '45px',
+                    width: '150px',
+                    height: '58px',
                   }}
-                  className="transition-all duration-300 h-full w-auto max-w-32 sm:max-w-128"
+                  className="transition-all duration-300 h-full w-auto"
                 />
               </a>
             </div>

@@ -1,8 +1,18 @@
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import type { ComponentType } from "react";
 import CMSAdapter from "@/lib/cms-adapter";
-import { fetchServicePageBuilderContent } from "@/lib/page-builder-api";
-import ServiceDetailContent from "@/components/service-detail-content";
+import { transformServiceData } from "@/lib/service-transformers";
+import {
+  RoutineTemplate,
+  DeepTemplate,
+  MovingTemplate,
+  PostConstructionTemplate,
+  AirbnbTemplate,
+  CommercialTemplate,
+  ExtrasTemplate,
+  OtherCommercialTemplate,
+} from "@/components/service-templates";
 
 export const revalidate = 60;
 
@@ -15,30 +25,42 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+const TEMPLATE_MAP: Record<string, ComponentType<{ data: Record<string, any> }>> = {
+  "routine-cleaning": RoutineTemplate,
+  "deep-cleaning": DeepTemplate,
+  "moving-cleaning": MovingTemplate,
+  "post-construction-cleaning": PostConstructionTemplate,
+  "airbnb-cleaning": AirbnbTemplate,
+  "office-cleaning": CommercialTemplate,
+  "gym-cleaning": CommercialTemplate,
+  "medical-cleaning": CommercialTemplate,
+  "retail-cleaning": CommercialTemplate,
+  "school-cleaning": CommercialTemplate,
+  "property-cleaning": CommercialTemplate,
+  extras: ExtrasTemplate,
+  "other-commercial": OtherCommercialTemplate,
+  "other-commercial-cleaning": OtherCommercialTemplate,
+};
+
 export default async function ServicePage({ params }: PageProps) {
   const { slug } = await params;
   const { isEnabled: isDraftMode } = await draftMode();
 
-  const [data, pbResult] = await Promise.all([
-    CMSAdapter.getServiceBySlug(slug, isDraftMode ? "draft" : "published"),
-    fetchServicePageBuilderContent(slug),
-  ]);
+  const rawData = await CMSAdapter.getServiceBySlug(
+    slug,
+    isDraftMode ? "draft" : "published"
+  );
 
-  if (!data) {
+  if (!rawData) {
     notFound();
   }
 
-  const templateData = pbResult
-    ? {
-        templateJson: pbResult.template,
-        content: pbResult.data,
-      }
-    : null;
+  const Template = TEMPLATE_MAP[slug];
+  if (!Template) {
+    notFound();
+  }
 
-  return (
-    <ServiceDetailContent
-      data={data}
-      templateData={templateData}
-    />
-  );
+  const data = transformServiceData(slug, rawData as any);
+
+  return <Template data={data} />;
 }

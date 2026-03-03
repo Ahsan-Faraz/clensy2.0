@@ -6,7 +6,7 @@
     "heroTopLabel": "Premium Add-On Services",
     "heroHeading": "Extra Cleaning Services On Demand",
     "heroSubheading": "Enhance your regular cleaning experience with our specialized add-on services. From window cleaning to oven scrubbing, customize your cleaning package to address your specific needs.",
-    "heroBackgroundImageUrl": "https://static.vecteezy.com/system/resources/previews/037/280/967/non_2x/ai-generated-minimalist-vivid-advertisment-spring-cleaning-background-with-copy-space-free-photo.jpeg",
+    "heroBackgroundImageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845101/ai-generated-minimalist-vivid-advertisment-spring-cleaning-background-with-copy-space-free-photo_mklbfv.jpg",
     "heroServiceDuration": "Customizable Services",
     "heroServiceGuarantee": "100% Satisfaction",
     "includedSectionHeading": "Our Premium Extra Services",
@@ -21,13 +21,13 @@
       {
         "title": "Refrigerator Cleaning",
         "description": "Thorough cleaning and sanitizing of refrigerators",
-        "imageUrl": "https://www.tasteofhome.com/wp-content/uploads/2023/01/GettyImages-484299846.jpg",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845302/shutterstock_1806194872_1_kszrsn.jpg",
         "features": ["Empty and clean all shelves and drawers", "Sanitize interior surfaces", "Clean exterior and handles", "Clean under and behind refrigerator when accessible"]
       },
       {
         "title": "Oven Cleaning",
         "description": "Deep cleaning for ovens and ranges",
-        "imageUrl": "https://cdn.prod.website-files.com/6397d1f7c4e0e51d3bd5a80f/650a589d1e631adc7e916b04_Regular%20cleanings.webp",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845558/shutterstock_2497352097_1_xavz0c.jpg",
         "features": ["Removal of built-up grease and carbon", "Cleaning of racks, trays, and knobs", "Hood and filter cleaning", "Full sanitization of interior and exterior"]
       }
     ],
@@ -53,14 +53,34 @@
         { "number": "1000+", "text": "Extra Services Completed" }
       ],
       "premiumExtraServices": [
-        { "id": "windows", "name": "Window Cleaning", "description": "Crystal clear windows inside and out", "price": "$5", "priceUnit": "per window" },
-        { "id": "fridge", "name": "Refrigerator Cleaning", "description": "Thorough cleaning and sanitizing", "price": "$35", "priceUnit": "per service" },
-        { "id": "oven", "name": "Oven Cleaning", "description": "Deep cleaning for ovens and ranges", "price": "$35", "priceUnit": "per service" },
-        { "id": "cabinets", "name": "Cabinet Cleaning", "description": "Interior and exterior cabinet cleaning", "price": "$60", "priceUnit": "per service" },
-        { "id": "organization", "name": "Organization Service", "description": "Professional organization of your spaces", "price": "$60", "priceUnit": "per service" },
-        { "id": "laundry", "name": "Laundry Service", "description": "Complete laundry washing and folding", "price": "$20", "priceUnit": "per service" },
-        { "id": "wet-wipe-blinds", "name": "Wet Wipe Blinds", "description": "Deep cleaning of blinds", "price": "$5", "priceUnit": "per blind" },
-        { "id": "wash-dishes", "name": "Wash Dishes", "description": "Complete dish washing and kitchen cleanup", "price": "$20", "priceUnit": "per service" }
+        { "id": "windows", "name": "Window Cleaning", "description": "Crystal clear windows inside and out", "price": "$5", "priceUnit": "per window", "features": ["Interior glass and frame", "Window sill cleaning", "Streak-free finish"], "image": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845184/image74_pnropc.png" },
+        { "id": "fridge", "name": "Refrigerator Cleaning", "description": "Thorough cleaning and sanitizing", "price": "$35", "priceUnit": "per service", "features": ["Complete emptying and organizing", "Shelf and drawer cleaning", "Interior and exterior wiping"], "image": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845302/shutterstock_1806194872_1_kszrsn.jpg" },
+        { "id": "oven", "name": "Oven Cleaning", "description": "Deep cleaning for ovens and ranges", "price": "$35", "priceUnit": "per service", "features": ["Deep grease removal", "Rack and tray cleaning", "Interior and door cleaning"], "image": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845558/shutterstock_2497352097_1_xavz0c.jpg" },
+        { "id": "cabinets", "name": "Cabinet Cleaning", "description": "Interior and exterior cabinet cleaning", "price": "$60", "priceUnit": "per service", "features": ["Interior and exterior cleaning", "Door and handle sanitizing", "Shelf organization"], "image": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845302/shutterstock_1806194872_1_kszrsn.jpg" },
+        { "id": "organization", "name": "Organization Service", "description": "Professional organization of your spaces", "price": "$60", "priceUnit": "per service", "features": ["Declutter and organize rooms", "Storage optimization", "Personalized system"], "image": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845646/shutterstock_2458948647_tx9wra.jpg" },
+        { "id": "laundry", "name": "Laundry Service", "description": "Complete laundry washing and folding", "price": "$20", "priceUnit": "per service", "features": ["Wash, dry, and fold", "Sorted by type", "Neat delivery"], "image": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845558/shutterstock_2497352097_1_xavz0c.jpg" },
+        { "id": "wet-wipe-blinds", "name": "Wet Wipe Blinds", "description": "Deep cleaning of blinds", "price": "$5", "priceUnit": "per blind", "features": ["Dust removal", "Wet wipe cleaning", "Dirt-free slats"], "image": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845646/shutterstock_2458948647_tx9wra.jpg" },
+        { "id": "wash-dishes", "name": "Wash Dishes", "description": "Complete dish washing and kitchen cleanup", "price": "$20", "priceUnit": "per service", "features": ["Hand wash or load dishwasher", "Dry and put away", "Sink and counters"], "image": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845709/shutterstock_2470888323_m4hl14.jpg" }
+      ],
+      "extrasPricing": [
+        { "serviceId": "windows", "serviceName": "Window Cleaning", "price": "$5", "priceUnit": "per window", "features": ["Interior glass and frame", "Window sill cleaning", "Streak-free finish"] },
+        { "serviceId": "fridge", "serviceName": "Refrigerator Cleaning", "price": "$35", "priceUnit": "per service", "features": ["Complete emptying and organizing", "Shelf and drawer cleaning", "Interior and exterior wiping"] },
+        { "serviceId": "oven", "serviceName": "Oven Cleaning", "price": "$35", "priceUnit": "per service", "features": ["Deep grease removal", "Rack and tray cleaning", "Interior and door cleaning"] },
+        { "serviceId": "cabinets", "serviceName": "Cabinet Cleaning", "price": "$60", "priceUnit": "per service", "features": ["Interior and exterior cleaning", "Door and handle sanitizing", "Shelf organization"] },
+        { "serviceId": "organization", "serviceName": "Organization Service", "price": "$60", "priceUnit": "per service", "features": ["Declutter and organize rooms", "Storage optimization", "Personalized system"] },
+        { "serviceId": "laundry", "serviceName": "Laundry Service", "price": "$20", "priceUnit": "per service", "features": ["Wash, dry, and fold", "Sorted by type", "Neat delivery"] }
+      ],
+      "pricingHeading": "Extras Pricing",
+      "pricingSubheading": "Transparent pricing for our most popular extra services.",
+      "howToAddExtraServicesSteps": [
+        { "stepNumber": 1, "title": "Browse Available Extras", "description": "Open our app or website and browse through our selection of premium add-on services that can be added to any cleaning appointment.", "badge": "8+ specialized extra services available", "icon": "Sparkles" },
+        { "stepNumber": 2, "title": "Select Your Extras", "description": "Simply tap to add the services you want. You can add multiple extras to customize your cleaning experience exactly to your needs.", "badge": "Mix and match any combination of services", "icon": "Check" },
+        { "stepNumber": 3, "title": "Confirm and Schedule", "description": "Review your selections, proceed to schedule your appointment, and our specialized team will take care of everything during your service.", "badge": "Same-day and next-day scheduling available", "icon": "Calendar" }
+      ],
+      "clientTestimonials": [
+        { "rating": 5, "review": "I added window cleaning to my regular service and the difference is incredible. The natural light in my home is so much better with crystal clear windows!", "clientName": "Amanda Peterson", "clientLocation": "Window Cleaning Client", "avatarBgColor": "bg-violet-500" },
+        { "rating": 5, "review": "The oven cleaning service is worth every penny. My oven looked brand new after years of built-up grease. I didn't even know it could look that clean again!", "clientName": "David Richards", "clientLocation": "Oven Cleaning Client", "avatarBgColor": "bg-lime-500" },
+        { "rating": 5, "review": "Having my refrigerator completely emptied, cleaned, and reorganized was amazing. It's so much more efficient now and I can find everything!", "clientName": "Jennifer Liu", "clientLocation": "Refrigerator Cleaning Client", "avatarBgColor": "bg-fuchsia-500" }
       ]
     }
   }

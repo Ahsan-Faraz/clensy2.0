@@ -6,7 +6,7 @@
     "heroTopLabel": "Premium Residential Services",
     "heroHeading": "Experience Pristine Routine Cleaning",
     "heroSubheading": "Our signature routine cleaning service maintains your home in immaculate condition with expert attention to detail. Perfect for busy professionals and families seeking consistent cleanliness.",
-    "heroBackgroundImageUrl": "https://images.unsplash.com/photo-1599619351208-3e6c839d6828?q=80&w=2070&auto=format&fit=crop",
+    "heroBackgroundImageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750838311/home-2573375_1280_ckf686.png",
     "heroServiceDuration": "2-3 Hour Service",
     "heroServiceGuarantee": "100% Satisfaction",
     "includedSectionHeading": "What's Included in Our Routine Cleaning",
@@ -15,25 +15,44 @@
       {
         "title": "Kitchen Excellence",
         "description": "The heart of your home deserves special attention. Our routine kitchen cleaning ensures cooking spaces remain fresh and sanitized.",
-        "imageUrl": "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?q=80&w=1470&auto=format&fit=crop",
-        "features": ["Clean and sanitize countertops and backsplash", "Clean exterior of appliances and cabinet fronts", "Thoroughly clean and sanitize sink and fixtures", "Vacuum and mop floors, removing all debris"]
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750838451/9_e4iama.png",
+        "features": [
+          "Clean and sanitize countertops and backsplash",
+          "Clean exterior of appliances and cabinet fronts",
+          "Thoroughly clean and sanitize sink and fixtures",
+          "Vacuum and mop floors, removing all debris"
+        ]
       },
       {
         "title": "Bathroom Refresh",
         "description": "Our bathroom cleaning routines ensure these essential spaces remain hygienic and sparkling clean after every visit.",
-        "imageUrl": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1470&auto=format&fit=crop",
-        "features": ["Clean and disinfect toilet, shower, tub and sink", "Clean mirrors and glass surfaces to a streak-free shine", "Wipe down bathroom fixtures and cabinet fronts", "Vacuum and mop floors, removing all debris"]
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839467/image51_rdeigp.png",
+        "features": [
+          "Clean and disinfect toilet, shower, tub and sink",
+          "Clean mirrors and glass surfaces to a streak-free shine",
+          "Wipe down bathroom fixtures and cabinet fronts",
+          "Vacuum and mop floors, removing all debris"
+        ]
       },
       {
         "title": "Living Area Maintenance",
         "description": "The spaces where you relax and entertain deserve special attention to maintain comfort and cleanliness.",
-        "imageUrl": "https://images.unsplash.com/photo-1613545325278-f24b0cae1224?q=80&w=1470&auto=format&fit=crop",
-        "features": ["Dust all accessible surfaces, including furniture", "Vacuum carpets, rugs, and upholstery", "Dust ceiling fans and light fixtures within reach", "Clean baseboards and remove cobwebs"]
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839328/image80_uzyl0v.png",
+        "features": [
+          "Dust all accessible surfaces, including furniture",
+          "Vacuum carpets, rugs, and upholstery",
+          "Dust ceiling fans and light fixtures within reach",
+          "Clean baseboards and remove cobwebs"
+        ]
       }
     ],
     "featureSectionHeading": "Exceptional Cleaning Results, Every Time",
     "featureSectionSubheading": "Our professional cleaners follow a meticulous process to ensure your home receives the highest standard of cleaning on every visit.",
-    "featureSectionPoints": ["Consistently thorough cleaning with attention to detail", "Eco-friendly cleaning products for a healthier home", "Professionally trained and background-checked staff"],
+    "featureSectionPoints": [
+      "Consistently thorough cleaning with attention to detail",
+      "Eco-friendly cleaning products for a healthier home",
+      "Professionally trained and background-checked staff"
+    ],
     "howItWorksHeading": "How Our Routine Cleaning Works",
     "howItWorksSubheading": "Getting started with our premium routine cleaning service is seamless and convenient.",
     "step1Title": "Book Online",
@@ -52,18 +71,88 @@
     "benefit3Description": "Regular professional cleaning significantly reduces allergens, dust, and bacteria, creating a healthier living environment that promotes overall well-being for you and your family.",
     "clientTestimonialsHeading": "What Our Clients Say",
     "clientTestimonialsSubheading": "Hear from our satisfied clients about their experience with our routine cleaning service.",
+    "clientTestimonials": [
+      {
+        "rating": 5,
+        "review": "Clensy's routine cleaning has been a game-changer for our busy family. Our home always feels fresh and welcoming. The team is professional and reliable.",
+        "clientName": "Sarah Mitchell",
+        "clientLocation": "Newark, NJ",
+        "avatarBgColor": "blue-500"
+      },
+      {
+        "rating": 5,
+        "review": "I've tried several cleaning services and Clensy is by far the best. Consistent quality, great communication, and they truly care about the details.",
+        "clientName": "David Chen",
+        "clientLocation": "Hoboken, NJ",
+        "avatarBgColor": "green-500"
+      },
+      {
+        "rating": 5,
+        "review": "As a working mom, having Clensy handle our routine cleaning gives me peace of mind. The house is always spotless when I get home.",
+        "clientName": "Emily Rodriguez",
+        "clientLocation": "Jersey City, NJ",
+        "avatarBgColor": "purple-500"
+      }
+    ],
     "frequencyGuideHeading": "Cleaning Frequency Guide",
     "frequencyGuideSubheading": "Finding the right cleaning frequency depends on your lifestyle and needs.",
     "frequencyOptions": [
-      { "title": "Weekly", "color": "green", "perfectFor": ["Busy families with children", "Homes with pets", "High-traffic areas"], "benefits": "Maintains a consistently clean home with no build-up.", "label": "Most Popular" },
-      { "title": "Bi-Weekly", "color": "blue", "perfectFor": ["Couples or small families", "Average-sized homes", "Those who tidy regularly"], "benefits": "Good balance between maintaining cleanliness and budget.", "label": "Best Value" },
-      { "title": "Monthly", "color": "purple", "perfectFor": ["Singles or couples", "Smaller living spaces", "Those who clean regularly"], "benefits": "Professional deep clean while handling regular maintenance yourself.", "label": "Budget-Friendly" }
+      {
+        "title": "Weekly",
+        "color": "green",
+        "perfectFor": [
+          "Busy families with children",
+          "Homes with pets",
+          "High-traffic areas"
+        ],
+        "benefits": "Maintains a consistently clean home with no build-up.",
+        "label": "Most Popular"
+      },
+      {
+        "title": "Bi-Weekly",
+        "color": "blue",
+        "perfectFor": [
+          "Couples or small families",
+          "Average-sized homes",
+          "Those who tidy regularly"
+        ],
+        "benefits": "Good balance between maintaining cleanliness and budget.",
+        "label": "Best Value"
+      },
+      {
+        "title": "Monthly",
+        "color": "purple",
+        "perfectFor": [
+          "Singles or couples",
+          "Smaller living spaces",
+          "Those who clean regularly"
+        ],
+        "benefits": "Professional deep clean while handling regular maintenance yourself.",
+        "label": "Budget-Friendly"
+      }
     ],
     "faqs": [
-      { "question": "Do I need to be home during the cleaning?", "answer": "No, you don't need to be home. Many of our clients provide a key or access code so we can clean while they're at work. Our cleaners are thoroughly vetted, background-checked, and fully insured for your peace of mind." },
-      { "question": "Can I change my cleaning schedule if needed?", "answer": "Absolutely! We understand schedules change. You can reschedule cleanings with at least 48 hours notice without any fee. We also offer the flexibility to occasionally add additional cleanings when you need them." },
-      { "question": "What cleaning products do you use?", "answer": "We use high-quality, eco-friendly cleaning products as our standard. If you have specific product preferences or sensitivities, we're happy to use products you provide or make accommodations for allergies and preferences." },
-      { "question": "What if I'm not satisfied with the cleaning?", "answer": "Your satisfaction is guaranteed. If you're not completely satisfied with any area we've cleaned, contact us within 24 hours and we'll return to reclean that area at no additional cost to you." }
-    ]
+      {
+        "question": "Do I need to be home during the cleaning?",
+        "answer": "No, you don't need to be home. Many of our clients provide a key or access code so we can clean while they're at work. Our cleaners are thoroughly vetted, background-checked, and fully insured for your peace of mind."
+      },
+      {
+        "question": "Can I change my cleaning schedule if needed?",
+        "answer": "Absolutely! We understand schedules change. You can reschedule cleanings with at least 48 hours notice without any fee. We also offer the flexibility to occasionally add additional cleanings when you need them."
+      },
+      {
+        "question": "What cleaning products do you use?",
+        "answer": "We use high-quality, eco-friendly cleaning products as our standard. If you have specific product preferences or sensitivities, we're happy to use products you provide or make accommodations for allergies and preferences."
+      },
+      {
+        "question": "What if I'm not satisfied with the cleaning?",
+        "answer": "Your satisfaction is guaranteed. If you're not completely satisfied with any area we've cleaned, contact us within 24 hours and we'll return to reclean that area at no additional cost to you."
+      }
+    ],
+    "step1Image": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839593/image47_npjiyh.png",
+    "step2Image": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839700/image21_qgnpkg.png",
+    "step3Image": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839766/image68_npznqj.png",
+    "featureSectionImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839531/image86_di8j8g.png",
+    "benefitsImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839832/image84_rjmtgy.png"
   }
 }

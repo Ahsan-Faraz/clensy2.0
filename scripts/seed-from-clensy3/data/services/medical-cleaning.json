@@ -6,7 +6,7 @@
     "heroTopLabel": "Premium Healthcare Services",
     "heroHeading": "Medical & Healthcare Facility Cleaning",
     "heroSubheading": "Specialized cleaning and sanitization services designed to meet the stringent requirements of healthcare environments, ensuring safety for patients and staff.",
-    "heroBackgroundImageUrl": "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1974&auto=format&fit=crop",
+    "heroBackgroundImageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846005/photo-1579684385127-1ef15d508118_pwceg2.jpg",
     "heroServiceDuration": "Healthcare Compliant",
     "heroServiceGuarantee": "100% Satisfaction",
     "includedSectionHeading": "Our Healthcare Cleaning Services",
@@ -15,19 +15,19 @@
       {
         "title": "Reception & Waiting Areas",
         "description": "Create a reassuring first impression for patients with meticulously cleaned reception and waiting areas that inspire confidence.",
-        "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846050/image6_ydkdec.png",
         "features": ["Thorough disinfection of all seating and surfaces", "Sanitization of high-touch areas like check-in kiosks", "Specialized cleaning of magazine racks and displays", "HEPA-filtered vacuuming of all floors and upholstery"]
       },
       {
         "title": "Examination & Treatment Rooms",
         "description": "Our specialized cleaning protocols ensure examination and treatment rooms meet the highest standards of hygiene and infection control.",
-        "imageUrl": "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2070&auto=format&fit=crop",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846159/shutterstock_2407190313_1_ekavzo.jpg",
         "features": ["Terminal cleaning between patient visits", "Disinfection of examination tables and equipment", "Proper disposal of medical waste", "Application of hospital-grade disinfectants"]
       },
       {
         "title": "Restrooms & Common Areas",
         "description": "Enhanced cleaning and disinfection protocols for healthcare facility restrooms and common areas to minimize cross-contamination.",
-        "imageUrl": "https://media.istockphoto.com/id/1298375809/photo/empty-luxury-modern-hospital-room.jpg",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846255/image12_oygjub.png",
         "features": ["Rigorous sanitization of all fixtures and surfaces", "Use of EPA-approved disinfectants effective against pathogens", "Regular replenishment of soap, sanitizer, and paper products", "Cleaning log maintenance for compliance verification"]
       }
     ],

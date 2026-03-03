@@ -6,7 +6,7 @@
     "heroTopLabel": "Specialized Airbnb & Vacation Rental Cleaning",
     "heroHeading": "Boost Your Ratings with Professional Cleaning",
     "heroSubheading": "Specialized cleaning services designed for Airbnb, VRBO, and vacation rental properties that ensure 5-star cleanliness reviews and quick turnovers.",
-    "heroBackgroundImageUrl": "https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=1939&auto=format&fit=crop",
+    "heroBackgroundImageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845101/ai-generated-minimalist-vivid-advertisment-spring-cleaning-background-with-copy-space-free-photo_mklbfv.jpg",
     "heroServiceDuration": "Quick Turnovers",
     "heroServiceGuarantee": "5-Star Results",
     "includedSectionHeading": "What's Included in Our Airbnb Cleaning",
@@ -15,19 +15,19 @@
       {
         "title": "Guest-Ready Bedrooms",
         "description": "We prepare bedrooms to hotel standards, ensuring your guests enjoy a pristine and welcoming environment for a perfect night's sleep.",
-        "imageUrl": "https://images.unsplash.com/photo-1592928302636-c83cf1e1c887?q=80&w=1470&auto=format&fit=crop",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839832/image84_rjmtgy.png",
         "features": ["Fresh linens perfectly changed and presented", "Dust-free surfaces and furniture", "Vacuumed floors and rugs", "Sanitized light switches and door handles"]
       },
       {
         "title": "Spotless Bathrooms",
         "description": "Our bathroom cleaning service ensures every inch is immaculate, as bathrooms are one of the most scrutinized areas by guests.",
-        "imageUrl": "https://www.bellacollina.com/hs-fs/hubfs/Real%20Estate/Pre-Designed%20Portfolio/Ibiza%201432/Ibiza1432B_masterbath.jpg",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839467/image51_rdeigp.png",
         "features": ["Deep cleaned showers, tubs, and toilets", "Streak-free mirrors and glass surfaces", "Fresh, neatly folded towels and bath mats", "Replenished toiletries and amenities"]
       },
       {
         "title": "Kitchen Excellence",
         "description": "We ensure your kitchen is ready for guests who want to cook, with every surface sanitized and all appliances cleaned inside and out.",
-        "imageUrl": "https://images.unsplash.com/photo-1556912173-46c336c7fd55?q=80&w=1471&auto=format&fit=crop",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750841898/image73_lowp7v.png",
         "features": ["Sanitized countertops and backsplash", "Cleaned appliances, inside and out", "Spotless sink and fixtures", "Clean and organized utensils and dishware"]
       }
     ],
@@ -57,7 +57,9 @@
         "heading": "The Airbnb Cleaning Difference",
         "subheading": "See how our specialized Airbnb cleaning transforms spaces for the perfect guest experience.",
         "items": [
-          { "heading": "Kitchen Transformation", "beforeImage": "https://images.unsplash.com/photo-1593642532973-d31b1a5f4c8d?q=80&w=1470", "afterImage": "https://images.unsplash.com/photo-1593642532973-d31b1a5f4c8d?q=80&w=1470", "caption": "Experience the difference with our deep cleaning service." }
+          { "heading": "Kitchen Transformation", "beforeImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750838451/9_e4iama.png", "afterImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750841898/image73_lowp7v.png", "caption": "Experience the difference with our specialized Airbnb cleaning service." },
+          { "heading": "Guest-Ready Bedroom", "beforeImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839328/image80_uzyl0v.png", "afterImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839832/image84_rjmtgy.png", "caption": "Pristine bedrooms ready for 5-star guest reviews." },
+          { "heading": "Spotless Bathroom", "beforeImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750841898/image73_lowp7v.png", "afterImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750839467/image51_rdeigp.png", "caption": "Immaculate bathrooms that delight your guests." }
         ]
       },
       "serviceFeatures": [

@@ -6,7 +6,7 @@
     "heroTopLabel": "Premium Commercial Services",
     "heroHeading": "Specialized Commercial Cleaning Services",
     "heroSubheading": "From bustling restaurants to sacred worship spaces, every specialized venue deserves exceptional care. Our customized cleaning solutions are crafted specifically for your unique commercial environment.",
-    "heroBackgroundImageUrl": "https://5.imimg.com/data5/SELLER/Default/2021/1/GS/UV/BZ/207102/commercial-cleaning-services.jpg",
+    "heroBackgroundImageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750847158/image53_kdmkgy.png",
     "heroServiceDuration": "Industry Specialists",
     "heroServiceGuarantee": "100% Satisfaction",
     "includedSectionHeading": "Our Specialized Commercial Cleaning Services",
@@ -15,19 +15,19 @@
       {
         "title": "Restaurants & Food Service",
         "description": "Maintain the highest standards of cleanliness and hygiene in food service environments with our specialized restaurant cleaning services.",
-        "imageUrl": "https://www.vip-cleaning-london.com/wp-content/uploads/2024/05/restaurant-cleaning-services-london.jpg",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750847199/restaurant-cleaning-services-london_qaonjw.jpg",
         "features": ["Kitchen deep cleaning and sanitization", "Dining area and front-of-house cleaning", "Restroom sanitation and maintenance", "Compliance with food safety regulations"]
       },
       {
         "title": "Warehouses & Industrial Spaces",
         "description": "Keep your industrial facilities clean, safe, and efficient with our specialized warehouse and industrial cleaning services.",
-        "imageUrl": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750847223/photo-1586528116311-ad8dd3c8310d_h0y5hk.jpg",
         "features": ["Large-area floor cleaning with industrial equipment", "Dust control and air quality maintenance", "Cleaning of machinery areas and equipment exteriors", "Staff facilities and break room maintenance"]
       },
       {
         "title": "Places of Worship",
         "description": "Provide a clean, welcoming environment for worship with our respectful, thorough church and religious facility cleaning services.",
-        "imageUrl": "https://cm.cleanmaster.ie/wp-content/uploads/2023/07/20220103-quiapo-church-aa.webp",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750847250/20220103-quiapo-church-aa_qbucog.webp",
         "features": ["Sanctuary and worship area cleaning", "Community rooms and fellowship halls", "Offices and administrative areas", "Event cleanup and special service preparation"]
       }
     ],
@@ -46,6 +46,20 @@
         { "number": "24/7", "text": "Business Support" },
         { "number": "4.9", "text": "Business Rating" },
         { "number": "100%", "text": "Quality Guarantee" }
+      ],
+      "pricingPlans": [
+        { "planName": "Basic Plan", "planSubtitle": "For small commercial spaces", "planPrice": "Call for Quote", "planPriceUnit": "/ visit", "planFeatures": ["Routine cleaning", "Restroom sanitization", "Trash removal", "Basic floor care"], "planButtonText": "Get Quote", "planButtonLink": "/contact", "isPopular": false, "planColor": "blue-600" },
+        { "planName": "Standard Plan", "planSubtitle": "For growing businesses", "planPrice": "Custom", "planPriceUnit": "/ month", "planFeatures": ["Everything in Basic", "Deep cleaning cycles", "Window cleaning", "Customized scheduling"], "planButtonText": "Get Quote", "planButtonLink": "/contact", "isPopular": true, "planColor": "blue-600" },
+        { "planName": "Premium Plan", "planSubtitle": "For large facilities", "planPrice": "Custom", "planPriceUnit": "/ month", "planFeatures": ["Everything in Standard", "24/7 availability", "Dedicated account manager", "Green cleaning options"], "planButtonText": "Get Quote", "planButtonLink": "/contact", "isPopular": false, "planColor": "blue-600" }
+      ],
+      "pricingHeading": "Tailored Cleaning Plans & Pricing",
+      "pricingSubheading": "We understand that each commercial space has unique requirements. Our flexible packages are designed to provide exactly what your business needs.",
+      "pricingCustomSectionHeading": "Need More Flexibility?",
+      "pricingCustomSectionDescription": "We understand that every business has unique requirements. Contact us for a completely customized cleaning plan tailored to your specific needs, budget, and schedule.",
+      "clientTestimonials": [
+        { "rating": 5, "review": "In the restaurant business, cleanliness is not just about appearance - it is about food safety and customer confidence. Clensy understands this perfectly. Their team has been handling our after-hours cleaning for three years, and their attention to detail has helped us maintain our perfect health inspection record.", "clientName": "Carlos Mendez", "clientLocation": "Owner, Seaside Grill Restaurant", "avatarBgColor": "amber-500" },
+        { "rating": 5, "review": "We manage multiple worship spaces and Clensy has been instrumental in keeping them welcoming and clean. They understand the sensitivity required when cleaning sacred spaces.", "clientName": "Reverend Sarah Chen", "clientLocation": "Facilities Director", "avatarBgColor": "indigo-500" },
+        { "rating": 5, "review": "Our warehouse spans 50,000 square feet. Clensy's industrial cleaning team handles dust control, floor maintenance, and break room sanitation. Their flexibility with our production schedule is unmatched.", "clientName": "James Wilson", "clientLocation": "Operations Manager, TechLogix", "avatarBgColor": "emerald-500" }
       ]
     }
   }

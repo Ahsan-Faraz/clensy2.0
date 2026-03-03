@@ -6,7 +6,7 @@
     "heroTopLabel": "Premium Educational Facility Services",
     "heroHeading": "School & Childcare Cleaning Services",
     "heroSubheading": "Specialized cleaning and sanitization services designed for educational environments, ensuring a healthy, safe space for students, teachers, and staff.",
-    "heroBackgroundImageUrl": "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=2032&auto=format&fit=crop",
+    "heroBackgroundImageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846630/photo-1580582932707-520aed937b7b_h9uf5z.jpg",
     "heroServiceDuration": "Education Specialists",
     "heroServiceGuarantee": "100% Satisfaction",
     "includedSectionHeading": "Our Educational Facility Cleaning Services",
@@ -15,19 +15,19 @@
       {
         "title": "Classrooms & Learning Spaces",
         "description": "Create an optimal learning environment with thoroughly sanitized classrooms, desks, and educational equipment.",
-        "imageUrl": "https://images.unsplash.com/photo-1588072432836-e10032774350?q=80&w=2072&auto=format&fit=crop",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846661/photo-1588072432836-e10032774350_ydjsls.jpg",
         "features": ["Desk and chair sanitization", "Whiteboard and smartboard cleaning", "Educational equipment disinfection", "Floor cleaning and maintenance", "Window and glass surface cleaning", "Air vent cleaning and dust removal"]
       },
       {
         "title": "Cafeterias & Food Service Areas",
         "description": "Maintain the highest hygiene standards in food service areas with specialized cleaning protocols for health and safety compliance.",
-        "imageUrl": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846752/shutterstock_2567781381_apqkc9.jpg",
         "features": ["Food preparation surface sanitization", "Kitchen equipment deep cleaning", "Dining table and chair disinfection", "Floor degreasing and sanitization", "Trash removal and bin sanitization", "Health code compliance cleaning"]
       },
       {
         "title": "Restrooms & Common Areas",
         "description": "Ensure student and staff health with thorough sanitization of high-traffic areas and restroom facilities.",
-        "imageUrl": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=500&auto=format&fit=crop",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846826/image64_pqa4og.png",
         "features": ["Toilet and urinal deep cleaning", "Sink and faucet sanitization", "Mirror and fixture cleaning", "Floor mopping and disinfection", "Supply restocking and maintenance", "Hallway and corridor cleaning"]
       }
     ],

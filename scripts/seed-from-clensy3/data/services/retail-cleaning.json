@@ -6,7 +6,7 @@
     "heroTopLabel": "Premium Retail Services",
     "heroHeading": "Retail Store & Shop Cleaning",
     "heroSubheading": "Create an impeccable shopping environment that enhances customer experience and protects your merchandise with our specialized retail cleaning services.",
-    "heroBackgroundImageUrl": "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?q=80&w=2070&auto=format&fit=crop",
+    "heroBackgroundImageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846308/photo-1567401893414-76b7b1e5a7a5_p9uaiq.jpg",
     "heroServiceDuration": "Retail Specialists",
     "heroServiceGuarantee": "100% Satisfaction",
     "includedSectionHeading": "Our Retail Cleaning Services",
@@ -15,19 +15,19 @@
       {
         "title": "Entrances & Display Areas",
         "description": "First impressions matter. We ensure your store entrance and display areas shine to create a welcoming environment that attracts customers.",
-        "imageUrl": "https://www.thimble.com/wp-content/uploads/2021/10/Retail-Store-Layout-Guide.jpg",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846352/Retail-Store-Layout-Guide_rxsiwy.jpg",
         "features": ["Glass door and window cleaning for crystal clear visibility", "Dusting and cleaning of display shelves and fixtures", "Floor cleaning and polishing for high-traffic entryways", "Sanitizing of doorknobs, handles, and railings"]
       },
       {
         "title": "Sales Floor & Merchandise Areas",
         "description": "Create an inviting shopping environment with meticulously cleaned sales floors that showcase your merchandise in the best light.",
-        "imageUrl": "https://cdn.prod.website-files.com/642b7859216b0f5b519de88a/642c66600054c7783cbff234_commercial.jpg",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846388/642c66600054c7783cbff234_commercial_c2lbev.jpg",
         "features": ["Thorough floor care tailored to your flooring type", "Gentle dusting of merchandise shelves and product displays", "Sanitizing of high-touch surfaces throughout your store", "Cleaning and polishing of display cases and counters"]
       },
       {
         "title": "Fitting Rooms & Customer Areas",
         "description": "Keep your fitting rooms and customer service areas pristine to enhance the shopping experience and encourage purchases.",
-        "imageUrl": "https://www.idcleaning.uk/img/pages/page_7/shutterstock_227609965.jpg",
+        "imageUrl": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750846425/image7_e44b5z.png",
         "features": ["Disinfection of fitting room surfaces and seating", "Mirror cleaning for smudge-free reflections", "Sanitization of customer service counters and points of sale", "Regular emptying and cleaning of fitting room waste receptacles"]
       }
     ],
