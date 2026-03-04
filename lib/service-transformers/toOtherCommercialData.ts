@@ -4,6 +4,7 @@ export function toOtherCommercialData(data: ServiceDataBase): Record<string, any
   const areas = data.cleaningAreas || [];
   const cd = data.customData || {};
 
+  // Trust indicators: prefer structured top-level serviceTrustIndicators, then customData, then defaults
   const trustFromData = cd.trustIndicators;
   const trustIndicators = trustFromData?.length
     ? trustFromData
@@ -44,23 +45,23 @@ export function toOtherCommercialData(data: ServiceDataBase): Record<string, any
       ...a,
       image: a.image || a.imageUrl,
     })),
-    whyChooseHeading: cd.whyChooseHeading || "Why Choose Us",
-    whyChooseSubheading: cd.whyChooseSubheading || "",
+    whyChooseHeading: data.whyChooseHeading || cd.whyChooseHeading || "Why Choose Us",
+    whyChooseSubheading: data.whyChooseSubheading || cd.whyChooseSubheading || "",
     feature1Title: data.benefit1Title || cd.feature1Title || "",
     feature1Description: data.benefit1Description || cd.feature1Description || "",
-    feature1Icon: cd.feature1Icon || "",
+    feature1Icon: data.benefit1Icon || cd.feature1Icon || "",
     feature2Title: data.benefit2Title || cd.feature2Title || "",
     feature2Description: data.benefit2Description || cd.feature2Description || "",
-    feature2Icon: cd.feature2Icon || "",
+    feature2Icon: data.benefit2Icon || cd.feature2Icon || "",
     feature3Title: data.benefit3Title || cd.feature3Title || "",
     feature3Description: data.benefit3Description || cd.feature3Description || "",
-    feature3Icon: cd.feature3Icon || "",
-    pricingPlans: cd.pricingPlans || [],
-    pricingHeading: cd.pricingHeading || "Tailored Cleaning Plans & Pricing",
-    pricingSubheading: cd.pricingSubheading || "",
-    pricingCustomSectionHeading: cd.pricingCustomSectionHeading || "Need More Flexibility?",
-    pricingCustomSectionDescription: cd.pricingCustomSectionDescription || "",
-    clientTestimonials: cd.clientTestimonials || [],
+    feature3Icon: data.benefit3Icon || cd.feature3Icon || "",
+    pricingPlans: data.pricingPlans || cd.pricingPlans || [],
+    pricingHeading: data.pricingHeading || cd.pricingHeading || "Tailored Cleaning Plans & Pricing",
+    pricingSubheading: data.pricingSubheading || cd.pricingSubheading || "",
+    pricingCustomSectionHeading: data.pricingCustomSectionHeading || cd.pricingCustomSectionHeading || "Need More Flexibility?",
+    pricingCustomSectionDescription: data.pricingCustomSectionDescription || cd.pricingCustomSectionDescription || "",
+    clientTestimonials: data.clientTestimonials || cd.clientTestimonials || [],
     faqs: data.faqs || [],
   };
 }

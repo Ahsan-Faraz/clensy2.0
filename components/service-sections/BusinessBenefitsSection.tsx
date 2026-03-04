@@ -7,6 +7,10 @@ import {
   Star,
   Building,
   Users,
+  Heart,
+  TrendingUp,
+  Award,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 
@@ -17,6 +21,10 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Clock,
   Star,
   Building,
+  Heart,
+  TrendingUp,
+  Award,
+  Sparkles,
 };
 
 const COLOR_MAP: Record<string, string> = {

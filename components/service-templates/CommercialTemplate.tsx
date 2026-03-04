@@ -30,11 +30,15 @@ export default function CommercialTemplate({ data }: CommercialTemplateProps) {
     { number: data.trustIndicator4Number, text: data.trustIndicator4Text },
   ].filter((t) => t.number || t.text);
 
+  // Why Choose Us: pass icon field from data (can be Lucide name or image URL)
   const benefits = [
-    { title: data.feature1Title, description: data.feature1Description },
-    { title: data.feature2Title, description: data.feature2Description },
-    { title: data.feature3Title, description: data.feature3Description },
+    { title: data.feature1Title, description: data.feature1Description, icon: data.feature1Icon },
+    { title: data.feature2Title, description: data.feature2Description, icon: data.feature2Icon },
+    { title: data.feature3Title, description: data.feature3Description, icon: data.feature3Icon },
   ].filter((b) => b.title);
+
+  // Gym uses dark variant for Why Choose section
+  const benefitsVariant = data.serviceType === "gym" ? "dark" : "light";
 
   return (
     <main className="overflow-x-hidden">
@@ -55,6 +59,13 @@ export default function CommercialTemplate({ data }: CommercialTemplateProps) {
         heading={data.includedSectionHeading}
         subheading={data.includedSectionSubheading}
         areas={cleaningAreas}
+      />
+      {/* Office: Business Benefits section comes AFTER Why Choose */}
+      <BenefitsSection
+        heading={data.whyChooseHeading}
+        subheading={data.whyChooseSubheading}
+        benefits={benefits}
+        variant={benefitsVariant as "light" | "dark"}
       />
       {data.serviceType === "office" && data.businessBenefits?.cards?.length > 0 && (
         <BusinessBenefitsSection
@@ -78,17 +89,17 @@ export default function CommercialTemplate({ data }: CommercialTemplateProps) {
           items={data.healthAndSafetyStandards.items}
         />
       )}
-      <BenefitsSection
-        heading={data.whyChooseHeading}
-        subheading={data.whyChooseSubheading}
-        benefits={benefits}
+      {(data.clientTestimonials?.length ?? 0) > 0 && (
+        <TestimonialsSection
+          heading={data.clientTestimonialsHeading || "What Our Business Clients Say"}
+          subheading={data.clientTestimonialsSubheading || "Discover why businesses trust us for their professional cleaning needs."}
+          testimonials={data.clientTestimonials || []}
+        />
+      )}
+      <FAQSection
+        faqs={data.faqs || []}
+        variant={data.serviceType === "office" ? "dark" : "light"}
       />
-      <TestimonialsSection
-        heading={data.clientTestimonialsHeading || "What Our Clients Say"}
-        subheading={data.clientTestimonialsSubheading || `Discover why businesses trust us for their professional cleaning needs.`}
-        testimonials={data.clientTestimonials || []}
-      />
-      <FAQSection faqs={data.faqs || []} />
       <CTASection />
     </main>
   );

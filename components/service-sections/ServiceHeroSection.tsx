@@ -16,6 +16,8 @@ interface ServiceHeroSectionProps {
   ctaText?: string;
   ctaLink?: string;
   badgeText?: string;
+  /** "outline" = bg-white/10 rounded-full (default), "solid" = bg-blue-600 rounded-lg (extras) */
+  badgeVariant?: "outline" | "solid";
   headingHighlight?: { before: string; highlight: string; after: string };
 }
 
@@ -32,6 +34,7 @@ export default function ServiceHeroSection({
   ctaText = "Get a Free Quote",
   ctaLink = "/contact",
   badgeText,
+  badgeVariant = "outline",
   headingHighlight,
 }: ServiceHeroSectionProps) {
   const accentClasses: Record<string, string> = {
@@ -46,8 +49,8 @@ export default function ServiceHeroSection({
     if (headingHighlight) {
       return (
         <>
-          {headingHighlight.before}{" "}
-          <span className={accent}>{headingHighlight.highlight}</span>
+          {headingHighlight.before}
+          <span className="text-blue-500">{headingHighlight.highlight}</span>
           {headingHighlight.after}
         </>
       );
@@ -126,14 +129,16 @@ export default function ServiceHeroSection({
             >
               {badgeText ? (
                 <div
-                  className={`px-8 py-3 rounded-full text-sm font-medium inline-flex items-center justify-center w-48 cursor-default select-none ${
-                    heroAccentColor === "blue"
-                      ? "bg-blue-100 text-blue-700"
+                  className={`px-8 py-3 text-sm font-medium inline-flex items-center justify-center w-48 cursor-default select-none ${
+                    badgeVariant === "solid"
+                      ? "bg-blue-100 text-blue-700 rounded-lg"
+                      : heroAccentColor === "blue"
+                      ? "bg-blue-100 text-blue-700 rounded-full"
                       : heroAccentColor === "yellow"
-                      ? "bg-yellow-100 text-yellow-700"
+                      ? "bg-yellow-100 text-yellow-700 rounded-full"
                       : heroAccentColor === "green"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-white/10 text-white"
+                      ? "bg-green-100 text-green-700 rounded-full"
+                      : "bg-white/10 text-white rounded-full"
                   }`}
                 >
                   {badgeText}

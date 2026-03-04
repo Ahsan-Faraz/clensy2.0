@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import CTASection from "@/components/cta-section";
 import {
@@ -44,8 +46,11 @@ interface ExtrasTemplateProps {
 }
 
 export default function ExtrasTemplate({ data }: ExtrasTemplateProps) {
-  const [activeExtra, setActiveExtra] = useState(data.premiumExtraServices?.[0]?.id || "windows");
-  const extras = data.premiumExtraServices || [];
+  const [activeExtra, setActiveExtra] = useState(data.premiumExtraServices?.[0]?.id || data.premiumExtraServices?.[0]?.serviceId || "windows");
+  const extras = (data.premiumExtraServices || []).map((e: any) => ({
+    ...e,
+    id: e.id || e.serviceId,
+  }));
   const activeItem = extras.find((e: any) => e.id === activeExtra) || extras[0];
 
   const steps = (data.howToAddExtraServicesSteps || [
@@ -64,25 +69,45 @@ export default function ExtrasTemplate({ data }: ExtrasTemplateProps) {
       features: e.features || [],
     }));
 
+  // Trust indicators - handle both flat fields and array format
+  const trustIndicators = data.trustIndicators || data.extrasTrustIndicators || [
+    { number: data.trustIndicator1Number, text: data.trustIndicator1Text },
+    { number: data.trustIndicator2Number, text: data.trustIndicator2Text },
+    { number: data.trustIndicator3Number, text: data.trustIndicator3Text },
+    { number: data.trustIndicator4Number, text: data.trustIndicator4Text },
+  ].filter((t: any) => t.number || t.text);
+
+  // Build heading highlight for "Services" keyword
+  const heroHeading = data.heroHeading || "";
+  const headingHighlight = heroHeading.includes("Services")
+    ? {
+        before: heroHeading.split("Services")[0],
+        highlight: "Services",
+        after: heroHeading.split("Services").slice(1).join("Services"),
+      }
+    : undefined;
+
   return (
     <main className="overflow-x-hidden">
       <ServiceHeroSection
         heroTopLabel={data.heroTopLabel}
-        heroHeading={data.heroHeading}
+        heroHeading={heroHeading}
         heroSubheading={data.heroSubheading}
         heroBackgroundImage={data.heroBackgroundImage}
         heroServiceDuration={data.heroServiceDuration}
         heroServiceGuarantee={data.heroServiceGuarantee}
         heroAccentColor="blue"
         badgeText="Customizable Extras"
+        badgeVariant="solid"
+        headingHighlight={headingHighlight}
       />
-      <TrustIndicatorsSection indicators={data.trustIndicators || []} />
+      <TrustIndicatorsSection indicators={trustIndicators} />
       {extras.length > 0 && (
         <section className="py-24 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">{data.extrasHeading}</h2>
-              <p className="text-lg text-gray-600">{data.extrasSubheading}</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{data.extrasHeading || data.includedSectionHeading}</h2>
+              <p className="text-lg text-gray-600">{data.extrasSubheading || data.includedSectionSubheading}</p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-10">
               {extras.slice(0, 8).map((extra: any) => {
@@ -111,9 +136,9 @@ export default function ExtrasTemplate({ data }: ExtrasTemplateProps) {
               })}
             </div>
             {activeItem && (
-              <div className="bg-gray-50 rounded-2xl p-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  <div className="relative h-[300px] rounded-xl overflow-hidden">
+              <div className="bg-gray-50 rounded-2xl overflow-hidden">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                  <div className="relative h-[300px] lg:h-full">
                     <Image
                       src={activeItem.image || "https://res.cloudinary.com/dgjmm3usy/image/upload/v1750845184/image74_pnropc.png"}
                       alt={activeItem.name}
@@ -121,20 +146,25 @@ export default function ExtrasTemplate({ data }: ExtrasTemplateProps) {
                       className="object-cover"
                     />
                   </div>
-                  <div>
+                  <div className="p-8 flex flex-col justify-center">
                     <h3 className="text-2xl font-bold mb-4">{activeItem.name}</h3>
                     <p className="text-gray-600 mb-6">{activeItem.description}</p>
-                    {(activeItem.features || []).map((f: string, i: number) => (
-                      <div key={i} className="flex items-start mb-2">
-                        <span className="text-blue-600 mr-2">✓</span>
-                        <span>{f}</span>
-                      </div>
-                    ))}
-                    {activeItem.price && (
-                      <p className="mt-4 text-xl font-bold text-blue-600">
-                        {activeItem.price} {activeItem.priceUnit}
-                      </p>
-                    )}
+                    <ul className="space-y-3">
+                      {(activeItem.features || []).map((f: string, i: number) => (
+                        <li key={i} className="flex items-start">
+                          <LucideIcons.Check className="h-5 w-5 mr-3 text-blue-600 flex-shrink-0 mt-0.5" />
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-8">
+                      <Link
+                        href="/booking"
+                        className="bg-blue-600 text-white hover:bg-blue-500 px-6 py-2 rounded-lg text-sm font-medium inline-flex items-center transition-all duration-300"
+                      >
+                        Add This Service <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -168,7 +198,7 @@ export default function ExtrasTemplate({ data }: ExtrasTemplateProps) {
           cards={pricingCards}
         />
       )}
-      {data.clientTestimonials?.length > 0 && (
+      {(data.clientTestimonials?.length ?? 0) > 0 && (
         <TestimonialsSection
           heading="What Our Clients Say"
           subheading="Hear from clients who have enhanced their cleaning experience with our extra services."

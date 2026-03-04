@@ -63,6 +63,27 @@ export interface ServiceDataBase {
     label: string;
   }>;
   faqs: Array<{ question: string; answer: string }>;
+  /** Top-level editable fields (also in Strapi admin) */
+  whyChooseHeading?: string;
+  whyChooseSubheading?: string;
+  benefit1Icon?: string;
+  benefit2Icon?: string;
+  benefit3Icon?: string;
+  pricingHeading?: string;
+  pricingSubheading?: string;
+  pricingPlans?: Array<{
+    planName: string;
+    planSubtitle?: string;
+    planPrice: string;
+    planPriceUnit?: string;
+    planFeatures?: string[];
+    planButtonText?: string;
+    planButtonLink?: string;
+    isPopular?: boolean;
+    planColor?: string;
+  }>;
+  pricingCustomSectionHeading?: string;
+  pricingCustomSectionDescription?: string;
   customData?: {
     trustIndicators?: Array<{ number: string; text: string }>;
     beforeAfter?: {

@@ -1099,6 +1099,7 @@ export class CMSAdapter {
       movingClientTestimonials: true,
       postConstructionSafety: true,
       postConstructionClientTestimonials: true,
+      pricingPlans: true,
     };
 
     // Try custom Strapi endpoint first (faster, optimized query)
@@ -1322,6 +1323,21 @@ export class CMSAdapter {
       extrasClientTestimonials: data.extrasClientTestimonials || null,
       pricingHeading: data.pricingHeading || null,
       pricingSubheading: data.pricingSubheading || null,
+      whyChooseHeading: data.whyChooseHeading || null,
+      whyChooseSubheading: data.whyChooseSubheading || null,
+      pricingPlans: data.pricingPlans?.map((plan: any) => ({
+        planName: plan.planName || '',
+        planSubtitle: plan.planSubtitle || '',
+        planPrice: plan.planPrice || '',
+        planPriceUnit: plan.planPriceUnit || '/ visit',
+        planFeatures: plan.planFeatures || [],
+        planButtonText: plan.planButtonText || 'Get Quote',
+        planButtonLink: plan.planButtonLink || '/contact',
+        isPopular: plan.isPopular || false,
+        planColor: plan.planColor || 'blue-600',
+      })) || [],
+      pricingCustomSectionHeading: data.pricingCustomSectionHeading || null,
+      pricingCustomSectionDescription: data.pricingCustomSectionDescription || null,
       // Moving, Deep, Airbnb, Office, Gym, Post-construction – structured components
       reduceStressSection: data.reduceStressSection || null,
       beforeAfter: data.beforeAfter || null,
