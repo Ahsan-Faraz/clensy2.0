@@ -904,7 +904,7 @@ export class CMSAdapter {
     // Tags enable targeted revalidateTag; revalidate 300 = 5 min ISR
     let result: StrapiResponse<any> | null = await fetchFromStrapi<StrapiResponse<any>>(
       `/locations/by-slug/${encodeURIComponent(slug)}`,
-      { populate: locationPopulate, status, revalidate: 300, tags: [`location-${slug}`] }
+      { populate: locationPopulate, status, revalidate: 60, tags: [`location-${slug}`] }
     );
 
     // Fallback to standard filtered endpoint if custom route returns 404/empty
@@ -913,7 +913,7 @@ export class CMSAdapter {
         filters: { slug: { $eq: slug } },
         populate: locationPopulate,
         status: status,
-        revalidate: 300,
+        revalidate: 60,
         tags: [`location-${slug}`],
       });
     }
@@ -923,7 +923,7 @@ export class CMSAdapter {
         filters: { slug: { $eq: slug } },
         populate: locationPopulate,
         status: fallbackStatus,
-        revalidate: 300,
+        revalidate: 60,
         tags: [`location-${slug}`],
       });
     }
@@ -1083,7 +1083,7 @@ export class CMSAdapter {
     // Tags enable targeted revalidateTag; revalidate 300 = 5 min ISR
     let result: StrapiResponse<any> | StrapiResponse<any[]> | null = await fetchFromStrapi<StrapiResponse<any>>(
       `/services/by-slug/${encodeURIComponent(slug)}`,
-      { status, revalidate: 300, tags: [`service-${slug}`] }
+      { status, revalidate: 60, tags: [`service-${slug}`] }
     );
 
     // Fallback to standard filtered endpoint if custom route returns 404/empty
@@ -1092,7 +1092,7 @@ export class CMSAdapter {
         filters: { slug: { $eq: slug } },
         populate: servicePopulate,
         status: status,
-        revalidate: 300,
+        revalidate: 60,
         tags: [`service-${slug}`],
       });
     }
@@ -1102,7 +1102,7 @@ export class CMSAdapter {
         filters: { slug: { $eq: slug } },
         populate: servicePopulate,
         status: fallbackStatus,
-        revalidate: 300,
+        revalidate: 60,
         tags: [`service-${slug}`],
       });
     }

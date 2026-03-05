@@ -47,7 +47,7 @@ async function getGlobalScripts(): Promise<{ globalHeadScripts: string; globalBo
       'Content-Type': 'application/json',
       ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
     };
-    const response = await fetch(url, { headers, next: { revalidate: 300 } }); // Cache for 5 minutes
+    const response = await fetch(url, { headers, next: { revalidate: 60 } }); // Cache for 1 minute
     if (!response.ok) return { globalHeadScripts: '', globalBodyEndScripts: '' };
     const json = await response.json();
     const data = json?.data;

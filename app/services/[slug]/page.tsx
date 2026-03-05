@@ -4,7 +4,7 @@ import CMSAdapter from "@/lib/cms-adapter";
 import { UnifiedTemplate } from "@/components/service-templates";
 import { ServicePageWithSWR } from "@/components/service-page-with-swr";
 
-export const revalidate = 300; // 5 min ISR - targeted revalidateTag on publish
+export const revalidate = 60; // 1 min ISR
 
 export async function generateStaticParams() {
   const services = await CMSAdapter.getAllServices();
