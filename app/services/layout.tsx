@@ -11,8 +11,8 @@ export default async function ServicesLayout({
   children: React.ReactNode;
 }) {
   const [services, locations] = await Promise.all([
-    CMSAdapter.getAllServices({ revalidate: 300 }),
-    CMSAdapter.getAllLocations({ revalidate: 300 }),
+    CMSAdapter.getAllServices({ revalidate: 60 }),
+    CMSAdapter.getAllLocations({ revalidate: 60 }),
   ]);
 
   return (
