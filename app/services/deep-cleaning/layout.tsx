@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ServicesLayout({
+export default function DeepCleaningLayout({
   children,
 }: {
   children: React.ReactNode;

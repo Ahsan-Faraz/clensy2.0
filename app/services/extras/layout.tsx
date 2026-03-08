@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ServicesLayout({
+export default function ExtrasLayout({
   children,
 }: {
   children: React.ReactNode;

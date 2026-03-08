@@ -1,0 +1,158 @@
+[{
+  "_id": {
+    "$oid": "684bfe60821d62bf875673ca"
+  },
+  "heroSection": {
+    "title": "Bergen County",
+    "subtitle": "Professional Cleaning Services in Bergen County, NJ",
+    "backgroundImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1751528394/718c5a20-c480-4df5-bf12-006e5614d111-112720-Paramus-BlackFriday-002_vpkfcx.jpg",
+    "ctaButton1": "SCHEDULE SERVICE",
+    "ctaButton2": "CALL US NOW"
+  },
+  "contactSection": {
+    "title": "Contact Information",
+    "phone": "551-305-4081",
+    "email": "info@clensy.com",
+    "address": "123 Bergen Ave, Bergen County, NJ 07000",
+    "hours": [
+      {
+        "day": "Monday",
+        "hours": "8:00 am - 8:00 pm",
+        "_id": {
+          "$oid": "684bfe60821d62bf875673cb"
+        }
+      },
+      {
+        "day": "Tuesday",
+        "hours": "8:00 am - 8:00 pm",
+        "_id": {
+          "$oid": "684bfe60821d62bf875673cc"
+        }
+      },
+      {
+        "day": "Wednesday",
+        "hours": "8:00 am - 8:00 pm",
+        "_id": {
+          "$oid": "684bfe60821d62bf875673cd"
+        }
+      },
+      {
+        "day": "Thursday",
+        "hours": "8:00 am - 8:00 pm",
+        "_id": {
+          "$oid": "684bfe60821d62bf875673ce"
+        }
+      },
+      {
+        "day": "Friday",
+        "hours": "8:00 am - 8:00 pm",
+        "_id": {
+          "$oid": "684bfe60821d62bf875673cf"
+        }
+      },
+      {
+        "day": "Saturday",
+        "hours": "9:00 am - 4:00 pm",
+        "_id": {
+          "$oid": "684bfe60821d62bf875673d0"
+        }
+      },
+      {
+        "day": "Sunday",
+        "hours": "Closed",
+        "_id": {
+          "$oid": "684bfe60821d62bf875673d1"
+        }
+      }
+    ]
+  },
+  "serviceAreas": [
+    "Cliffside Park",
+    "Edgewater",
+    "Fairview",
+    "Fort Lee",
+    "Garfield",
+    "North Arlington",
+    "Wallington",
+    "Rutherford",
+    "Lyndhurst",
+    "Carlstadt",
+    "East Rutherford",
+    "Moonachie",
+    "Wood Ridge",
+    "Allendale",
+    "Franklin Lakes",
+    "Ho Ho Kus",
+    "Mahwah",
+    "Midland Park",
+    "Oakland",
+    "Ramsey",
+    "Ridgewood",
+    "Glen Rock",
+    "Saddle River",
+    "Waldwick",
+    "Wyckoff",
+    "Hackensack",
+    "Bogota",
+    "Hasbrouck Heights",
+    "Leonia",
+    "South Hackensack",
+    "Maywood",
+    "Teterboro",
+    "Alpine",
+    "Bergenfield",
+    "Closter",
+    "Cresskill",
+    "Demarest",
+    "Dumont",
+    "Emerson",
+    "Englewood",
+    "Englewood Cliffs",
+    "Harrington Park",
+    "Haworth",
+    "Hillsdale",
+    "Little Ferry",
+    "Lodi",
+    "Montvale",
+    "New Milford",
+    "Northvale",
+    "Norwood",
+    "Oradell",
+    "Palisades Park",
+    "Paramus",
+    "Park Ridge",
+    "Ridgefield",
+    "Ridgefield Park",
+    "River Edge",
+    "Rochelle Park",
+    "Saddle Brook",
+    "Teaneck",
+    "Tenafly",
+    "Westwood",
+    "Township of Washington",
+    "Woodcliff Lake"
+  ],
+  "aboutSection": {
+    "title": "About Our Bergen County Services",
+    "description": "Serving Bergen County with top-quality cleaning services for both residential and commercial properties. Our team of professional cleaners is dedicated to providing exceptional service with attention to detail."
+  },
+  "seo": {
+    "title": "Professional Cleaning Services in Bergen County, NJ | Clensy",
+    "description": "Clensy offers professional cleaning services in Bergen County, NJ. Book online for residential and commercial cleaning services with guaranteed satisfaction.",
+    "keywords": [
+      "cleaning services Bergen County",
+      "house cleaning Bergen County",
+      "commercial cleaning Bergen County",
+      "professional cleaners Bergen",
+      "maid service Bergen County",
+      "office cleaning Bergen"
+    ]
+  },
+  "createdAt": {
+    "$date": "2025-06-13T10:33:04.468Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-04T14:53:30.270Z"
+  },
+  "__v": 0
+}]

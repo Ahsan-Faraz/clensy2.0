@@ -27,8 +27,7 @@ interface DynamicLandingPageProps {
   comparisonData?: any;
   reviewsData?: any;
   checklistData?: any;
-  services?: any[];
-  locations?: any[];
+
   // SSG: Page builder template data pre-fetched from server
   pageBuilderContent?: any;
   pageBuilderTemplateField?: string;
@@ -48,8 +47,6 @@ export default function DynamicLandingPage({
   comparisonData,
   reviewsData,
   checklistData,
-  services,
-  locations,
   pageBuilderContent,
   pageBuilderTemplateField,
 }: DynamicLandingPageProps) {
@@ -143,7 +140,7 @@ export default function DynamicLandingPage({
       <main className="overflow-x-hidden">
         <SEOHead schemaJsonLd={schemaJsonLd} additionalSchemas={additionalSchemas} headScripts={headScripts} bodyEndScripts={bodyEndScripts} customCss={customCss} />
         <div className="relative z-50">
-          <Navbar services={services} locations={locations} />
+          <Navbar />
         </div>
         
         {/* Page Builder content BEFORE Checklist position */}
@@ -179,7 +176,7 @@ export default function DynamicLandingPage({
           />
         )}
         
-        <Footer services={services} locations={locations} />
+        <Footer />
       </main>
     );
   }
@@ -188,7 +185,7 @@ export default function DynamicLandingPage({
   return (
     <main className="overflow-x-hidden">
       <SEOHead schemaJsonLd={schemaJsonLd} additionalSchemas={additionalSchemas} headScripts={headScripts} bodyEndScripts={bodyEndScripts} customCss={customCss} />
-      <Navbar services={services} locations={locations} />
+      <Navbar />
       <HeroSection data={heroData} />
       <div className="max-w-full">
         <HowItWorks data={howItWorksData} />
@@ -197,7 +194,7 @@ export default function DynamicLandingPage({
         <ComparisonSection data={comparisonData} />
         <CTASection data={ctaData} />
       </div>
-      <Footer services={services} locations={locations} />
+      <Footer />
     </main>
   );
 }

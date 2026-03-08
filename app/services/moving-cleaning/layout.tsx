@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function ServicesLayout({
+export default function MovingCleaningLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return <>{children}</>;
-}
+} 

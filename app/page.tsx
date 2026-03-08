@@ -93,8 +93,6 @@ export default async function Home() {
     comparisonData,
     reviewsData,
     checklistData,
-    services,
-    locations,
     pageBuilderResult,
   ] = await Promise.all([
     CMSAdapter.getLandingPageSEO().catch(() => null),
@@ -104,8 +102,6 @@ export default async function Home() {
     CMSAdapter.getComparisonSection().catch(() => null),
     CMSAdapter.getReviewsSection().catch(() => null),
     CMSAdapter.getChecklistSection().catch(() => null),
-    CMSAdapter.getAllServices().catch(() => []),
-    CMSAdapter.getAllLocations().catch(() => []),
     fetchLandingPage().catch(() => null),
   ]);
 
@@ -127,8 +123,6 @@ export default async function Home() {
       comparisonData={comparisonData}
       reviewsData={reviewsData}
       checklistData={checklistData}
-      services={services}
-      locations={locations}
       pageBuilderContent={pageBuilderContent}
     />
   );

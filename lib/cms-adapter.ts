@@ -876,11 +876,24 @@ export class CMSAdapter {
     };
   }
   
+  // Map location page slug → Strapi single-type name
+  private static LOCATION_SINGLE_TYPES: Record<string, string> = {
+    bergen: 'bergen-county',
+    essex: 'essex-county',
+    hudson: 'hudson-county',
+    morris: 'morris-county',
+    passaic: 'passaic-county',
+    union: 'union-county',
+  };
+
   /**
-   * Get Location by Slug (cached, selective populate, prefers custom by-slug endpoint)
+   * Get Location by Slug — fetches from individual single-type endpoints
    */
   static async getLocationBySlug(slug: string, status: 'draft' | 'published' = 'published') {
     if (!slug) return null;
+
+    const singleTypeName = this.LOCATION_SINGLE_TYPES[slug];
+    if (!singleTypeName) return null;
 
     const cacheKey = `${slug}:${status}`;
     const cached = locationBySlugCache.get(cacheKey);
@@ -888,169 +901,86 @@ export class CMSAdapter {
       return cached.data;
     }
 
-    // Selective populate: only fields needed for location pages (much smaller payload)
-    const locationPopulate = {
-      heroBackgroundImage: true,
-      operatingHours: true,
-      serviceAreas: true,
-      seo: true,
-      openGraph: { populate: { ogImage: true } },
-      localSeo: true,
-      schema: true,
-      scripts: true,
-    };
-
-    // Try custom Strapi endpoint first (faster, optimized query)
-    // Tags enable targeted revalidateTag; revalidate 300 = 5 min ISR
-    let result: StrapiResponse<any> | null = await fetchFromStrapi<StrapiResponse<any>>(
-      `/locations/by-slug/${encodeURIComponent(slug)}`,
-      { populate: locationPopulate, status, revalidate: 60, tags: [`location-${slug}`] }
+    const result = await fetchFromStrapi<StrapiResponse<any>>(
+      `/${singleTypeName}`,
+      { status, revalidate: 60, tags: [`location-${slug}`] }
     );
 
-    // Fallback to standard filtered endpoint if custom route returns 404/empty
     if (!result?.data) {
-      result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
-        filters: { slug: { $eq: slug } },
-        populate: locationPopulate,
-        status: status,
-        revalidate: 60,
-        tags: [`location-${slug}`],
-      });
-    }
-    if (!result?.data || (Array.isArray(result.data) && result.data.length === 0)) {
+      // Fallback to opposite status
       const fallbackStatus = status === 'published' ? 'draft' : 'published';
-      result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
-        filters: { slug: { $eq: slug } },
-        populate: locationPopulate,
-        status: fallbackStatus,
-        revalidate: 60,
-        tags: [`location-${slug}`],
-      });
-    }
-    // Fallback: fetch all and filter client-side (avoids slug/filters issues)
-    const dataArray = Array.isArray(result?.data) ? result.data : (result?.data ? [result.data] : []);
-    if (dataArray.length === 0) {
-      const all = await this.getAllLocations();
-      const found = all.find((loc) => loc.slug === slug);
-      if (!found) return null;
-      // Minimal shape to avoid breaking pages
-      return {
-        name: found.name,
-        slug: found.slug,
-        county: found.county,
-        state: found.state || 'NJ',
-        heroSection: { title: '', subtitle: '', backgroundImage: '', ctaButton1: '', ctaButton2: '' },
-        contactSection: { title: '', phone: '', email: '', address: '', hours: [] },
-        serviceAreas: [],
-        aboutSection: { title: '', description: '' },
-        seo: {
-          metaTitle: found.name || '',
-          metaDescription: '',
-          keywords: [],
-          canonicalUrl: `https://clensy.com/locations/${found.slug}`,
-          robots: 'index, follow',
-          h1: found.name || '',
-          h2: '',
-          h3: '',
-          openGraph: { title: found.name || '', description: '', image: found.heroBackgroundImage || '', type: 'website' },
-          twitter: { card: 'summary_large_image', title: found.name || '', description: '' },
-          schemaJsonLd: null,
-          schemaType: 'LocalBusiness',
-          headScripts: '',
-          bodyStartScripts: '',
-          bodyEndScripts: '',
-          customCss: '',
-        },
-        localSeo: {
-          city: '',
-          county: found.county || '',
-          state: found.state || 'NJ',
-          zipCode: '',
-          serviceType: 'residential, commercial',
-        },
-        imageAlt: { heroBackground: '' },
-      };
+      const fallback = await fetchFromStrapi<StrapiResponse<any>>(
+        `/${singleTypeName}`,
+        { status: fallbackStatus, revalidate: 60, tags: [`location-${slug}`] }
+      );
+      if (!fallback?.data) return null;
+      const transformed = this.transformLocationData(fallback.data, slug);
+      locationBySlugCache.set(cacheKey, { data: transformed, time: Date.now() });
+      return transformed;
     }
 
-    const data = dataArray[0];
-    const transformed = {
-      name: data.name || '',
-      slug: data.slug || slug,
-      county: data.county || '',
-      state: data.state || 'NJ',
+    const transformed = this.transformLocationData(result.data, slug);
+    locationBySlugCache.set(cacheKey, { data: transformed, time: Date.now() });
+    return transformed;
+  }
+
+  /**
+   * Transform flat Strapi location fields to the shape the frontend expects
+   */
+  private static transformLocationData(data: any, slug: string) {
+    const countyName = data.heroTitle || slug.charAt(0).toUpperCase() + slug.slice(1);
+    return {
+      name: countyName,
+      slug,
+      county: countyName,
+      state: 'NJ',
       heroSection: {
         title: data.heroTitle || '',
         subtitle: data.heroSubtitle || '',
-        backgroundImage: getImageUrl(data.heroBackgroundImage) || data.heroBackgroundImageUrl || '',
-        ctaButton1: data.ctaButton1Text || 'Get a Quote',
-        ctaButton2: data.ctaButton2Text || 'Contact Us',
+        backgroundImage: data.heroBackgroundImageUrl || '',
+        ctaButton1: data.heroCtaButton1 || 'SCHEDULE SERVICE',
+        ctaButton2: data.heroCtaButton2 || 'CALL US NOW',
       },
       contactSection: {
-        title: data.contactTitle || '',
+        title: data.contactTitle || 'Contact Information',
         phone: data.contactPhone || '',
         email: data.contactEmail || '',
         address: data.contactAddress || '',
-        hours: data.operatingHours?.map((h: any) => ({
-          day: h.day || '',
-          hours: h.hours || '',
-        })) || [],
+        hours: Array.isArray(data.operatingHours) ? data.operatingHours : [],
       },
-      serviceAreas: data.serviceAreas?.map((a: any) => a.name || a) || [],
+      serviceAreas: Array.isArray(data.serviceAreas) ? data.serviceAreas : [],
       aboutSection: {
         title: data.aboutTitle || '',
         description: data.aboutDescription || '',
       },
       seo: {
-        metaTitle: data.seo?.metaTitle || data.seoMetaTitle || `Professional Cleaning Services in ${data.county || ''} County, NJ | Clensy`,
-        metaDescription: data.seo?.metaDescription || data.seoMetaDescription || `Professional cleaning services for ${data.county || ''} County. Book online in 30 seconds.`,
-        keywords: data.seo?.keywords ? (typeof data.seo.keywords === 'string' ? data.seo.keywords.split(',').map((k: string) => k.trim()) : data.seo.keywords) : (data.seoKeywords || []),
-        canonicalUrl: data.seo?.canonicalURL || data.seoCanonicalUrl || `https://clensy.com/locations/${data.slug}`,
-        robots: data.seo?.metaRobots || data.seoRobots || 'index, follow',
-        h1: data.seo?.h1 || data.seoH1 || data.heroTitle || `Professional Cleaning Services in ${data.county || ''} County`,
-        h2: data.seo?.h2 || data.seoH2 || data.aboutTitle || '',
-        h3: data.seo?.h3 || data.seoH3 || 'Service Areas',
+        metaTitle: data.seoTitle || `Professional Cleaning Services in ${countyName}, NJ | Clensy`,
+        metaDescription: data.seoMetaDescription || '',
+        keywords: Array.isArray(data.seoKeywords) ? data.seoKeywords : [],
+        canonicalUrl: data.seoCanonicalUrl || `https://clensy.com/locations/${slug}`,
+        robots: data.seoRobots || 'index, follow',
+        h1: data.heroTitle || `Professional Cleaning Services in ${countyName}`,
+        h2: data.aboutTitle || '',
+        h3: 'Service Areas',
         openGraph: {
-          title: data.openGraph?.ogTitle || data.ogTitle || `Professional Cleaning Services in ${data.county || ''} County | Clensy`,
-          description: data.openGraph?.ogDescription || data.ogDescription || `Professional cleaning services for ${data.county || ''} County.`,
-          image: getImageUrl(data.openGraph?.ogImage) || data.ogImageUrl || getImageUrl(data.heroBackgroundImage) || data.heroBackgroundImageUrl || '',
-          type: data.openGraph?.ogType || data.ogType || 'website',
+          title: data.ogTitle || data.seoTitle || '',
+          description: data.ogDescription || data.seoMetaDescription || '',
+          image: data.ogImageUrl || data.heroBackgroundImageUrl || '',
+          type: data.ogType || 'website',
         },
         twitter: {
-          card: data.openGraph?.twitterCard || data.twitterCard || 'summary_large_image',
-          title: data.openGraph?.twitterTitle || data.twitterTitle || data.openGraph?.ogTitle || data.ogTitle || `Professional Cleaning Services in ${data.county || ''} County | Clensy`,
-          description: data.openGraph?.twitterDescription || data.twitterDescription || data.openGraph?.ogDescription || data.ogDescription || `Professional cleaning services for ${data.county || ''} County.`,
+          card: data.twitterCard || 'summary_large_image',
+          title: data.twitterTitle || data.ogTitle || data.seoTitle || '',
+          description: data.twitterDescription || data.ogDescription || data.seoMetaDescription || '',
         },
-        schemaJsonLd: data.seo?.structuredData || data.schema?.customJsonLd || data.schemaJsonLd || null,
-        schemaType: data.schema?.schemaType || data.schemaType || 'LocalBusiness',
-        headScripts: getScriptsForPlacement(data, 'head'),
-        bodyStartScripts: getScriptsForPlacement(data, 'body-start'),
-        bodyEndScripts: getScriptsForPlacement(data, 'body-end'),
+        schemaJsonLd: data.schemaJsonLd || null,
+        schemaType: 'LocalBusiness',
+        headScripts: data.headScripts || '',
+        bodyStartScripts: '',
+        bodyEndScripts: data.bodyEndScripts || '',
         customCss: data.customCss || '',
-        localBusinessSchema: data.schema ? {
-          name: data.schema.businessName || 'Clensy',
-          url: `https://clensy.com/locations/${data.slug}`,
-          telephone: data.schema.telephone || data.contactPhone || '',
-          address: data.schema.address || data.contactAddress || '',
-          priceRange: data.schema.priceRange || '$$',
-        } : null,
-        faqSchema: null, // Can be added if FAQs are added to locations
-        reviewSchema: null, // Can be added if testimonials are added to locations
-      },
-      // Local SEO
-      localSeo: {
-        city: data.localSeo?.city || data.city || '',
-        county: data.localSeo?.county || data.county || '',
-        state: data.localSeo?.state || data.state || 'NJ',
-        zipCode: data.localSeo?.zipCode || data.zipCode || '',
-        serviceType: data.localSeo?.serviceType || data.serviceType || 'residential, commercial',
-      },
-      // Image Alt Text
-      imageAlt: {
-        heroBackground: data.heroBackgroundImageAlt || `Professional cleaning services in ${data.county || ''} County, New Jersey`,
       },
     };
-    locationBySlugCache.set(cacheKey, { data: transformed, time: Date.now() });
-    return transformed;
   }
   
   /**
@@ -1301,40 +1231,45 @@ export class CMSAdapter {
   }
   
   /**
-   * Get All Locations (for listing) - cached, minimal populate
+   * Get All Locations (for listing) — aggregates from 6 single-type endpoints
    */
   static async getAllLocations(options?: { revalidate?: number }) {
     if (allLocationsCache && Date.now() - allLocationsCacheTime < CACHE_DURATION) {
       return allLocationsCache;
     }
 
-    const fetchOptions = options?.revalidate !== undefined ? { revalidate: options.revalidate } : {};
-    const listPopulate = { heroBackgroundImage: true };
-    let result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
-      populate: listPopulate,
-      status: 'published',
-      ...fetchOptions,
-    });
-    if (!result?.data || result.data.length === 0) {
-      result = await fetchFromStrapi<StrapiResponse<any[]>>('/locations', {
-        populate: listPopulate,
-        status: 'draft',
-        ...fetchOptions,
-      });
-    }
+    const revalidate = options?.revalidate ?? 60;
+    const entries = Object.entries(this.LOCATION_SINGLE_TYPES);
 
-    if (!result?.data) return [];
+    const locations = (
+      await Promise.all(
+        entries.map(async ([slug, singleType]) => {
+          let result = await fetchFromStrapi<StrapiResponse<any>>(
+            `/${singleType}`,
+            { status: 'published', revalidate }
+          );
+          if (!result?.data) {
+            result = await fetchFromStrapi<StrapiResponse<any>>(
+              `/${singleType}`,
+              { status: 'draft', revalidate }
+            );
+          }
+          if (!result?.data) return null;
+          const d = result.data;
+          return {
+            name: d.heroTitle || slug,
+            slug,
+            county: d.heroTitle || slug,
+            state: 'NJ',
+            heroTitle: d.heroTitle || '',
+            heroSubtitle: d.heroSubtitle || '',
+            heroBackgroundImage: d.heroBackgroundImageUrl || '',
+          };
+        })
+      )
+    ).filter(Boolean);
 
-    const locations = result.data.map((location: any) => ({
-      name: location.name || '',
-      slug: location.slug || '',
-      county: location.county || '',
-      state: location.state || 'NJ',
-      heroTitle: location.heroTitle || '',
-      heroSubtitle: location.heroSubtitle || '',
-      heroBackgroundImage: getImageUrl(location.heroBackgroundImage) || location.heroBackgroundImageUrl || '',
-    }));
-    allLocationsCache = locations;
+    allLocationsCache = locations as any[];
     allLocationsCacheTime = Date.now();
     return locations;
   }

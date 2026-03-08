@@ -1,114 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Facebook,
   Instagram,
+  Twitter,
   MapPin,
   Phone,
   Mail,
 } from "lucide-react";
 
-interface Service {
-  name: string;
-  slug: string;
-  serviceType: string;
-}
-
-interface Location {
-  name: string;
-  slug: string;
-  county: string;
-}
-
-// Hardcoded defaults — render these instantly while CMS data loads
-const DEFAULT_SERVICES: Service[] = [
-  { name: 'Routine Cleaning', slug: 'routine-cleaning', serviceType: 'routine' },
-  { name: 'Deep Cleaning', slug: 'deep-cleaning', serviceType: 'deep' },
-  { name: 'Airbnb Cleaning', slug: 'airbnb-cleaning', serviceType: 'airbnb' },
-  { name: 'Move In/Out Cleaning', slug: 'moving-cleaning', serviceType: 'moving' },
-  { name: 'Post-Construction Cleaning', slug: 'post-construction-cleaning', serviceType: 'post-construction' },
-  { name: 'Office Cleaning', slug: 'office-cleaning', serviceType: 'office' },
-];
-
-const DEFAULT_LOCATIONS: Location[] = [
-  { name: 'Bergen County', slug: 'bergen', county: 'Bergen County' },
-  { name: 'Hudson County', slug: 'hudson', county: 'Hudson County' },
-  { name: 'Essex County', slug: 'essex', county: 'Essex County' },
-  { name: 'Passaic County', slug: 'passaic', county: 'Passaic County' },
-  { name: 'Union County', slug: 'union', county: 'Union County' },
-  { name: 'Morris County', slug: 'morris', county: 'Morris County' },
-];
-
-export interface FooterProps {
-  services?: Service[];
-  locations?: Location[];
-}
-
-export default function Footer({ services: propServices, locations: propLocations }: FooterProps) {
-  // Fallback state for when no props are provided (non-landing pages)
-  const [fetchedServices, setFetchedServices] = useState<Service[]>([]);
-  const [fetchedLocations, setFetchedLocations] = useState<Location[]>([]);
-
-  // Fetch from CMS only if no server props were provided (non-landing pages)
-  useEffect(() => {
-    if (propServices !== undefined && propLocations !== undefined) return;
-    const fetchData = async () => {
-      try {
-        const [servicesRes, locationsRes] = await Promise.all([
-          fetch('/api/cms/services'),
-          fetch('/api/cms/locations')
-        ]);
-        const servicesData = await servicesRes.json();
-        const locationsData = await locationsRes.json();
-        if (servicesData.success && (servicesData.data?.length ?? 0) > 0) {
-          setFetchedServices(servicesData.data);
-        }
-        if (locationsData.success && (locationsData.data?.length ?? 0) > 0) {
-          setFetchedLocations(locationsData.data);
-        }
-      } catch {
-        // Silently fail - defaults are already shown
-      }
-    };
-    fetchData();
-  }, [propServices, propLocations]);
-
-  // Priority: server props > client-fetched CMS data > hardcoded defaults
-  const services = (propServices && propServices.length > 0)
-    ? propServices
-    : (fetchedServices.length > 0 ? fetchedServices : DEFAULT_SERVICES);
-  const locations = (propLocations && propLocations.length > 0)
-    ? propLocations
-    : (fetchedLocations.length > 0 ? fetchedLocations : DEFAULT_LOCATIONS);
-
+export default function Footer() {
+  // Remove theme state and set to black permanently
   const bgColor = "bg-black";
   const textColor = "text-white";
   const headingColor = "text-white";
   const borderColor = "border-gray-800";
   const iconColor = "text-gray-400";
-  const hoverColor = "text-[#007BFF]";
-
-  // Same order as Navbar: Residential first, then Commercial (Other Commercial last)
-  const SERVICE_DISPLAY_ORDER = [
-    'routine', 'deep', 'moving', 'post-construction', 'airbnb', 'extras',
-    'office', 'medical', 'gym', 'school', 'retail', 'property', 'other-commercial',
-  ];
-  const sortedServices = [...services].sort(
-    (a, b) => SERVICE_DISPLAY_ORDER.indexOf(a.serviceType) - SERVICE_DISPLAY_ORDER.indexOf(b.serviceType)
-  );
-
-  // Locations order: Bergen → Hudson → Essex → Passaic → Union → Morris
-  const LOCATION_ORDER = ['bergen', 'hudson', 'essex', 'passaic', 'union', 'morris'];
-  const sortedLocations = [...locations].sort(
-    (a, b) => LOCATION_ORDER.indexOf(a.slug) - LOCATION_ORDER.indexOf(b.slug)
-  );
+  const hoverColor = "text-[#007BFF]"; // Changed to blue
 
   return (
     <footer className={`py-16 ${bgColor} relative overflow-hidden`}>
+      {/* Remove theme toggle buttons */}
+
       {/* Animated wavy line at the top */}
       <div className="absolute top-0 left-0 w-full overflow-hidden">
         <svg width="100%" height="20" className="fill-current text-[#111]">
@@ -182,28 +98,59 @@ export default function Footer({ services: propServices, locations: propLocation
             </div>
           </div>
 
-          {/* Services - Dynamic from Strapi */}
           <div>
             <h3 className={`text-sm font-bold ${headingColor} mb-4`}>
               Services
             </h3>
             <ul className="space-y-2">
-              {sortedServices.length > 0 ? (
-                sortedServices.map((service) => (
-                  <li key={service.slug}>
-                    <Link
-                      href={`/services/${service.slug}`}
-                      className={`text-sm ${textColor} hover:${hoverColor}`}
-                    >
-                      {service.name}
-                    </Link>
-                  </li>
-                ))
-              ) : (
-                <li className={`text-sm ${textColor} opacity-50`}>
-                  No services available
-                </li>
-              )}
+              <li>
+                <Link
+                  href="/services/routine-cleaning"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Routine Cleaning
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services/deep-cleaning"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Deep Cleaning
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services/moving-cleaning"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Moving Cleaning
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services/post-construction-cleaning"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Post Construction
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services/airbnb-cleaning"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Airbnb Cleaning
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services/other-commercial"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Commercial Cleaning
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -236,16 +183,14 @@ export default function Footer({ services: propServices, locations: propLocation
                   Join The Team
                 </Link>
               </li>
-              {locations.length > 0 && (
-                <li>
-                  <Link
-                    href="/locations"
-                    className={`text-sm ${textColor} hover:${hoverColor}`}
-                  >
-                    Locations
-                  </Link>
-                </li>
-              )}
+              <li>
+                <Link
+                  href="/locations"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Locations
+                </Link>
+              </li>
               <li>
                 <Link
                   href="/faq"
@@ -265,28 +210,59 @@ export default function Footer({ services: propServices, locations: propLocation
             </ul>
           </div>
 
-          {/* Locations - Dynamic from Strapi */}
           <div>
             <h3 className={`text-sm font-bold ${headingColor} mb-4`}>
               Locations
             </h3>
             <ul className="space-y-2">
-              {sortedLocations.length > 0 ? (
-                sortedLocations.map((location) => (
-                  <li key={location.slug}>
-                    <Link
-                      href={`/locations/${location.slug}`}
-                      className={`text-sm ${textColor} hover:${hoverColor}`}
-                    >
-                      {location.name || location.county}
-                    </Link>
-                  </li>
-                ))
-              ) : (
-                <li className={`text-sm ${textColor} opacity-50`}>
-                  No locations available
-                </li>
-              )}
+              <li>
+                <Link
+                  href="/locations/bergen"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Bergen County
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/locations/hudson"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Hudson County
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/locations/essex"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Essex County
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/locations/passaic"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Passaic County
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/locations/union"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Union County
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/locations/morris"
+                  className={`text-sm ${textColor} hover:${hoverColor}`}
+                >
+                  Morris County
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

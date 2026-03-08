@@ -1,0 +1,104 @@
+[{
+  "_id": {
+    "$oid": "684c2b7c47bca8c638782546"
+  },
+  "heroSection": {
+    "title": "Hudson County",
+    "subtitle": "Professional Cleaning Services in Hudson County, NJ",
+    "backgroundImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1751528451/c01b3f0cb3f32f34ac1670ff10991d9e47-hoboken-lede.2x.rsocial.w600_bvqxiu.jpg",
+    "ctaButton1": "SCHEDULE SERVICE",
+    "ctaButton2": "CALL US NOW"
+  },
+  "contactSection": {
+    "title": "Contact Information",
+    "phone": "201-555-7890",
+    "email": "hudson@clensy.com",
+    "address": "123 Hudson Ave, Hudson County, NJ 07000",
+    "hours": [
+      {
+        "day": "Monday",
+        "hours": "8:00 am - 6:00 pm",
+        "_id": {
+          "$oid": "684c2b7c47bca8c638782547"
+        }
+      },
+      {
+        "day": "Tuesday",
+        "hours": "8:00 am - 6:00 pm",
+        "_id": {
+          "$oid": "684c2b7c47bca8c638782548"
+        }
+      },
+      {
+        "day": "Wednesday",
+        "hours": "8:00 am - 6:00 pm",
+        "_id": {
+          "$oid": "684c2b7c47bca8c638782549"
+        }
+      },
+      {
+        "day": "Thursday",
+        "hours": "8:00 am - 6:00 pm",
+        "_id": {
+          "$oid": "684c2b7c47bca8c63878254a"
+        }
+      },
+      {
+        "day": "Friday",
+        "hours": "8:00 am - 6:00 pm",
+        "_id": {
+          "$oid": "684c2b7c47bca8c63878254b"
+        }
+      },
+      {
+        "day": "Saturday",
+        "hours": "9:00 am - 3:00 pm",
+        "_id": {
+          "$oid": "684c2b7c47bca8c63878254c"
+        }
+      },
+      {
+        "day": "Sunday",
+        "hours": "Closed",
+        "_id": {
+          "$oid": "684c2b7c47bca8c63878254d"
+        }
+      }
+    ]
+  },
+  "serviceAreas": [
+    "Bayonne",
+    "Harrison",
+    "Hoboken",
+    "Kearny",
+    "North Bergen",
+    "Weehawken",
+    "Union City",
+    "West New York",
+    "Secaucus",
+    "Jersey City"
+  ],
+  "aboutSection": {
+    "title": "About Our Hudson County Services",
+    "description": "Serving Hudson County with top-quality cleaning services for both residential and commercial properties. Our team of professional cleaners is dedicated to providing exceptional service with attention to detail."
+  },
+  "seo": {
+    "title": "Professional Cleaning Services in Hudson County, NJ | Clensy",
+    "description": "Clensy offers professional cleaning services in Hudson County, NJ. Book online for residential and commercial cleaning services with guaranteed satisfaction.",
+    "keywords": [
+      "cleaning services Hudson County",
+      "house cleaning Hudson County",
+      "commercial cleaning Hudson County",
+      "professional cleaners Hudson",
+      "maid service Hudson County",
+      "office cleaning Hudson"
+    ]
+  },
+  "createdAt": {
+    "$date": "2025-06-13T13:45:33.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-04T14:55:25.687Z"
+  },
+  "__v": 0
+}]

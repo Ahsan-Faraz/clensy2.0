@@ -162,49 +162,6 @@ export async function savePageBuilderData(
 }
 
 /**
- * Fetch raw Service content with Page Builder template (for server-side rendering)
- * Returns { data, templateField } or null if not found / no template
- */
-export async function fetchServicePageBuilderContent(slug: string): Promise<{
-  data: any;
-  templateField: string;
-  template: { json: any } | null;
-} | null> {
-  try {
-    const url = strapiUrl('services', `filters[slug][$eq]=${encodeURIComponent(slug)}&populate[Service_Page][populate]=*`);
-    const response = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...(STRAPI_API_TOKEN && { Authorization: `Bearer ${STRAPI_API_TOKEN}` }),
-      },
-      next: { revalidate: 60 },
-    });
-
-    if (!response.ok) return null;
-
-    const result = await response.json();
-    const services = result.data || [];
-    const service = services[0];
-    if (!service) return null;
-
-    const templateField = 'Service_Page';
-    const template = service[templateField];
-    if (!template?.json?.content || template.json.content.length === 0) {
-      return null;
-    }
-
-    return {
-      data: service,
-      templateField,
-      template: template.json,
-    };
-  } catch (error) {
-    console.warn('[fetchServicePageBuilderContent]', error);
-    return null;
-  }
-}
-
-/**
  * Fetch Contact page with Page Builder template (for server-side rendering)
  */
 export async function fetchContactPageBuilderContent(): Promise<{

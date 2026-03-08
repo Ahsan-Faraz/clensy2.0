@@ -1,25 +1,17 @@
 import React from "react";
-import CMSAdapter from "@/lib/cms-adapter";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 
-export const revalidate = 60;
-
-export default async function LocationsLayout({
+export default function LocationsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [services, locations] = await Promise.all([
-    CMSAdapter.getAllServices({ revalidate: 60 }),
-    CMSAdapter.getAllLocations({ revalidate: 60 }),
-  ]);
-
   return (
     <div className="min-h-screen overflow-hidden">
-      <Navbar services={services} locations={locations} />
+      <Navbar />
       {children}
-      <Footer services={services} locations={locations} />
+      <Footer />
     </div>
   );
 }

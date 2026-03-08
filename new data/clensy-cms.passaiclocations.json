@@ -1,0 +1,108 @@
+[{
+  "_id": {
+    "$oid": "684c2e1247bca8c638782608"
+  },
+  "heroSection": {
+    "title": "Passaic County",
+    "subtitle": "Professional Cleaning Services in Passaic County, NJ",
+    "backgroundImage": "https://res.cloudinary.com/dgjmm3usy/image/upload/v1751528559/718c5a20-c480-4df5-bf12-006e5614d111-112720-Paramus-BlackFriday-002_tqa9si.jpg",
+    "ctaButton1": "SCHEDULE SERVICE",
+    "ctaButton2": "CALL US NOW"
+  },
+  "contactSection": {
+    "title": "Contact Information",
+    "phone": "973-555-7890",
+    "email": "passaic@clensy.com",
+    "address": "123 Passaic Ave, Passaic County, NJ 07000",
+    "hours": [
+      {
+        "day": "Monday",
+        "hours": "8:00 am - 6:00 pm",
+        "_id": {
+          "$oid": "684c2e1247bca8c638782609"
+        }
+      },
+      {
+        "day": "Tuesday",
+        "hours": "8:00 am - 6:00 pm",
+        "_id": {
+          "$oid": "684c2e1247bca8c63878260a"
+        }
+      },
+      {
+        "day": "Wednesday",
+        "hours": "8:00 am - 6:00 pm",
+        "_id": {
+          "$oid": "684c2e1247bca8c63878260b"
+        }
+      },
+      {
+        "day": "Thursday",
+        "hours": "8:00 am - 6:00 pm",
+        "_id": {
+          "$oid": "684c2e1247bca8c63878260c"
+        }
+      },
+      {
+        "day": "Friday",
+        "hours": "8:00 am - 6:00 pm",
+        "_id": {
+          "$oid": "684c2e1247bca8c63878260d"
+        }
+      },
+      {
+        "day": "Saturday",
+        "hours": "9:00 am - 3:00 pm",
+        "_id": {
+          "$oid": "684c2e1247bca8c63878260e"
+        }
+      },
+      {
+        "day": "Sunday",
+        "hours": "Closed",
+        "_id": {
+          "$oid": "684c2e1247bca8c63878260f"
+        }
+      }
+    ]
+  },
+  "serviceAreas": [
+    "Clifton",
+    "Bloomingdale",
+    "Haskell",
+    "Hewitt",
+    "Little Falls",
+    "Newfoundland",
+    "Ringwood",
+    "Wayne",
+    "West Milford",
+    "Paterson",
+    "Haledon",
+    "Prospect Park",
+    "Totowa",
+    "Wanaque"
+  ],
+  "aboutSection": {
+    "title": "About Our Passaic County Services",
+    "description": "Serving Passaic County with top-quality cleaning services for both residential and commercial properties. Our team of professional cleaners is dedicated to providing exceptional service with attention to detail."
+  },
+  "seo": {
+    "title": "Professional Cleaning Services in Passaic County, NJ | Clensy",
+    "description": "Clensy offers professional cleaning services in Passaic County, NJ. Book online for residential and commercial cleaning services with guaranteed satisfaction.",
+    "keywords": [
+      "cleaning services Passaic County",
+      "house cleaning Passaic County",
+      "commercial cleaning Passaic County",
+      "professional cleaners Passaic",
+      "maid service Passaic County",
+      "office cleaning Passaic"
+    ]
+  },
+  "createdAt": {
+    "$date": "2025-06-13T13:56:34.081Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-04T15:18:57.799Z"
+  },
+  "__v": 0
+}]
