@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
     if (model) {
       const { paths, tags, clearFn } = resolveModel(model);
       clearFn?.();
-      for (const tag of tags) { revalidateTag(tag); revalidated.push(`tag:${tag}`); }
+      for (const tag of tags) { revalidateTag(tag, { expire: 0 }); revalidated.push(`tag:${tag}`); }
       for (const p of [...new Set(paths)]) { revalidatePath(p); revalidated.push(p); }
     } else {
       // Manual / explicit format
@@ -124,13 +124,13 @@ export async function POST(request: NextRequest) {
 
       if (type === 'service' && slug) {
         clearServiceCaches();
-        revalidateTag(`service-${slug}`);
+        revalidateTag(`service-${slug}`, { expire: 0 });
         revalidatePath(`/services/${slug}`);
         revalidatePath('/services');
         revalidated.push(`service-${slug}`, '/services');
       } else if (type === 'location' && slug) {
         clearLocationCaches();
-        revalidateTag(`location-${slug}`);
+        revalidateTag(`location-${slug}`, { expire: 0 });
         revalidatePath(`/locations/${slug}`);
         revalidatePath('/locations');
         revalidated.push(`location-${slug}`, '/locations');

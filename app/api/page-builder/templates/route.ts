@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     ];
     
     let lastError: any = null;
-    let lastResponse: Response | null = null;
+    let lastResponse: any = null;
     
     for (const url of endpoints) {
       try {
