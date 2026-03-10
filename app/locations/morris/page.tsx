@@ -32,7 +32,6 @@ interface MorrisLocationData {
   aboutSection: {
     title: string;
     description: string;
-    content: string[];
   };
   seo: {
     title: string;
@@ -276,10 +275,7 @@ export default function MorrisCountyPage() {
                 </h2>
               </div>
               <div className="p-6">
-                <p className="text-gray-300 mb-4">
-                  {data.aboutSection.description}
-                </p>
-                {data.aboutSection.content.map((paragraph, index) => (
+                {data.aboutSection.description.split('\n\n').map((paragraph, index) => (
                   <p key={index} className="text-gray-300 mb-4">
                     {paragraph}
                   </p>
