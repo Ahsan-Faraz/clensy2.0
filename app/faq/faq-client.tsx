@@ -17,6 +17,9 @@ interface FAQItem {
   answer: string;
   category: string;
   order: number;
+  tags?: string[];
+  priority?: number;
+  isActive?: boolean;
 }
 
 interface StillHaveQuestionsCard {
@@ -104,7 +107,8 @@ export default function FAQPageClient({ schemaJsonLd, headScripts, bodyEndScript
   const filteredFAQs = useMemo(() => {
     if (!faqData?.comprehensiveFAQs) return [];
     
-    let filtered = faqData.comprehensiveFAQs;
+    // Filter out inactive items
+    let filtered = faqData.comprehensiveFAQs.filter(faq => faq.isActive !== false);
     
     if (selectedCategory !== "all") {
       filtered = filtered.filter(faq => faq.category === selectedCategory);
@@ -114,12 +118,15 @@ export default function FAQPageClient({ schemaJsonLd, headScripts, bodyEndScript
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(faq => 
         faq.question.toLowerCase().includes(query) || 
-        faq.answer.toLowerCase().includes(query)
+        faq.answer.toLowerCase().includes(query) ||
+        faq.tags?.some(tag => tag.toLowerCase().includes(query))
       );
     }
     
     return filtered.sort((a, b) => {
       if (a.category !== b.category) return a.category.localeCompare(b.category);
+      // Sort by priority (higher first), then by order
+      if ((b.priority ?? 0) !== (a.priority ?? 0)) return (b.priority ?? 0) - (a.priority ?? 0);
       return a.order - b.order;
     });
   }, [faqData, selectedCategory, searchQuery]);
@@ -205,7 +212,7 @@ export default function FAQPageClient({ schemaJsonLd, headScripts, bodyEndScript
                     type="text" 
                     value={searchQuery} 
                     onChange={(e) => handleSearchChange(e.target.value)} 
-                    placeholder={`Search from ${faqData.comprehensiveFAQs?.length || 110}+ questions about cleaning, pricing, booking, and more...`}
+                    placeholder={`Search from ${faqData.comprehensiveFAQs?.length || 92}+ questions about cleaning, pricing, booking, and more...`}
                     className="block w-full pl-10 pr-3 py-4 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" 
                   />
                   {searchQuery && (

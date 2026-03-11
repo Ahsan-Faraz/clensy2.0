@@ -595,7 +595,7 @@ export default function RoutineCleaningPage() {
                   "{testimonial.review}"
                 </p>
                 <div className="flex items-center mt-auto">
-                  <div className={`w-12 h-12 rounded-full bg-${testimonial.avatarBgColor} flex items-center justify-center mr-4`}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mr-4" style={{ backgroundColor: {'pink-500':'#ec4899','purple-500':'#a855f7','orange-500':'#f97316','teal-500':'#14b8a6','blue-500':'#3b82f6','green-500':'#22c55e'}[testimonial.avatarBgColor] || '#a855f7' }}>
                     <svg
                       className="w-6 h-6 text-white"
                       fill="currentColor"

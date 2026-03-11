@@ -13,7 +13,7 @@ function linkifyContent(text: string): string {
     .replace(/(https?:\/\/[^\s<>"']+)/gi, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">$1</a>')
     .replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, '<a href="mailto:$1" class="text-blue-600 hover:text-blue-800 underline">$1</a>')
     .replace(/•\s+([^\n<]+)/g, "<li>$1</li>")
-    .replace(/(<li>[\s\S]*?<\/li>\s*)+/g, (m) => `<ul class="list-disc pl-5 my-3 space-y-1">${m.trim()}</ul>`);
+    .replace(/(<li>[\s\S]*?<\/li>\s*)+/g, (m) => `<ul class="list-disc pl-5 my-1 space-y-0.5">${m.trim()}</ul>`);
 }
 
 interface PrivacyPolicySection { title: string; content: string; order: number; }
@@ -83,7 +83,7 @@ export default function PrivacyPolicyClient({ schemaJsonLd, headScripts, bodyEnd
                     <div key={index}>
                       <h3 className="text-xl font-semibold text-gray-900 mb-3">{section.title}</h3>
                       <div
-                        className="text-gray-700 [&_a]:text-blue-600 [&_a]:hover:text-blue-800 [&_a]:underline [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-3 [&_ul]:space-y-1"
+                        className="text-gray-700 [&_a]:text-blue-600 [&_a]:hover:text-blue-800 [&_a]:underline [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-1 [&_ul]:space-y-0.5"
                         dangerouslySetInnerHTML={{ __html: linkifyContent(section.content) }}
                       />
                     </div>

@@ -22,7 +22,7 @@ const defaultData = {
     title: "Call us now",
     description:
       "Need more information? Prefer a friendly voice over the phone?",
-    buttonText: "(123) 456-7890",
+    buttonText: "(551) 305-4081",
   },
 };
 
