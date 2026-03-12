@@ -13,83 +13,33 @@ import {
   Building,
 } from "lucide-react";
 
-interface HudsonLocationData {
-  heroSection: {
-    title: string;
-    subtitle: string;
-    backgroundImage: string;
-    ctaButton1: string;
-    ctaButton2: string;
-  };
-  contactSection: {
-    title: string;
-    phone: string;
-    email: string;
-    address: string;
-    hours: { day: string; hours: string }[];
-  };
-  serviceAreas: string[];
-  aboutSection: {
-    title: string;
-    description: string;
-  };
-  seo: {
-    title: string;
-    description: string;
-    keywords: string[];
-  };
-}
-
-export default function HudsonCountyPage() {
-  const [data, setData] = useState<HudsonLocationData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export default function LocationTemplate({
+  data,
+  slug,
+}: {
+  data: any;
+  slug: string;
+}) {
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/cms/location/hudson");
-        const result = await response.json();
-        
-        if (result.success) {
-          setData(result.data);
-        } else {
-          setError("Failed to load data");
-        }
-      } catch (error) {
-        setError("An error occurred while fetching data");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    setIsLoaded(true);
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#007bff]"></div>
-      </div>
-    );
-  }
+  const { heroSection, contactSection, serviceAreas, aboutSection } = data;
 
-  if (error || !data) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-red-500">{error || "Failed to load data"}</div>
-      </div>
-    );
-  }
+  // Derive display name from slug (e.g., "bergen" -> "Bergen County")
+  const countyName =
+    slug.charAt(0).toUpperCase() + slug.slice(1) + " County";
 
   return (
     <main className="overflow-x-hidden bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
-      {/* Hero Section styled like services page */}
+      {/* Hero Section */}
       <section className="relative min-h-[60vh] bg-black pt-16">
         <div className="absolute inset-0 z-0">
           <Image
-            src={data.heroSection.backgroundImage}
-            alt="Hudson County Skyline"
+            src={heroSection.backgroundImage}
+            alt={`${countyName} Skyline`}
             fill
             className="object-cover brightness-90"
             priority
@@ -101,21 +51,25 @@ export default function HudsonCountyPage() {
           <div className="grid grid-cols-1 gap-8 items-center min-h-[calc(60vh-64px)]">
             <div className="flex flex-col justify-end h-full pb-16">
               <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 tracking-tight">
-                {data.heroSection.title}
+                {heroSection.title}
               </h1>
+              <p className="text-xl text-gray-300 mb-8 max-w-2xl">
+                {heroSection.subtitle}
+              </p>
 
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/booking"
                   className="flex px-8 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors items-center"
                 >
-                  <Calendar className="mr-2 h-5 w-5" /> SCHEDULE SERVICE
+                  <Calendar className="mr-2 h-5 w-5" />{" "}
+                  {heroSection.ctaButton1}
                 </Link>
                 <Link
-                  href={`tel:${data.contactSection.phone}`}
+                  href={`tel:${contactSection.phone.replace(/[^0-9+]/g, "")}`}
                   className="inline-flex items-center px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-md font-medium hover:bg-white/20 transition-colors"
                 >
-                  <Phone className="mr-2 h-5 w-5" /> CALL US NOW
+                  <Phone className="mr-2 h-5 w-5" /> {heroSection.ctaButton2}
                 </Link>
               </div>
             </div>
@@ -134,7 +88,7 @@ export default function HudsonCountyPage() {
               All Locations
             </Link>
             <ChevronRight className="h-4 w-4 mx-2" />
-            <span className="text-white font-medium">Hudson County</span>
+            <span className="text-white font-medium">{countyName}</span>
           </div>
         </div>
       </div>
@@ -153,34 +107,37 @@ export default function HudsonCountyPage() {
               </div>
               <div className="p-6 space-y-6">
                 <div className="flex items-start">
-                  <Phone className="h-5 w-5 text-blue-400 mr-3 mt-1" />
+                  <Phone className="h-5 w-5 text-blue-400 mr-3 mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="text-gray-300 font-medium mb-1">Phone</h3>
                     <a
-                      href={`tel:${data.contactSection.phone}`}
+                      href={`tel:${contactSection.phone.replace(
+                        /[^0-9+]/g,
+                        ""
+                      )}`}
                       className="text-white hover:text-blue-400 transition-colors"
                     >
-                      {data.contactSection.phone}
+                      {contactSection.phone}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-start">
-                  <Mail className="h-5 w-5 text-blue-400 mr-3 mt-1" />
+                  <Mail className="h-5 w-5 text-blue-400 mr-3 mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="text-gray-300 font-medium mb-1">Email</h3>
                     <a
-                      href={`mailto:${data.contactSection.email}`}
+                      href={`mailto:${contactSection.email}`}
                       className="text-white hover:text-blue-400 transition-colors"
                     >
-                      {data.contactSection.email}
+                      {contactSection.email}
                     </a>
                   </div>
                 </div>
 
                 <div className="pt-4">
                   <Link
-                    href="/booking?location=hudson"
+                    href="/booking"
                     className="inline-block w-full py-3 bg-blue-600 text-white rounded-md text-center font-medium hover:bg-blue-700 transition-colors"
                   >
                     Request a Quote
@@ -199,12 +156,21 @@ export default function HudsonCountyPage() {
               </div>
               <div className="p-6">
                 <div className="space-y-3">
-                  {data.contactSection.hours.map((hour, index) => (
-                    <div key={index} className="flex justify-between items-center">
-                      <span className="text-gray-300 font-medium">{hour.day}</span>
-                      <span className="text-white">{hour.hours}</span>
-                    </div>
-                  ))}
+                  {contactSection.hours.map(
+                    (dayHours: any, index: number) => (
+                      <div key={dayHours.day || index}>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-300 font-medium">
+                            {dayHours.day}
+                          </span>
+                          <span className="text-white">{dayHours.hours}</span>
+                        </div>
+                        {index < contactSection.hours.length - 1 && (
+                          <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent my-2"></div>
+                        )}
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             </div>
@@ -212,63 +178,75 @@ export default function HudsonCountyPage() {
 
           {/* Right Column - Map and Description */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Interactive Map */}
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-xl overflow-hidden">
-              <div className="p-6 border-b border-gray-700">
-                <h2 className="text-xl font-bold text-white">Service Area</h2>
-              </div>
-              <div className="relative h-[400px] w-full">
-                <Image
-                  src="https://www.cccarto.com/nj/hudson_zipcodes/files/hudson_county_zip_codes.jpg"
-                  alt="Hudson County Map"
-                  fill
-                  className="object-cover z-10"
-                />
+            {/* Interactive Map (shown if mapImage exists in data) */}
+            {data.mapImage && (
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-xl overflow-hidden">
+                <div className="p-6 border-b border-gray-700">
+                  <h2 className="text-xl font-bold text-white">
+                    Service Area
+                  </h2>
+                </div>
+                <div className="relative h-[400px] w-full">
+                  <Image
+                    src={data.mapImage}
+                    alt={`${countyName} Map`}
+                    fill
+                    className="object-cover z-10"
+                  />
 
-                {/* Map Overlay with Pin */}
-                <div className="absolute inset-0 bg-blue-900/30 backdrop-blur-sm z-20"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
-                  <div className="relative">
-                    <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-xl animate-pulse">
-                      <MapPin className="h-8 w-8 text-white" />
-                    </div>
-                    <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 translate-y-full bg-white px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
-                      <span className="font-semibold text-gray-800">
-                        Hudson County
-                      </span>
+                  <div className="absolute inset-0 bg-blue-900/30 backdrop-blur-sm z-20"></div>
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+                    <div className="relative">
+                      <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-xl animate-pulse">
+                        <MapPin className="h-8 w-8 text-white" />
+                      </div>
+                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 translate-y-full bg-white px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+                        <span className="font-semibold text-gray-800">
+                          {countyName}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Schedule Service Button */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-blue-800 to-indigo-800 text-white py-4 px-6 flex justify-center z-30">
-                  <Link
-                    href="/booking"
-                    className="flex items-center font-medium hover:text-blue-200 transition-colors"
-                  >
-                    <Calendar className="h-5 w-5 mr-2" /> SCHEDULE A CLEANING
-                  </Link>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-blue-800 to-indigo-800 text-white py-4 px-6 flex justify-center z-30">
+                    <Link
+                      href="/booking"
+                      className="flex items-center font-medium hover:text-blue-200 transition-colors"
+                    >
+                      <Calendar className="h-5 w-5 mr-2" /> SCHEDULE A
+                      CLEANING
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* About This Location */}
             <div className="bg-gradient-to-br from-indigo-900/70 to-gray-900 rounded-xl shadow-xl overflow-hidden backdrop-blur-sm border border-indigo-900/30">
               <div className="p-6 border-b border-gray-700">
                 <h2 className="text-xl font-bold text-white">
-                  About Our Hudson County Cleaning Services
+                  {aboutSection.title}
                 </h2>
               </div>
               <div className="p-6">
-                <p className="text-gray-300 mb-4 leading-relaxed">
-                  {data.aboutSection.description}
-                </p>
-                <div>
+                <div className="prose prose-invert max-w-none">
+                  {aboutSection.description
+                    .split("\n\n")
+                    .map((paragraph: string, index: number) => (
+                      <p
+                        key={index}
+                        className="text-gray-300 mb-4 leading-relaxed"
+                      >
+                        {paragraph}
+                      </p>
+                    ))}
+                </div>
+                <div className="mt-6">
                   <Link
-                    href="/contact"
+                    href={`/booking?location=${slug}`}
                     className="inline-block px-8 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors"
                   >
-                    Contact Us Today
+                    Get a Free Quote
                   </Link>
                 </div>
               </div>
@@ -281,12 +259,12 @@ export default function HudsonCountyPage() {
           <div className="bg-gradient-to-br from-gray-900 to-blue-900/50 rounded-xl shadow-xl overflow-hidden backdrop-blur-sm border border-blue-900/30">
             <div className="p-6 border-b border-gray-700">
               <h2 className="text-xl font-bold text-white">
-                Service Areas in Hudson County
+                Service Areas in {countyName}
               </h2>
             </div>
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {data.serviceAreas.map((area) => (
+                {serviceAreas.map((area: string) => (
                   <div
                     key={area}
                     className="flex items-center py-3 px-4 bg-gray-700/50 border border-gray-700 rounded-lg hover:bg-blue-900/20 hover:border-blue-500/50 transition-all"

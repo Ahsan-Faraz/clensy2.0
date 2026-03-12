@@ -155,7 +155,7 @@ export default function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href="/services/extras" className="block text-gray-600 hover:text-gray-900 transition-colors">
+                        <a href="/services/extras-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
                           Extras
                         </a>
                       </li>
@@ -195,7 +195,7 @@ export default function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href="/services/other-commercial" className="block text-gray-600 hover:text-gray-900 transition-colors">
+                        <a href="/services/other-commercial-cleaning" className="block text-gray-600 hover:text-gray-900 transition-colors">
                           Other Commercial Spaces
                         </a>
                       </li>
@@ -395,7 +395,7 @@ export default function Navbar() {
                             Airbnb Cleaning
                           </a>
                           <a
-                            href="/services/extras"
+                            href="/services/extras-cleaning"
                             className="block text-sm text-gray-600 hover:text-gray-900 py-2 hover:bg-white rounded px-2 transition-colors"
                             onClick={closeAllDropdowns}
                           >

@@ -110,37 +110,12 @@ interface DeepCleaningData {
   // FAQ Section
   faqs?: FAQItem[];
 }
-export default function DeepCleaningPage() {
+export default function DeepTemplate({ data }: { data: any }) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [data, setData] = useState<DeepCleaningData | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/cms/service/deep-cleaning");
-        const result = await response.json();
-        if (result.success) {
-          setData(result.data);
-        }
-      } catch (error) {
-        console.error("Error fetching deep cleaning data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
     setIsLoaded(true);
   }, []);
-
-  if (loading || !data) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
 
   return (
     <main className="overflow-x-hidden">
@@ -276,7 +251,7 @@ export default function DeepCleaningPage() {
               <h3 className="text-2xl font-bold mb-4">{data.bathroomTitle}</h3>
               <p className="text-gray-600 mb-6">{data.bathroomDescription}</p>
               <ul className="space-y-3">
-                {data.bathroomFeatures.map((feature, index) => (
+                {data.bathroomFeatures.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <Check className="h-5 w-5 mr-3 text-blue-600 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
@@ -292,7 +267,7 @@ export default function DeepCleaningPage() {
               <h3 className="text-2xl font-bold mb-4">{data.kitchenTitle}</h3>
               <p className="text-gray-600 mb-6">{data.kitchenDescription}</p>
               <ul className="space-y-3">
-                {data.kitchenFeatures.map((feature, index) => (
+                {data.kitchenFeatures.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <Check className="h-5 w-5 mr-3 text-blue-600 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
@@ -328,7 +303,7 @@ export default function DeepCleaningPage() {
                 {data.livingAreasDescription}
               </p>
               <ul className="space-y-3">
-                {data.livingAreasFeatures.map((feature, index) => (
+                {data.livingAreasFeatures.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <Check className="h-5 w-5 mr-3 text-blue-600 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
@@ -506,7 +481,7 @@ export default function DeepCleaningPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {data.clientReviews.map((review, index) => (
+            {data.clientReviews.map((review: any, index: number) => (
               <div key={index} className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl h-full flex flex-col">
                 <div className="flex items-center mb-4">
                   {[...Array(review.rating)].map((_, i) => (
@@ -517,7 +492,7 @@ export default function DeepCleaningPage() {
                   "{review.review}"
                 </p>
                 <div className="flex items-center mt-auto">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mr-4" style={{ backgroundColor: {'pink-500':'#ec4899','purple-500':'#a855f7','orange-500':'#f97316','teal-500':'#14b8a6','blue-500':'#3b82f6','green-500':'#22c55e'}[review.avatarBgColor] || '#a855f7' }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mr-4" style={{ backgroundColor: ({'pink-500':'#ec4899','purple-500':'#a855f7','orange-500':'#f97316','teal-500':'#14b8a6','blue-500':'#3b82f6','green-500':'#22c55e'} as Record<string, string>)[review.avatarBgColor] || '#a855f7' }}>
                     <svg
                       className="w-6 h-6 text-white"
                       fill="currentColor"
@@ -570,7 +545,7 @@ export default function DeepCleaningPage() {
                 </div>
                 <div className="p-8">
                   <ul className="space-y-4">
-                    {data.regularCleaning.features.map((feature, index) => (
+                    {data.regularCleaning.features.map((feature: string, index: number) => (
                       <li key={index} className="flex items-start">
                         <Check className="h-5 w-5 mr-3 text-gray-400 flex-shrink-0 mt-0.5" />
                         <div>
@@ -611,7 +586,7 @@ export default function DeepCleaningPage() {
                 </div>
                 <div className="p-8">
                   <ul className="space-y-4">
-                    {data.deepCleaning.features.map((feature, index) => (
+                    {data.deepCleaning.features.map((feature: string, index: number) => (
                       <li key={index} className="flex items-start">
                         <Check className="h-5 w-5 mr-3 text-blue-600 flex-shrink-0 mt-0.5" />
                         <div>
@@ -651,7 +626,7 @@ export default function DeepCleaningPage() {
 
             <div className="space-y-8">
               {data.faqs && data.faqs.length > 0 ? (
-                data.faqs.map((faq, idx) => (
+                data.faqs.map((faq: any, idx: number) => (
                   <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-blue-600">
                     <h3 className="text-xl font-semibold mb-3">{faq.question}</h3>
                     <p className="text-gray-600">{faq.answer}</p>

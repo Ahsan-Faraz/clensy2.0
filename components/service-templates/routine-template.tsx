@@ -123,37 +123,12 @@ interface RoutineCleaningData {
   faqs?: FAQItem[];
 }
 
-export default function RoutineCleaningPage() {
+export default function RoutineTemplate({ data }: { data: any }) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [data, setData] = useState<RoutineCleaningData | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/cms/service/routine-cleaning");
-        const result = await response.json();
-        if (result.success) {
-          setData(result.data);
-        }
-      } catch (error) {
-        console.error("Error fetching routine cleaning data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
     setIsLoaded(true);
   }, []);
-
-  if (loading || !data) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
 
   return (
     <main className="overflow-x-hidden">
@@ -323,7 +298,7 @@ export default function RoutineCleaningPage() {
               <h3 className="text-2xl font-bold mb-4">{data.kitchenTitle}</h3>
               <p className="text-gray-600 mb-6">{data.kitchenDescription}</p>
               <ul className="space-y-3">
-                {data.kitchenFeatures.map((feature, index) => (
+                {data.kitchenFeatures.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <Check className="h-5 w-5 mr-3 text-blue-600 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
@@ -339,7 +314,7 @@ export default function RoutineCleaningPage() {
               <h3 className="text-2xl font-bold mb-4">{data.bathroomTitle}</h3>
               <p className="text-gray-600 mb-6">{data.bathroomDescription}</p>
               <ul className="space-y-3">
-                {data.bathroomFeatures.map((feature, index) => (
+                {data.bathroomFeatures.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <Check className="h-5 w-5 mr-3 text-blue-600 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
@@ -375,7 +350,7 @@ export default function RoutineCleaningPage() {
                 {data.livingAreasDescription}
               </p>
               <ul className="space-y-3">
-                {data.livingAreasFeatures.map((feature, index) => (
+                {data.livingAreasFeatures.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <Check className="h-5 w-5 mr-3 text-blue-600 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
@@ -400,7 +375,7 @@ export default function RoutineCleaningPage() {
                 {data.featureSectionSubheading}
               </p>
               <div className="space-y-4">
-                {data.featureSectionPoints.map((point, index) => (
+                {data.featureSectionPoints.map((point: string, index: number) => (
                   <div key={index} className="flex items-start">
                     <div className="bg-white/10 rounded-full p-2 mr-4 flex-shrink-0">
                       <Check className="h-5 w-5 text-green-400" />
@@ -584,7 +559,7 @@ export default function RoutineCleaningPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {data.clientTestimonials.map((testimonial, index) => (
+            {data.clientTestimonials.map((testimonial: any, index: number) => (
               <div key={index} className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl h-full flex flex-col">
                 <div className="flex items-center mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
@@ -595,7 +570,7 @@ export default function RoutineCleaningPage() {
                   "{testimonial.review}"
                 </p>
                 <div className="flex items-center mt-auto">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mr-4" style={{ backgroundColor: {'pink-500':'#ec4899','purple-500':'#a855f7','orange-500':'#f97316','teal-500':'#14b8a6','blue-500':'#3b82f6','green-500':'#22c55e'}[testimonial.avatarBgColor] || '#a855f7' }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mr-4" style={{ backgroundColor: ({'pink-500':'#ec4899','purple-500':'#a855f7','orange-500':'#f97316','teal-500':'#14b8a6','blue-500':'#3b82f6','green-500':'#22c55e'} as Record<string, string>)[testimonial.avatarBgColor] || '#a855f7' }}>
                     <svg
                       className="w-6 h-6 text-white"
                       fill="currentColor"
@@ -811,7 +786,7 @@ export default function RoutineCleaningPage() {
 
             <div className="space-y-8">
               {data.faqs && data.faqs.length > 0 ? (
-                data.faqs.map((faq, idx) => (
+                data.faqs.map((faq: any, idx: number) => (
                   <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-blue-600">
                     <h3 className="text-xl font-semibold mb-3">{faq.question}</h3>
                     <p className="text-gray-600">{faq.answer}</p>

@@ -145,7 +145,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/services/other-commercial"
+                  href="/services/other-commercial-cleaning"
                   className={`text-sm ${textColor} hover:${hoverColor}`}
                 >
                   Commercial Cleaning

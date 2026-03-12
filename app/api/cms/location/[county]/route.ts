@@ -73,6 +73,7 @@ export async function GET(
         title: d.aboutTitle || '',
         description: d.aboutDescription || '',
       },
+      mapImage: d.mapImageUrl || null,
       seo: {
         title: d.seoTitle || '',
         description: d.seoMetaDescription || '',

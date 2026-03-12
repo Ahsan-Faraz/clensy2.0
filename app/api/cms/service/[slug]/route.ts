@@ -54,7 +54,7 @@ export async function GET(
     const { id, documentId, createdAt, updatedAt, publishedAt, locale, slug: _s, name, serviceTemplate, pageData, ...topFields } = entry;
 
     // Merge top-level fields + pageData into the flat shape pages expect
-    const data = { ...topFields, ...(pageData || {}) };
+    const data = { ...topFields, ...(pageData || {}), serviceTemplate };
 
     return NextResponse.json(
       { success: true, data },

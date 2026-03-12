@@ -88,11 +88,9 @@ interface ExtrasServiceData {
   }>;
 }
 
-export default function ExtrasPage() {
+export default function ExtrasTemplate({ data }: { data: any }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeExtra, setActiveExtra] = useState("windows");
-  const [data, setData] = useState<ExtrasServiceData | null>(null);
-  const [loading, setLoading] = useState(true);
 
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -104,31 +102,8 @@ export default function ExtrasPage() {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/cms/service/extras-cleaning");
-        const result = await response.json();
-        if (result.success) {
-          setData(result.data);
-        }
-      } catch (error) {
-        console.error("Error fetching extras service data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
     setIsLoaded(true);
   }, []);
-
-  if (loading || !data) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
 
   // Use dynamic extras from CMS data
   const extras = data?.premiumExtraServices || [];

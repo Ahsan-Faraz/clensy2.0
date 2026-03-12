@@ -96,11 +96,9 @@ interface PostConstructionCleaningData {
   }>;
 }
 
-export default function PostConstructionCleaningPage() {
+export default function PostConstructionTemplate({ data }: { data: any }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
-  const [data, setData] = useState<PostConstructionCleaningData | null>(null);
-  const [loading, setLoading] = useState(true);
 
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -112,31 +110,8 @@ export default function PostConstructionCleaningPage() {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/cms/service/post-construction-cleaning");
-        const result = await response.json();
-        if (result.success) {
-          setData(result.data);
-        }
-      } catch (error) {
-        console.error("Error fetching post-construction cleaning data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
     setIsLoaded(true);
   }, []);
-
-  if (loading || !data) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
 
   return (
     <main className="overflow-x-hidden">
@@ -279,7 +254,7 @@ export default function PostConstructionCleaningPage() {
                 {data.debrisRemovalDescription}
               </p>
               <ul className="space-y-3">
-                {data.debrisRemovalFeatures.map((feature, index) => (
+                {data.debrisRemovalFeatures.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <Check className="h-5 w-5 mr-3 text-yellow-500 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
@@ -297,7 +272,7 @@ export default function PostConstructionCleaningPage() {
                 {data.dustEliminationDescription}
               </p>
               <ul className="space-y-3">
-                {data.dustEliminationFeatures.map((feature, index) => (
+                {data.dustEliminationFeatures.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <Check className="h-5 w-5 mr-3 text-yellow-500 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
@@ -331,7 +306,7 @@ export default function PostConstructionCleaningPage() {
                 {data.surfaceFinishingDescription}
               </p>
               <ul className="space-y-3">
-                {data.surfaceFinishingFeatures.map((feature, index) => (
+                {data.surfaceFinishingFeatures.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <Check className="h-5 w-5 mr-3 text-yellow-500 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
@@ -647,7 +622,7 @@ export default function PostConstructionCleaningPage() {
                 </div>
               </div>
               <ul className="space-y-3">
-                {data.ppeFeatures.map((feature, index) => (
+                {data.ppeFeatures.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <CheckSquare className="h-5 w-5 mr-2 text-yellow-600 flex-shrink-0" />
                     <span>{feature}</span>
@@ -677,7 +652,7 @@ export default function PostConstructionCleaningPage() {
                 </div>
               </div>
               <ul className="space-y-3">
-                {data.hazmatFeatures.map((feature, index) => (
+                {data.hazmatFeatures.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <CheckSquare className="h-5 w-5 mr-2 text-yellow-600 flex-shrink-0" />
                     <span>{feature}</span>
@@ -702,7 +677,7 @@ export default function PostConstructionCleaningPage() {
 
             <div className="space-y-8">
               {data?.faqs && data.faqs.length > 0 ? (
-                data.faqs.map((faq, idx) => (
+                data.faqs.map((faq: any, idx: number) => (
                   <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-yellow-500">
                     <h3 className="text-xl font-semibold mb-3">{faq.question}</h3>
                     <p className="text-gray-600">{faq.answer}</p>
