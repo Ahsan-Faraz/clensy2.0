@@ -93,7 +93,7 @@ export default function SchoolCleaningPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/school-cleaning");
+        const response = await fetch("/api/cms/service/school-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);

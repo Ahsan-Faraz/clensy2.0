@@ -7,16 +7,6 @@ const STRAPI_URL =
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 const STRAPI_API_PREFIX = process.env.STRAPI_API_PREFIX || '/admin/api';
 
-// Map page slug → Strapi single-type name
-const SLUG_TO_SINGLE_TYPE: Record<string, string> = {
-  bergen: 'bergen-county',
-  essex: 'essex-county',
-  hudson: 'hudson-county',
-  morris: 'morris-county',
-  passaic: 'passaic-county',
-  union: 'union-county',
-};
-
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ county: string }> | { county: string } }
@@ -24,17 +14,17 @@ export async function GET(
   const resolvedParams = params instanceof Promise ? await params : params;
   const county = resolvedParams?.county;
 
-  if (!county || !SLUG_TO_SINGLE_TYPE[county]) {
+  if (!county) {
     return NextResponse.json(
-      { success: false, error: `Unknown location: ${county}` },
-      { status: 404 }
+      { success: false, error: 'Missing location slug' },
+      { status: 400 }
     );
   }
 
-  const singleTypeName = SLUG_TO_SINGLE_TYPE[county];
-
   try {
-    const url = `${STRAPI_URL}${STRAPI_API_PREFIX}/${singleTypeName}`;
+    const base = STRAPI_URL.replace(/\/+$/, '');
+    const prefix = (STRAPI_API_PREFIX || '/admin/api').replace(/^\/+|\/+$/g, '');
+    const url = `${base}/${prefix}/locations?filters[slug][$eq]=${encodeURIComponent(county)}`;
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
     if (STRAPI_API_TOKEN) {
       headers['Authorization'] = `Bearer ${STRAPI_API_TOKEN}`;
@@ -43,15 +33,24 @@ export async function GET(
     const res = await fetch(url, { headers, next: { revalidate: 60 } });
 
     if (!res.ok) {
-      console.error(`Strapi fetch failed for ${singleTypeName}: ${res.status}`);
+      console.error(`Strapi fetch failed for location ${county}: ${res.status}`);
       return NextResponse.json(
-        { success: false, error: `Failed to fetch ${singleTypeName}` },
+        { success: false, error: `Failed to fetch location ${county}` },
         { status: res.status }
       );
     }
 
     const json = await res.json();
-    const d = json.data || {};
+    const entries = json.data || [];
+    if (entries.length === 0) {
+      return NextResponse.json(
+        { success: false, error: `Location not found: ${county}` },
+        { status: 404 }
+      );
+    }
+
+    const raw = entries[0];
+    const { id, documentId, createdAt, updatedAt, publishedAt, locale, slug, ...d } = raw;
 
     // Transform flat Strapi fields → nested shape expected by frontend
     const data = {
@@ -86,7 +85,7 @@ export async function GET(
       { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' } }
     );
   } catch (error) {
-    console.error(`Error fetching ${singleTypeName}:`, error);
+    console.error(`Error fetching location ${county}:`, error);
     return NextResponse.json(
       { success: false, error: `Failed to fetch location data` },
       { status: 500 }

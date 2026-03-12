@@ -131,7 +131,7 @@ export default function RoutineCleaningPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/routine-cleaning");
+        const response = await fetch("/api/cms/service/routine-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);

@@ -114,7 +114,7 @@ export default function PostConstructionCleaningPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/post-construction-cleaning");
+        const response = await fetch("/api/cms/service/post-construction-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);

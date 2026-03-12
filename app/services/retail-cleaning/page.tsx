@@ -93,7 +93,7 @@ export default function RetailCleaningPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/retail-cleaning");
+        const response = await fetch("/api/cms/service/retail-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);

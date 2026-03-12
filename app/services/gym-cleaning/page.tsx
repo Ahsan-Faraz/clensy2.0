@@ -93,7 +93,7 @@ export default function GymCleaningPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/gym-cleaning");
+        const response = await fetch("/api/cms/service/gym-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);

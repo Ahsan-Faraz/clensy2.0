@@ -93,7 +93,7 @@ export default function MedicalCleaningPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/medical-cleaning");
+        const response = await fetch("/api/cms/service/medical-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);

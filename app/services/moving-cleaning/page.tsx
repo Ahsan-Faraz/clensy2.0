@@ -97,7 +97,7 @@ export default function MovingCleaningPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/moving-cleaning");
+        const response = await fetch("/api/cms/service/moving-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);

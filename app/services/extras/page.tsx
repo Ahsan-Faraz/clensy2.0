@@ -106,7 +106,7 @@ export default function ExtrasPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/extras-service");
+        const response = await fetch("/api/cms/service/extras-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);

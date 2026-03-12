@@ -118,7 +118,7 @@ export default function DeepCleaningPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/deep-cleaning");
+        const response = await fetch("/api/cms/service/deep-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);

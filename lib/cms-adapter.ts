@@ -876,24 +876,11 @@ export class CMSAdapter {
     };
   }
   
-  // Map location page slug → Strapi single-type name
-  private static LOCATION_SINGLE_TYPES: Record<string, string> = {
-    bergen: 'bergen-county',
-    essex: 'essex-county',
-    hudson: 'hudson-county',
-    morris: 'morris-county',
-    passaic: 'passaic-county',
-    union: 'union-county',
-  };
-
   /**
-   * Get Location by Slug — fetches from individual single-type endpoints
+   * Get Location by Slug — fetches from locations collection type
    */
   static async getLocationBySlug(slug: string, status: 'draft' | 'published' = 'published') {
     if (!slug) return null;
-
-    const singleTypeName = this.LOCATION_SINGLE_TYPES[slug];
-    if (!singleTypeName) return null;
 
     const cacheKey = `${slug}:${status}`;
     const cached = locationBySlugCache.get(cacheKey);
@@ -901,25 +888,24 @@ export class CMSAdapter {
       return cached.data;
     }
 
-    const result = await fetchFromStrapi<StrapiResponse<any>>(
-      `/${singleTypeName}`,
-      { status, revalidate: 60, tags: [`location-${slug}`] }
+    const result = await fetchFromStrapi<StrapiResponse<any[]>>(
+      '/locations',
+      { filters: { slug: { $eq: slug } }, status, revalidate: 60, tags: [`location-${slug}`] }
     );
 
-    if (!result?.data) {
-      // Fallback to opposite status
+    if (!result?.data || result.data.length === 0) {
       const fallbackStatus = status === 'published' ? 'draft' : 'published';
-      const fallback = await fetchFromStrapi<StrapiResponse<any>>(
-        `/${singleTypeName}`,
-        { status: fallbackStatus, revalidate: 60, tags: [`location-${slug}`] }
+      const fallback = await fetchFromStrapi<StrapiResponse<any[]>>(
+        '/locations',
+        { filters: { slug: { $eq: slug } }, status: fallbackStatus, revalidate: 60, tags: [`location-${slug}`] }
       );
-      if (!fallback?.data) return null;
-      const transformed = this.transformLocationData(fallback.data, slug);
+      if (!fallback?.data || fallback.data.length === 0) return null;
+      const transformed = this.transformLocationData(fallback.data[0], slug);
       locationBySlugCache.set(cacheKey, { data: transformed, time: Date.now() });
       return transformed;
     }
 
-    const transformed = this.transformLocationData(result.data, slug);
+    const transformed = this.transformLocationData(result.data[0], slug);
     locationBySlugCache.set(cacheKey, { data: transformed, time: Date.now() });
     return transformed;
   }
@@ -995,56 +981,32 @@ export class CMSAdapter {
       return cached.data;
     }
 
-    // Selective populate for fallback (custom Strapi route has its own)
-    const servicePopulate = {
-      heroBackgroundImage: true,
-      serviceTrustIndicators: true,
-      cleaningAreas: { populate: { image: true } },
-      clientTestimonials: true,
-      faqs: true,
-      seo: true,
-      openGraph: { populate: { ogImage: true } },
-      schema: true,
-      scripts: true,
-      htmlBlocks: true,
-    };
+    let result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
+      filters: { slug: { $eq: slug } },
+      status,
+      revalidate: 60,
+      tags: [`service-${slug}`],
+    });
 
-    // Try custom Strapi endpoint first (faster, optimized query)
-    // Tags enable targeted revalidateTag; revalidate 300 = 5 min ISR
-    let result: StrapiResponse<any> | StrapiResponse<any[]> | null = await fetchFromStrapi<StrapiResponse<any>>(
-      `/services/by-slug/${encodeURIComponent(slug)}`,
-      { status, revalidate: 60, tags: [`service-${slug}`] }
-    );
-
-    // Fallback to standard filtered endpoint if custom route returns 404/empty
-    if (!result?.data || (Array.isArray(result.data) && result.data.length === 0)) {
-      result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
-        filters: { slug: { $eq: slug } },
-        populate: servicePopulate,
-        status: status,
-        revalidate: 60,
-        tags: [`service-${slug}`],
-      });
-    }
-    if (!result?.data || (Array.isArray(result.data) && result.data.length === 0)) {
+    if (!result?.data || result.data.length === 0) {
       const fallbackStatus = status === 'published' ? 'draft' : 'published';
       result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
         filters: { slug: { $eq: slug } },
-        populate: servicePopulate,
         status: fallbackStatus,
         revalidate: 60,
         tags: [`service-${slug}`],
       });
     }
-    // Fallback: fetch all and filter client-side
+
     if (!result?.data || result.data.length === 0) {
+      // Fallback: try listing
       const all = await this.getAllServices();
       const found = all.find((svc) => svc.slug === slug);
       if (!found) return null;
       return {
         name: found.name,
         slug: found.slug,
-        serviceType: found.serviceType,
+        serviceType: found.serviceType || found.serviceTemplate || '',
         heroTopLabel: '',
         heroHeading: found.heroHeading || '',
         heroSubheading: found.heroSubheading || '',
@@ -1057,15 +1019,9 @@ export class CMSAdapter {
         cleaningAreas: [],
         whyChooseHeading: '',
         whyChooseSubheading: '',
-        benefit1Title: '',
-        benefit1Description: '',
-        benefit1Icon: '',
-        benefit2Title: '',
-        benefit2Description: '',
-        benefit2Icon: '',
-        benefit3Title: '',
-        benefit3Description: '',
-        benefit3Icon: '',
+        benefit1Title: '', benefit1Description: '', benefit1Icon: '',
+        benefit2Title: '', benefit2Description: '', benefit2Icon: '',
+        benefit3Title: '', benefit3Description: '', benefit3Icon: '',
         clientTestimonialsHeading: '',
         clientTestimonialsSubheading: '',
         clientTestimonials: [],
@@ -1077,39 +1033,35 @@ export class CMSAdapter {
           canonicalUrl: `https://clensy.com/services/${found.slug}`,
           robots: 'index, follow',
           h1: found.heroHeading || found.name || '',
-          h2: '',
-          h3: '',
+          h2: '', h3: '',
           openGraph: { title: found.name || '', description: '', image: found.heroBackgroundImage || '', type: 'website' },
           twitter: { card: 'summary_large_image', title: found.name || '', description: '' },
-          schemaJsonLd: null,
-          schemaType: 'Service',
-          headScripts: '',
-          bodyStartScripts: '',
-          bodyEndScripts: '',
-          customCss: '',
+          schemaJsonLd: null, schemaType: 'Service',
+          headScripts: '', bodyStartScripts: '', bodyEndScripts: '', customCss: '',
         },
         htmlBlocks: [],
       };
     }
 
-    const data = result.data[0];
+    const raw = result.data[0];
+    // Merge pageData JSON back into flat fields
+    const { pageData, ...topFields } = raw;
+    const data = { ...topFields, ...(pageData || {}) };
 
     const transformed = {
       name: data.name || '',
       slug: data.slug || slug,
-      serviceType: data.serviceType || '',
+      serviceType: data.serviceType || data.serviceTemplate || '',
       heroTopLabel: data.heroTopLabel || '',
       heroHeading: data.heroHeading || '',
       heroSubheading: data.heroSubheading || '',
       heroBackgroundImage: getImageUrl(data.heroBackgroundImage) || data.heroBackgroundImageUrl || '',
       heroServiceDuration: data.heroServiceDuration || '',
       heroServiceGuarantee: data.heroServiceGuarantee || '100% Satisfaction',
-      // Trust Indicators
       serviceTrustIndicators: data.serviceTrustIndicators?.map((ti: any) => ({
         number: ti.number || '',
         text: ti.text || '',
       })) || [],
-      // What's Included (Zig-Zag)
       includedSectionHeading: data.includedSectionHeading || '',
       includedSectionSubheading: data.includedSectionSubheading || '',
       cleaningAreas: data.cleaningAreas?.map((area: any) => ({
@@ -1119,7 +1071,6 @@ export class CMSAdapter {
         imageAlt: area.imageAlt || area.title || '',
         features: area.features || [],
       })) || [],
-      // Why Choose
       whyChooseHeading: data.whyChooseHeading || '',
       whyChooseSubheading: data.whyChooseSubheading || '',
       benefit1Title: data.benefit1Title || '',
@@ -1131,7 +1082,6 @@ export class CMSAdapter {
       benefit3Title: data.benefit3Title || '',
       benefit3Description: data.benefit3Description || '',
       benefit3Icon: data.benefit3Icon || '',
-      // Testimonials
       clientTestimonialsHeading: data.clientTestimonialsHeading || '',
       clientTestimonialsSubheading: data.clientTestimonialsSubheading || '',
       clientTestimonials: data.clientTestimonials?.map((t: any) => ({
@@ -1141,50 +1091,38 @@ export class CMSAdapter {
         clientLocation: t.clientLocation || '',
         avatarBgColor: t.avatarBgColor || 'blue',
       })) || [],
-      // FAQs
       faqs: data.faqs?.map((f: any) => ({
         question: f.question || '',
         answer: f.answer || '',
       })) || [],
-      // SEO Fields
       seo: {
-        metaTitle: data.seo?.metaTitle || `${data.name} in New Jersey | Clensy`,
-        metaDescription: data.seo?.metaDescription || `Professional ${data.name.toLowerCase()} services. Book online in 30 seconds.`,
-        keywords: data.seo?.keywords ? (typeof data.seo.keywords === 'string' ? data.seo.keywords.split(',').map((k: string) => k.trim()) : data.seo.keywords) : [],
-        canonicalUrl: data.seo?.canonicalURL || `https://clensy.com/services/${data.slug}`,
-        robots: data.seo?.metaRobots || 'index, follow',
-        h1: data.seo?.h1 || data.heroHeading || `${data.name} Services`,
-        h2: data.seo?.h2 || data.includedSectionHeading || '',
-        h3: data.seo?.h3 || '',
+        metaTitle: data.seoTitle || `${data.name || ''} in New Jersey | Clensy`,
+        metaDescription: data.seoMetaDescription || `Professional ${(data.name || '').toLowerCase()} services. Book online in 30 seconds.`,
+        keywords: data.seoKeywords ? (typeof data.seoKeywords === 'string' ? data.seoKeywords.split(',').map((k: string) => k.trim()) : Array.isArray(data.seoKeywords) ? data.seoKeywords : []) : [],
+        canonicalUrl: data.seoCanonicalUrl || `https://clensy.com/services/${data.slug || slug}`,
+        robots: data.seoRobots || 'index, follow',
+        h1: data.heroHeading || `${data.name || ''} Services`,
+        h2: data.includedSectionHeading || '',
+        h3: '',
         openGraph: {
-          title: data.openGraph?.ogTitle || `${data.name} | Clensy`,
-          description: data.openGraph?.ogDescription || `Professional ${data.name.toLowerCase()} services.`,
-          image: getImageUrl(data.openGraph?.ogImage) || getImageUrl(data.heroBackgroundImage) || data.heroBackgroundImageUrl || '',
-          type: data.openGraph?.ogType || 'website',
+          title: data.ogTitle || `${data.name || ''} | Clensy`,
+          description: data.ogDescription || `Professional ${(data.name || '').toLowerCase()} services.`,
+          image: data.ogImageUrl || data.heroBackgroundImage || '',
+          type: data.ogType || 'website',
         },
         twitter: {
-          card: data.openGraph?.twitterCard || 'summary_large_image',
-          title: data.openGraph?.twitterTitle || data.openGraph?.ogTitle || `${data.name} | Clensy`,
-          description: data.openGraph?.twitterDescription || data.openGraph?.ogDescription || `Professional ${data.name.toLowerCase()} services.`,
+          card: data.twitterCard || 'summary_large_image',
+          title: data.twitterTitle || data.ogTitle || `${data.name || ''} | Clensy`,
+          description: data.twitterDescription || data.ogDescription || `Professional ${(data.name || '').toLowerCase()} services.`,
         },
-        schemaJsonLd: data.seo?.structuredData || data.schema?.customJsonLd || null,
-        schemaType: data.schema?.schemaType || 'Service',
-        headScripts: getScriptsForPlacement(data, 'head'),
-        bodyStartScripts: getScriptsForPlacement(data, 'body-start'),
-        bodyEndScripts: getScriptsForPlacement(data, 'body-end'),
+        schemaJsonLd: data.schemaJsonLd || null,
+        schemaType: 'Service',
+        headScripts: data.headScripts || '',
+        bodyStartScripts: '',
+        bodyEndScripts: data.bodyEndScripts || '',
         customCss: data.customCss || '',
       },
-      // HTML Blocks
-      htmlBlocks: (data.htmlBlocks || []).map((block: any) => ({
-        blockName: block.blockName || '',
-        htmlContent: block.htmlContent || '',
-        placement: block.placement || 'before-footer',
-        customPosition: block.customPosition || '',
-        cssClasses: block.cssClasses || '',
-        cssId: block.cssId || '',
-        order: block.order || 0,
-        isActive: block.isActive !== false,
-      })).filter((block: any) => block.isActive && block.htmlContent),
+      htmlBlocks: [],
     };
     serviceBySlugCache.set(cacheKey, { data: transformed, time: Date.now() });
     return transformed;
@@ -1199,17 +1137,14 @@ export class CMSAdapter {
     }
 
     const fetchOptions = options?.revalidate !== undefined ? { revalidate: options.revalidate } : {};
-    const listPopulate = { heroBackgroundImage: true };
     // First, try published
     let result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
-      populate: listPopulate,
       status: 'published',
       ...fetchOptions,
     });
     // If none published, fallback to draft
     if (!result?.data || result.data.length === 0) {
       result = await fetchFromStrapi<StrapiResponse<any[]>>('/services', {
-        populate: listPopulate,
         status: 'draft',
         ...fetchOptions,
       });
@@ -1220,10 +1155,10 @@ export class CMSAdapter {
     const services = result.data.map((service: any) => ({
       name: service.name || '',
       slug: service.slug || '',
-      serviceType: service.serviceType || '',
+      serviceType: service.serviceType || service.serviceTemplate || '',
       heroHeading: service.heroHeading || '',
       heroSubheading: service.heroSubheading || '',
-      heroBackgroundImage: getImageUrl(service.heroBackgroundImage) || service.heroBackgroundImageUrl || '',
+      heroBackgroundImage: service.heroBackgroundImage || '',
     }));
     allServicesCache = services;
     allServicesCacheTime = Date.now();
@@ -1231,7 +1166,7 @@ export class CMSAdapter {
   }
   
   /**
-   * Get All Locations (for listing) — aggregates from 6 single-type endpoints
+   * Get All Locations (for listing) — fetches from locations collection type
    */
   static async getAllLocations(options?: { revalidate?: number }) {
     if (allLocationsCache && Date.now() - allLocationsCacheTime < CACHE_DURATION) {
@@ -1239,37 +1174,31 @@ export class CMSAdapter {
     }
 
     const revalidate = options?.revalidate ?? 60;
-    const entries = Object.entries(this.LOCATION_SINGLE_TYPES);
 
-    const locations = (
-      await Promise.all(
-        entries.map(async ([slug, singleType]) => {
-          let result = await fetchFromStrapi<StrapiResponse<any>>(
-            `/${singleType}`,
-            { status: 'published', revalidate }
-          );
-          if (!result?.data) {
-            result = await fetchFromStrapi<StrapiResponse<any>>(
-              `/${singleType}`,
-              { status: 'draft', revalidate }
-            );
-          }
-          if (!result?.data) return null;
-          const d = result.data;
-          return {
-            name: d.heroTitle || slug,
-            slug,
-            county: d.heroTitle || slug,
-            state: 'NJ',
-            heroTitle: d.heroTitle || '',
-            heroSubtitle: d.heroSubtitle || '',
-            heroBackgroundImage: d.heroBackgroundImageUrl || '',
-          };
-        })
-      )
-    ).filter(Boolean);
+    let result = await fetchFromStrapi<StrapiResponse<any[]>>(
+      '/locations',
+      { status: 'published', revalidate }
+    );
+    if (!result?.data || result.data.length === 0) {
+      result = await fetchFromStrapi<StrapiResponse<any[]>>(
+        '/locations',
+        { status: 'draft', revalidate }
+      );
+    }
 
-    allLocationsCache = locations as any[];
+    if (!result?.data) return [];
+
+    const locations = result.data.map((d: any) => ({
+      name: d.heroTitle || d.slug,
+      slug: d.slug,
+      county: d.heroTitle || d.slug,
+      state: 'NJ',
+      heroTitle: d.heroTitle || '',
+      heroSubtitle: d.heroSubtitle || '',
+      heroBackgroundImage: d.heroBackgroundImageUrl || '',
+    }));
+
+    allLocationsCache = locations;
     allLocationsCacheTime = Date.now();
     return locations;
   }

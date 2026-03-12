@@ -93,7 +93,7 @@ export default function PropertyCleaningPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/property-cleaning");
+        const response = await fetch("/api/cms/service/property-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);

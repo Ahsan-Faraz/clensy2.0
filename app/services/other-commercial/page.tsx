@@ -114,7 +114,7 @@ export default function OtherCommercialPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/other-commercial-cleaning");
+        const response = await fetch("/api/cms/service/other-commercial-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);

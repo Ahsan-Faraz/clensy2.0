@@ -93,7 +93,7 @@ export default function OfficeCleaningPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/office-cleaning");
+        const response = await fetch("/api/cms/service/office-cleaning");
         const result = await response.json();
         if (result.success) {
           // Ensure faqs is always an array

@@ -152,7 +152,7 @@ export default function AirbnbCleaningPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/cms/airbnb-cleaning");
+        const response = await fetch("/api/cms/service/airbnb-cleaning");
         const result = await response.json();
         if (result.success) {
           setData(result.data);
